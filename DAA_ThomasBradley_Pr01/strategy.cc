@@ -30,9 +30,9 @@ class ReadRow : public Strategy  {
   void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
     std::vector<std::vector<int>> result(int(matrix1.size()));
     for (int i{0}; i < int(matrix1.size()); i++) {
-      for (int j{0}; j < int(matrix1.size()); j++) {
+      for (int j{0}; j < int(matrix2[0].size()); j++) {
         int tempNum = 0;
-        for (int z{0}; z < int(matrix1.size()); z++) {
+        for (int z{0}; z < int(matrix1[0].size()); z++) {
           tempNum = tempNum + (matrix1[i][z] * matrix2[z][j]);
         }
         result[i].push_back(tempNum);
@@ -52,8 +52,8 @@ class ReadRow : public Strategy  {
 class ReadColumn : public Strategy  {
   void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
     std::vector<std::vector<int>> result(int(matrix1.size()));
-    for (int i{0}; i < int(matrix1.size()); i++) {
-      for (int j{0}; j < int(matrix1.size()); j++) {
+    for (int i{0}; i < int(matrix2.size()); i++) {
+      for (int j{0}; j < int(matrix1[0].size()); j++) {
         int tempNum = 0;
         for (int z{0}; z < int(matrix1.size()); z++) {
           tempNum = tempNum + (matrix1[z][j] * matrix2[i][z]);
