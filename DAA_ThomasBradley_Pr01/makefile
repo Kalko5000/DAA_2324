@@ -15,7 +15,7 @@ LDFLAGS =
 
 all: strategy
 
-strategy: DAA_ThomasBradley_Pr01.cc
+strategy: strategy.cc context.cc main.cc
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .PHONY: all clean

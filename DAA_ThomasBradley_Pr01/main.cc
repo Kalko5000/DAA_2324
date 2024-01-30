@@ -14,81 +14,7 @@
 // g++ --std=c++14 -o strategy DAA_ThomasBradley_Pr01.cc
 // ./strategy 6
 
-#include <iostream>
-#include <bits/stdc++.h>
-#include <cstdlib>
-#include <time.h>
-#include <vector>
-
-class Strategy {
-  public: 
-	  virtual void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) = 0;
-};
-
-class ReadRow : public Strategy  {
-  void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
-    std::vector<std::vector<int>> result(int(matrix1.size()));
-    for (int i{0}; i < int(matrix1.size()); i++) {
-      for (int j{0}; j < int(matrix1.size()); j++) {
-        int tempNum = 0;
-        for (int z{0}; z < int(matrix1.size()); z++) {
-          tempNum = tempNum + (matrix1[i][z] * matrix2[z][j]);
-        }
-        result[i].push_back(tempNum);
-      }
-    }
-
-    std::cout << "Row Multiplication:" << std::endl;
-    for (int i{0}; i < int(result.size()); i++) {
-      for (int j{0}; j < int(result[0].size()); j++) {
-        std::cout << result[i][j] << " ";
-      }
-      std::cout << std::endl;
-    }
-  }
-};
-
-class ReadColumn : public Strategy  {
-  void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
-    std::vector<std::vector<int>> result(int(matrix1.size()));
-    for (int i{0}; i < int(matrix1.size()); i++) {
-      for (int j{0}; j < int(matrix1.size()); j++) {
-        int tempNum = 0;
-        for (int z{0}; z < int(matrix1.size()); z++) {
-          tempNum = tempNum + (matrix1[z][j] * matrix2[i][z]);
-        }
-        result[j].push_back(tempNum);
-      }
-    }
-
-    std::cout << "Column Multiplication:" << std::endl;
-    for (int i{0}; i < int(result.size()); i++) {
-      for (int j{0}; j < int(result[0].size()); j++) {
-        std::cout << result[i][j] << " ";
-      }
-      std::cout << std::endl;
-    }
-  }
-};
-
-class Context {
-  private:
-	  Strategy *_strategy;
-  public:
-    // Constructor
-    Context(Strategy *strategy) {
-      _strategy = strategy;
-    }
-    
-    void setContext(Strategy *strategy) {
-      _strategy = strategy;
-    }
-
-    void multiply(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
-      _strategy -> printProduct(matrix1, matrix2);
-    }
-
-};
+#include "./context.cc"
 
 std::vector<std::vector<int>> randomMatrix(int size) {
   std::vector<std::vector<int>> result(size);
@@ -149,9 +75,9 @@ void Usage(const int kArgc, char* argv[]) {
 }
 
 int main(int argc, char* argv []) {
-  srand(time(0));
-  time_t start, end; 
-  Usage(argc, argv);
+  srand(time(0)); // Random Seed, to generate random numbers later
+  time_t start, end; // To calculate how much time we take for each multiplication call
+  Usage(argc, argv); // Check we have the right parameters
   int size{std::stoi(argv[1])};
 
   std::vector<std::vector<int>> matrix1 = randomMatrix(size);
