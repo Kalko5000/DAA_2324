@@ -12,7 +12,7 @@
  */
 
 // g++ --std=c++14 -o strategy DAA_ThomasBradley_Pr01.cc
-// ./strategy 
+// ./strategy 6
 
 #include <iostream>
 #include <bits/stdc++.h>
@@ -22,15 +22,53 @@
 
 class Strategy {
   public: 
-	  virtual void AlgorithmInterface(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) = 0;
+	  virtual void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) = 0;
 };
 
 class ReadRow : public Strategy  {
-  void AlgorithmInterface(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {}
+  void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
+    std::vector<std::vector<int>> result(int(matrix1.size()));
+    for (int i{0}; i < int(matrix1.size()); i++) {
+      for (int j{0}; j < int(matrix1.size()); j++) {
+        int tempNum = 0;
+        for (int z{0}; z < int(matrix1.size()); z++) {
+          tempNum = tempNum + (matrix1[i][z] * matrix2[z][j]);
+        }
+        result[i].push_back(tempNum);
+      }
+    }
+
+    std::cout << "Row Multiplication:" << std::endl;
+    for (int i{0}; i < int(result.size()); i++) {
+      for (int j{0}; j < int(result[0].size()); j++) {
+        std::cout << result[i][j] << " ";
+      }
+      std::cout << std::endl;
+    }
+  }
 };
 
 class ReadColumn : public Strategy  {
-  void AlgorithmInterface(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {}
+  void printProduct(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
+    std::vector<std::vector<int>> result(int(matrix1.size()));
+    for (int i{0}; i < int(matrix1.size()); i++) {
+      for (int j{0}; j < int(matrix1.size()); j++) {
+        int tempNum = 0;
+        for (int z{0}; z < int(matrix1.size()); z++) {
+          tempNum = tempNum + (matrix1[z][j] * matrix2[i][z]);
+        }
+        result[j].push_back(tempNum);
+      }
+    }
+
+    std::cout << "Column Multiplication:" << std::endl;
+    for (int i{0}; i < int(result.size()); i++) {
+      for (int j{0}; j < int(result[0].size()); j++) {
+        std::cout << result[i][j] << " ";
+      }
+      std::cout << std::endl;
+    }
+  }
 };
 
 class Context {
@@ -46,8 +84,8 @@ class Context {
       _strategy = strategy;
     }
 
-    void ContextInterface(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
-      _strategy -> AlgorithmInterface(matrix1, matrix2);
+    void multiply(std::vector<std::vector<int>> matrix1, std::vector<std::vector<int>> matrix2) {
+      _strategy -> printProduct(matrix1, matrix2);
     }
 
 };
@@ -113,7 +151,6 @@ void Usage(const int kArgc, char* argv[]) {
 int main(int argc, char* argv []) {
   srand(time(0));
   time_t start, end; 
-  start = clock();
   Usage(argc, argv);
   int size{std::stoi(argv[1])};
 
@@ -123,14 +160,20 @@ int main(int argc, char* argv []) {
   printMatrix(matrix2, "Matrix 2:");
 
   Context *context;
+  start = clock();
   context = new Context(new ReadRow());
-  context->ContextInterface(matrix1, matrix2);
-  context->setContext(new ReadColumn());
-  context->ContextInterface(matrix1, matrix2);
-
+  context->multiply(matrix1, matrix2);
   end = clock();
-  std::cout << "Time taken: " << std::fixed << double(end - start) / double(CLOCKS_PER_SEC) << std::setprecision(9);
+  std::cout << "Time taken for row product: " << std::fixed << double(end - start) / double(CLOCKS_PER_SEC);
+  std::cout << std::endl << std::endl;
+
+  start = clock();
+  context->setContext(new ReadColumn());
+  context->multiply(matrix1, matrix2);
+  end = clock();
+  std::cout << "Time taken for column product: " << std::fixed << double(end - start) / double(CLOCKS_PER_SEC);
   std::cout << std::endl;
+
   delete context;
   return 0;
 }
