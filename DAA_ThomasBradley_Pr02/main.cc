@@ -7,7 +7,7 @@
  * PRACTICA 02: Simulador de la máquina RAM
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
- * @date:    12.feb.2023
+ * @date:    20.feb.2024
  * @brief:   Diseño y funcionamiento de una maquina RAM
  */
 

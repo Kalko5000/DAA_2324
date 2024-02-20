@@ -7,7 +7,7 @@
 # PRACTICA 02: Simulador de la máquina RAM
 # Author:      Thomas Edward Bradley
 # Email:       alu0101408248@ull.edu.es
-# Date:        12.feb.2023
+# Date:        20.feb.2024
 # Brief:       A makefile used to compile the files in "DAA_ThomasEdwardBradley_p02"
 
 CXX = g++
