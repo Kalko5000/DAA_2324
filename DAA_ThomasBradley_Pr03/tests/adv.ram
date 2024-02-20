@@ -1,0 +1,11 @@
+# Test ADV function
+
+READ 1
+ADV 1
+STORE 2
+WRITE 2
+LOAD =5
+STORE 3
+ADV 1
+STORE 4
+WRITE 4
