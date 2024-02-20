@@ -18,7 +18,7 @@
 */
 Ram::Ram(std::string nombre_ram) { 
   programa.resize(1);
-  registros.resize(10);
+  registros.resize(20);
   instrucciones = 0;
   for (int i{0}; i < int(registros.size()); i++) {
     registros[i] = 0;
@@ -40,7 +40,7 @@ Ram::Ram(std::string nombre_ram) {
         tamaño++;
         std::pair<std::string, int> temp_pair{entrada, tamaño};
         bloques.push_back(temp_pair);
-      } else if (entrada == "HALT" || entrada == "halt") { // Halt, to tomar entrada ademas
+      } else if (entrada == "HALT" || entrada == "halt") { // Halt, no tomar entrada ademas
         addProgram("halt", "");
       } else { 
         if (entrada[0] == 'J' || entrada[0] == 'j') { // Salto, siguiente entrada sera una etiqueta
