@@ -13,6 +13,21 @@
 
 #include "sort.h"
 
+int Sort::print(vector<int> arr , string name) {
+  auto start = high_resolution_clock::now();
+  sort(arr, 0, arr.size()-1);
+  auto end = high_resolution_clock::now();
+  float time = duration_cast<nanoseconds>(end - start).count();
+
+  std::cout << name << "(ns: " << time << "): ";
+  for(int j{0}; j < int(arr.size()); ++j) {
+    std::cout << arr[j] << " ";
+  }
+  std::cout << std::endl << std::endl;
+
+  return time; 
+}
+
 void Sort::sort(vector<int>& arr, int ini, int fin) {
   if (small(arr, ini, fin)) {
     SolveSmall(arr);
@@ -28,7 +43,7 @@ void Sort::sort(vector<int>& arr, int ini, int fin) {
 // MERGESORT
 
 bool MergeSort::small(vector<int>& arr, int ini, int fin) {
-  return fin - ini < 1; // Empezamos en 0 por lo que <1 ([1,2] = size 2; 1-0 = 1, queremos que se vuelva a separar)
+  return ini >= fin;
 }
 
 void MergeSort::SolveSmall(vector<int>& arr) {
@@ -72,7 +87,7 @@ void MergeSort::Combine(vector<int>& arr, int ini, int med, int fin) { // Fix
 // QUICKSORT
 
 bool QuickSort::small(vector<int>& arr, int ini, int fin) {
-  return fin - ini < 1; // Empezamos en 0 por lo que <1 ([1,2] = size 2; 1-0 = 1, queremos que se vuelva a separar)
+  return ini >= fin;
 }
 
 void QuickSort::SolveSmall(vector<int>& arr) {
@@ -85,13 +100,6 @@ int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
 }
 
 void QuickSort::Combine(vector<int>& arr, int ini, int med, int fin) {
-  
+  // We don't combine in Quicksort
+  return;
 }
-
-// 1 3 5 6
-// 2 4 7 8
-
-// 1-0 3-2
-
-// 1 3 5 6 2 4 7 8
-// 1 2 5 6 3 4 7 8

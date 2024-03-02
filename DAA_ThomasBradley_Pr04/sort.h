@@ -13,11 +13,14 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 class Sort {
 public:
+  int print(vector<int> arr, string name);
   void sort(vector<int>& arr, int ini, int fin);
 protected:
   virtual bool small(vector<int>& arr, int ini, int fin) = 0;

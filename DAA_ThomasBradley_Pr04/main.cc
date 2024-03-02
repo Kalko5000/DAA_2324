@@ -14,13 +14,11 @@
 // g++ --std=c++14 -o dyv sort.cc main.cc
 // ./dyv
 
-#include <iostream>
 #include <fstream>
 #include <string>
-#include <chrono>
 #include "sort.h"
 
-using namespace std::chrono;
+const int MAX_SIZE = 10; // Biggest size of arrays to analyze
 
 /**
  * @desc Texto de ayuda para el correcto funcionamiento del código
@@ -57,51 +55,63 @@ void Usage(const int kArgc, char* argv[]) {
   } 
 }
 
+/**
+ * @desc Generates an array of random numbers between 1 and 100 of a certain size
+ * @param {int} size Size of resulting Array
+ * @return {std::vector<int>} Randomly generated array
+*/
 std::vector<int> RandomArray(int size) {
   std::vector<int> randArray;
-  srand((unsigned) time(NULL));
   for(int i{0}; i < size; ++i) {
     randArray.push_back(rand()%100);
   }
   return randArray;
 }
 
-void printSortedArray(std::vector<int> array) {
-  std::vector<int> array_copy = array;
-
-  MergeSort mergesort;
-  auto start = high_resolution_clock::now();
-  mergesort.sort(array, 0, array.size()-1);
-  auto end = high_resolution_clock::now();
-  std::cout << "Mergesort(ns: " << duration_cast<nanoseconds>(end - start).count() << "): ";
-  for(int j{0}; j < int(array.size()); ++j) {
-    std::cout << array[j] << " ";
-  }
-
-  QuickSort quickSort;
-  start = high_resolution_clock::now();
-  // quickSort.sort(array_copy, 0, array_copy.size()-1);
-  end = high_resolution_clock::now();
-  std::cout << std::endl << "Quicksort(ns: " << duration_cast<nanoseconds>(end - start).count() << "): ";
-  for(int j{0}; j < int(array_copy.size()); ++j) {
-    std::cout << array_copy[j] << " ";
-  }
-
-  std::cout << std::endl;
-}
-
-int main(int argc, char* argv []) {
-  Usage(argc, argv);
-  for(int i{1}; i < 11; ++i) {
-    std::vector<int> array = RandomArray(i);
-    std::cout << "Random Array size [" << i << "]: ";
+/**
+ * @desc Prints a given Array
+ * @param {std::vector<int>} array Array to be printed
+*/
+void printArray(std::vector<int> array) {
+  std::cout << "Random Array size [" << array.size() << "]: ";
     for(int j{0}; j < int(array.size()); ++j) {
       std::cout << array[j] << " ";
     }
-    std::cout << std::endl;
-    printSortedArray(array);
-    if(i != 10) std::cout << std::endl;
+  std::cout << std::endl;
+}
+
+/**
+ * @desc Prints the average value in an array, of a certain name
+ * @param {std::vector<int>} times Array with values to average out
+ * @param {string} name Name given to the array, to be displayed on screen
+*/
+void printAverage(std::vector<int> times, string name) {
+  int total = 0;
+  for (int i{0}; i < int(times.size()); i++) {
+    total += times[i];
   }
+  total /= times.size();
+  std::cout << name << " average: " << total << "ns" << std::endl;
+}
+
+int main(int argc, char* argv []) {
+  srand(time(0)); // Random Seed, to generate random numbers later
+  Usage(argc, argv);
+  std::vector<int> mergeTimes;
+  std::vector<int> quickTimes;
+
+  for(int i{1}; i <= MAX_SIZE; ++i) {
+    std::vector<int> array = RandomArray(i);
+    printArray(array);
+
+    MergeSort mergesort;
+    mergeTimes.push_back(mergesort.print(array, "Mergesort"));
+    QuickSort quicksort;
+    // quickTimes.push_back(quicksort.print(array, "Quicksort"));
+  }
+
+  printAverage(mergeTimes, "Mergesort");
+  // printAverage(quickTimes, "Quicksort");
 
   return 0;
 }
