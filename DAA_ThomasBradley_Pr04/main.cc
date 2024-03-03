@@ -74,9 +74,9 @@ std::vector<int> RandomArray(int size) {
 */
 void printArray(std::vector<int> array) {
   std::cout << "Random Array size [" << array.size() << "]: ";
-    for(int j{0}; j < int(array.size()); ++j) {
-      std::cout << array[j] << " ";
-    }
+  for(int j{0}; j < int(array.size()); ++j) {
+    std::cout << array[j] << " ";
+  }
   std::cout << std::endl;
 }
 
@@ -107,11 +107,12 @@ int main(int argc, char* argv []) {
     MergeSort mergesort;
     mergeTimes.push_back(mergesort.print(array, "Mergesort"));
     QuickSort quicksort;
-    // quickTimes.push_back(quicksort.print(array, "Quicksort"));
+    quickTimes.push_back(quicksort.print(array, "Quicksort"));
+    std::cout << std::endl;
   }
 
   printAverage(mergeTimes, "Mergesort");
-  // printAverage(quickTimes, "Quicksort");
+  printAverage(quickTimes, "Quicksort");
 
   return 0;
 }

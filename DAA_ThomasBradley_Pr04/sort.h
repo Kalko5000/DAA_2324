@@ -27,6 +27,8 @@ protected:
   virtual void SolveSmall(vector<int>& arr) = 0;
   virtual int Divide(vector<int>& arr, int ini, int fin) = 0;
   virtual void Combine(vector<int>& arr, int ini, int med, int fin) = 0;
+  virtual int Minus() = 0;
+  virtual int Plus() = 0;
 };
 
 class MergeSort : public Sort {
@@ -35,6 +37,8 @@ protected:
   void SolveSmall(vector<int>& arr) override;
   int Divide(vector<int>& arr, int ini, int fin) override;
   void Combine(vector<int>& arr, int ini, int med, int fin) override;
+  int Minus() override;
+  int Plus() override;
 };
 
 class QuickSort : public Sort {
@@ -43,4 +47,6 @@ protected:
   void SolveSmall(vector<int>& arr) override;
   int Divide(vector<int>& arr, int ini, int fin) override;
   void Combine(vector<int>& arr, int ini, int med, int fin) override;
+  int Minus() override;
+  int Plus() override;
 };

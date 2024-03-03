@@ -23,7 +23,7 @@ int Sort::print(vector<int> arr , string name) {
   for(int j{0}; j < int(arr.size()); ++j) {
     std::cout << arr[j] << " ";
   }
-  std::cout << std::endl << std::endl;
+  std::cout << std::endl;
 
   return time; 
 }
@@ -33,9 +33,8 @@ void Sort::sort(vector<int>& arr, int ini, int fin) {
     SolveSmall(arr);
   } else {
     int med = Divide(arr, ini, fin);
-    sort(arr, ini, med);
-    sort(arr, med+1, fin);
-    // std::cout << ini << ' ' << med << ' ' << fin << std::endl;
+    sort(arr, ini, med - Minus());
+    sort(arr, med + Plus(), fin);
     Combine(arr, ini, med, fin);
   }
 }
@@ -82,7 +81,15 @@ void MergeSort::Combine(vector<int>& arr, int ini, int med, int fin) { // Fix
   for (int i{0}; i < int(ordered.size()); i++) {  // Cambiar valores de arr a los de ordered
     arr[ini + i] = ordered[i];
   }
- }
+}
+
+int MergeSort::Minus() {
+  return 0;
+}
+
+int MergeSort::Plus() {
+  return 1;
+}
 
 // QUICKSORT
 
@@ -96,10 +103,39 @@ void QuickSort::SolveSmall(vector<int>& arr) {
 }
 
 int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
-  return 1;
+  int pivote{arr[fin]}, posPivote{0};
+  std::vector<int> menor, mayor;
+  fin--;  // Don't include pivot
+
+  for (int i{ini}; i <= fin; i++) { // Get higher and lower values
+    if (arr[i] > pivote) {
+      mayor.push_back(arr[i]);
+    } else {
+      menor.push_back(arr[i]);
+    }
+  }
+
+  for (int i{0}; i < int(menor.size()); i++) {  // Add lower values at start
+    arr[ini + i] = menor[i];
+  }
+  arr[ini + int(menor.size())] = pivote;  // Add pivot in middle
+  posPivote = ini + int(menor.size());
+  for (int j{0}; j < int(mayor.size()); j++) {  // Add higher values at end
+    arr[ini + int(menor.size()) + j + 1] = mayor[j];
+  }
+
+  return posPivote;
 }
 
 void QuickSort::Combine(vector<int>& arr, int ini, int med, int fin) {
   // We don't combine in Quicksort
   return;
+}
+
+int QuickSort::Minus() {
+  return 1;
+}
+
+int QuickSort::Plus() {
+  return 1;
 }
