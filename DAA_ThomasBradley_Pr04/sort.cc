@@ -103,28 +103,31 @@ void QuickSort::SolveSmall(vector<int>& arr) {
 }
 
 int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
-  int pivote{arr[fin]}, posPivote{0};
-  std::vector<int> menor, mayor;
-  fin--;  // Don't include pivot
+  int pivot{arr[fin]}, pivotIndex{0};
+  int count{0}, leftIndex{ini}, rightIndex{fin};
 
-  for (int i{ini}; i <= fin; i++) { // Get higher and lower values
-    if (arr[i] > pivote) {
-      mayor.push_back(arr[i]);
-    } else {
-      menor.push_back(arr[i]);
+  for (int i{ini}; i < fin; i++) { // How many values are lower than the chosen pivot?
+    if (arr[i] <= pivot) {
+      count++;
     }
   }
 
-  for (int i{0}; i < int(menor.size()); i++) {  // Add lower values at start
-    arr[ini + i] = menor[i];
-  }
-  arr[ini + int(menor.size())] = pivote;  // Add pivot in middle
-  posPivote = ini + int(menor.size());
-  for (int j{0}; j < int(mayor.size()); j++) {  // Add higher values at end
-    arr[ini + int(menor.size()) + j + 1] = mayor[j];
+  pivotIndex = ini + count; // Store new pivot pos
+  swap(arr[pivotIndex], arr[fin]);  // Place pivot value in that position
+
+  while (leftIndex < pivotIndex && rightIndex > pivotIndex) { // Until all values are on the correct side
+    while (arr[leftIndex] <= pivot) {
+      leftIndex++;
+    }
+    while (arr[rightIndex] > pivot) {
+      rightIndex--;
+    }
+    if (leftIndex < pivotIndex && rightIndex > pivotIndex) { // Swap bigger element to right, smaller to left
+      swap(arr[leftIndex], arr[rightIndex]);
+    }
   }
 
-  return posPivote;
+  return pivotIndex;
 }
 
 void QuickSort::Combine(vector<int>& arr, int ini, int med, int fin) {

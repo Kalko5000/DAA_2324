@@ -18,8 +18,6 @@
 #include <string>
 #include "sort.h"
 
-const int MAX_SIZE = 10; // Biggest size of arrays to analyze
-
 /**
  * @desc Texto de ayuda para el correcto funcionamiento del código
 */
@@ -97,6 +95,7 @@ void printAverage(std::vector<int> times, string name) {
 int main(int argc, char* argv []) {
   srand(time(0)); // Random Seed, to generate random numbers later
   Usage(argc, argv);
+  const int MAX_SIZE = 15; // Biggest size of arrays to analyze
   std::vector<int> mergeTimes;
   std::vector<int> quickTimes;
 
