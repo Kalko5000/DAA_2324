@@ -95,11 +95,12 @@ void printAverage(std::vector<int> times, string name) {
 int main(int argc, char* argv []) {
   srand(time(0)); // Random Seed, to generate random numbers later
   Usage(argc, argv);
+  const int START_SIZE = 1;
   const int MAX_SIZE = 15; // Biggest size of arrays to analyze
   std::vector<int> mergeTimes;
   std::vector<int> quickTimes;
 
-  for(int i{1}; i <= MAX_SIZE; ++i) {
+  for(int i{START_SIZE}; i <= MAX_SIZE; ++i) {
     std::vector<int> array = RandomArray(i);
     printArray(array);
 
@@ -113,5 +114,8 @@ int main(int argc, char* argv []) {
   printAverage(mergeTimes, "Mergesort");
   printAverage(quickTimes, "Quicksort");
 
+  std::cout << std::endl;
+  std::cout << "Complexity of MergeSort: " << MergeSort().recurrence() << std::endl;
+  std::cout << "Complexity of QuickSort: " << QuickSort().recurrence() << std::endl;
   return 0;
 }

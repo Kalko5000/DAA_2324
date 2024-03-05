@@ -13,6 +13,12 @@
 
 #include "sort.h"
 
+/**
+ * @desc Prints the name of the algorithm, how long it took to complete and the ordered array
+ * @param {vector<int>} arr Array to be ordered
+ * @param {string} name Name of the algorithm
+ * @return {int} Time it took (in nanoseconds) to complete the ordering
+*/
 int Sort::print(vector<int> arr , string name) {
   auto start = high_resolution_clock::now();
   sort(arr, 0, arr.size()-1);
@@ -28,6 +34,12 @@ int Sort::print(vector<int> arr , string name) {
   return time; 
 }
 
+/**
+ * @desc Recursive template for sorting arrays, specifics to be filled by subclasses
+ * @param {vector<int>&} arr Array to be ordered
+ * @param {int} ini Starting position of array to look at
+ * @param {int} fin Ending position of array to look at
+*/
 void Sort::sort(vector<int>& arr, int ini, int fin) {
   if (small(arr, ini, fin)) {
     SolveSmall(arr);
@@ -39,21 +51,56 @@ void Sort::sort(vector<int>& arr, int ini, int fin) {
   }
 }
 
+/**
+ * @desc Return a string with the recurrence formula for an algorithm, dependant
+ *       on subclasses
+ * @return {string} String with formula
+*/
+string Sort::recurrence() {
+  std::vector<string> constants = values();
+  return "T(n) = " + constants[0] + "T(" + constants[1] + ") + " + constants[2];
+}
+
 // MERGESORT
 
+/**
+ * @desc Detects wether an array is small enough to evaluate yet
+ * @param {vector<int>&} arr Array to evaluate
+ * @param {int} ini Inicial value where we begin looking at array
+ * @param {int} fin Ending value where we stop looking at array
+ * @return {bool} True if is small enough
+*/
 bool MergeSort::small(vector<int>& arr, int ini, int fin) {
   return ini >= fin;
 }
 
+/**
+ * @desc Solvers the order of an array for small enough sizes
+ * @param {vector<int>&} arr Array to evaluate
+*/
 void MergeSort::SolveSmall(vector<int>& arr) {
   // Do nothing since the array is already sorted.
   return;
 }
 
+/**
+ * @desc Splits the array into two halves
+ * @param {vector<int>&} arr Array to evaluate
+ * @param {int} ini Inicial value where we begin looking at array
+ * @param {int} fin Ending value where we stop looking at array
+ * @return {int} Middle position that separates left from right side of array
+*/
 int MergeSort::Divide(vector<int>& arr, int ini, int fin) {
   return (ini + fin) / 2;
 }
 
+/**
+ * @desc Combines two different halves of array into one
+ * @param {vector<int>&} arr Array to evaluate
+ * @param {int} ini Inicial value where we begin looking at the first part of array
+ * @param {int} med Middle value where we stop looking at first half and start looking at second half of array
+ * @param {int} fin Ending value where we stop looking at second part of array
+*/
 void MergeSort::Combine(vector<int>& arr, int ini, int med, int fin) { // Fix
   int iniCount{ini}, medCount{med + 1};
   std::vector<int> ordered;
@@ -83,25 +130,62 @@ void MergeSort::Combine(vector<int>& arr, int ini, int med, int fin) { // Fix
   }
 }
 
+/**
+ * @desc Quantity to subtract from med in first recursive call to sort()
+ * @return {int} Amount to subtract
+*/
 int MergeSort::Minus() {
   return 0;
 }
 
+/**
+ * @desc Quantity to add onto med in second recursive call to sort()
+ * @return {int} Amount to add
+*/
 int MergeSort::Plus() {
   return 1;
 }
 
+/**
+ * @desc Returns values a, b and c for a MergeSort recurrence formula
+ * @return {std::vector<string>} Vector with values a, b and c
+*/
+std::vector<string> MergeSort::values() {
+  const string valueA = "2";
+  const string valueB = "n/2";
+  const string valueC = "O(n)";
+  return {valueA, valueB, valueC};
+}
+
 // QUICKSORT
 
+/**
+ * @desc Detects wether an array is small enough to evaluate yet
+ * @param {vector<int>&} arr Array to evaluate
+ * @param {int} ini Inicial value where we begin looking at array
+ * @param {int} fin Ending value where we stop looking at array
+ * @return {bool} True if is small enough
+*/
 bool QuickSort::small(vector<int>& arr, int ini, int fin) {
   return ini >= fin;
 }
 
+/**
+ * @desc Solvers the order of an array for small enough sizes
+ * @param {vector<int>&} arr Array to evaluate
+*/
 void QuickSort::SolveSmall(vector<int>& arr) {
   // Do nothing since the array is already sorted.
   return;
 }
 
+/**
+ * @desc Splits the array into two halves
+ * @param {vector<int>&} arr Array to evaluate
+ * @param {int} ini Inicial value where we begin looking at array
+ * @param {int} fin Ending value where we stop looking at array
+ * @return {int} Middle position that separates left from right side of array
+*/
 int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
   int pivot{arr[fin]}, pivotIndex{0};
   int count{0}, leftIndex{ini}, rightIndex{fin};
@@ -130,15 +214,41 @@ int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
   return pivotIndex;
 }
 
+/**
+ * @desc Combines two different halves of array into one
+ * @param {vector<int>&} arr Array to evaluate
+ * @param {int} ini Inicial value where we begin looking at the first part of array
+ * @param {int} med Middle value where we stop looking at first half and start looking at second half of array
+ * @param {int} fin Ending value where we stop looking at second part of array
+*/
 void QuickSort::Combine(vector<int>& arr, int ini, int med, int fin) {
   // We don't combine in Quicksort
   return;
 }
 
+/**
+ * @desc Quantity to subtract from med in first recursive call to sort()
+ * @return {int} Amount to subtract
+*/
 int QuickSort::Minus() {
   return 1;
 }
 
+/**
+ * @desc Quantity to add onto med in second recursive call to sort()
+ * @return {int} Amount to add
+*/
 int QuickSort::Plus() {
   return 1;
+}
+
+/**
+ * @desc Returns values a, b and c for a QuickSort recurrence formula
+ * @return {std::vector<string>} Vector with values a, b and c
+*/
+std::vector<string> QuickSort::values() {
+  const string valueA = "T(i) + ";
+  const string valueB = "n-i-1";
+  const string valueC = "cn";
+  return {valueA, valueB, valueC};
 }

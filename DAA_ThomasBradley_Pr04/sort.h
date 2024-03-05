@@ -22,6 +22,7 @@ class Sort {
 public:
   int print(vector<int> arr, string name);
   void sort(vector<int>& arr, int ini, int fin);
+  string recurrence();
 protected:
   virtual bool small(vector<int>& arr, int ini, int fin) = 0;
   virtual void SolveSmall(vector<int>& arr) = 0;
@@ -29,6 +30,7 @@ protected:
   virtual void Combine(vector<int>& arr, int ini, int med, int fin) = 0;
   virtual int Minus() = 0;
   virtual int Plus() = 0;
+  virtual std::vector<string> values() = 0;
 };
 
 class MergeSort : public Sort {
@@ -39,6 +41,7 @@ protected:
   void Combine(vector<int>& arr, int ini, int med, int fin) override;
   int Minus() override;
   int Plus() override;
+  std::vector<string> values() override;
 };
 
 class QuickSort : public Sort {
@@ -49,4 +52,5 @@ protected:
   void Combine(vector<int>& arr, int ini, int med, int fin) override;
   int Minus() override;
   int Plus() override;
+  std::vector<string> values() override;
 };
