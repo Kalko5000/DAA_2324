@@ -88,9 +88,9 @@ int BinarySearch<key>::Plus() {
 */
 template<class key>
 vector<string> BinarySearch<key>::values() {
-  const string valueA = "T(i) + ";
-  const string valueB = "n-i-1";
-  const string valueC = "cn";
+  const string valueA = "";
+  const string valueB = "n/2";
+  const string valueC = "1";
   return {valueA, valueB, valueC};
 }
 

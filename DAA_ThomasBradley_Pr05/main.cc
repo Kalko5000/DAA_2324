@@ -127,7 +127,6 @@ void printResults(Sort<int>* algortithm, std::string name) {
       QuickSort<int> tempSort;
       tempSort.sort(array, 0, array.size()-1, -1, 0);
     }
-    // std::cout << value << std::endl;
 
     auto start = high_resolution_clock::now();
     algortithm->sort(array, 0, array.size()-1, value, 0);
