@@ -22,7 +22,8 @@
 template<class key>
 void Sort<key>::sort(vector<key>& arr, int ini, int fin, int level) {
   level++;
-  if (level_ < level) level_ = level;
+  if (level_ < level) level_ = level; // Depth
+
   if (small(arr, ini, fin)) {
     SolveSmall(arr);
   } else {

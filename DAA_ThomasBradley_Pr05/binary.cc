@@ -8,7 +8,7 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    12.mar.2024
- * @brief:   Algoritmos de Divide y Vencerás. Aqui esta la definición de la clase QuickSort
+ * @brief:   Algoritmos de Divide y Vencerás. Aqui esta la definición de la clase BinarySearch
  */
 
 #include "quick.h"
@@ -21,7 +21,7 @@
  * @return {bool} True if is small enough
 */
 template<class key>
-bool QuickSort<key>::small(vector<key>& arr, int ini, int fin) {
+bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin) {
   return ini >= fin;
 }
 
@@ -30,7 +30,7 @@ bool QuickSort<key>::small(vector<key>& arr, int ini, int fin) {
  * @param {vector<int>&} arr Array to evaluate
 */
 template<class key>
-void QuickSort<key>::SolveSmall(vector<key>& arr) {
+void BinarySearch<key>::SolveSmall(vector<key>& arr) {
   // Do nothing since the array is already sorted.
   return;
 }
@@ -43,7 +43,7 @@ void QuickSort<key>::SolveSmall(vector<key>& arr) {
  * @return {int} Middle position that separates left from right side of array
 */
 template<class key>
-int QuickSort<key>::Divide(vector<key>& arr, int ini, int fin) {
+int BinarySearch<key>::Divide(vector<key>& arr, int ini, int fin) {
   int pivot{arr[fin]}, pivotIndex{0};
   int count{0}, leftIndex{ini}, rightIndex{fin};
 
@@ -79,7 +79,7 @@ int QuickSort<key>::Divide(vector<key>& arr, int ini, int fin) {
  * @param {int} fin Ending value where we stop looking at second part of array
 */
 template<class key>
-void QuickSort<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
+void BinarySearch<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
   // We don't combine in Quicksort
   return;
 }
@@ -89,7 +89,7 @@ void QuickSort<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
  * @return {int} Amount to subtract
 */
 template<class key>
-int QuickSort<key>::Minus() {
+int BinarySearch<key>::Minus() {
   return 1;
 }
 
@@ -98,16 +98,16 @@ int QuickSort<key>::Minus() {
  * @return {int} Amount to add
 */
 template<class key>
-int QuickSort<key>::Plus() {
+int BinarySearch<key>::Plus() {
   return 1;
 }
 
 /**
- * @desc Returns values a, b and c for a QuickSort recurrence formula
+ * @desc Returns values a, b and c for a BinarySearch recurrence formula
  * @return {std::vector<string>} Vector with values a, b and c
 */
 template<class key>
-vector<string> QuickSort<key>::values() {
+vector<string> BinarySearch<key>::values() {
   const string valueA = "T(i) + ";
   const string valueB = "n-i-1";
   const string valueC = "cn";
@@ -115,4 +115,4 @@ vector<string> QuickSort<key>::values() {
 }
 
 // DECLARACIONES
-template class QuickSort<int>;
+template class BinarySearch<int>;

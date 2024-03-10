@@ -8,17 +8,17 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    12.mar.2024
- * @brief:   Algoritmos de Divide y Vencerás. Aqui esta la declaración de la clase QuickSort
+ * @brief:   Algoritmos de Divide y Vencerás. Aqui esta la declaración de la clase BinarySearch
  */
 
 #include <iostream>
 #include <vector>
-#include "binary.h"
+#include "sort.h"
 
 using namespace std;
 
 template<class key>
-class QuickSort : public Sort<key> {
+class BinarySearch : public Sort<key> {
  private:
   bool small(vector<key>& arr, int ini, int fin) override;
   void SolveSmall(vector<key>& arr) override;

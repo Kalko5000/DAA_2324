@@ -171,7 +171,7 @@ int main(int argc, char* argv []) {
 
   bool validInput{false};
   while (!validInput) {
-    std::cout << "Introduzca algoritmo (0: MergeSort, 1: QuickSort): ";
+    std::cout << "Introduzca algoritmo (0: MergeSort, 1: QuickSort, 2: BinarySearch): ";
     int input{0};
     std::cin >> input;
     switch (input) {
@@ -183,6 +183,11 @@ int main(int argc, char* argv []) {
       case 1:
         if (!debug) printResults(new QuickSort<int>(), "QUICKSORT");
         else printSingleResult(new QuickSort<int>(), "QUICKSORT");
+        validInput = true;
+        break;
+      case 2:
+        if (!debug) printResults(new BinarySearch<int>(), "BINARY SEARCH");
+        else printSingleResult(new BinarySearch<int>(), "BINARY SEARCH");
         validInput = true;
         break;
       default:
