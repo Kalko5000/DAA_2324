@@ -27,4 +27,6 @@ class BinarySearch : public Sort<key> {
   int Minus() override;
   int Plus() override;
   vector<string> values() override;
+
+  int foundPos = -1;
 };

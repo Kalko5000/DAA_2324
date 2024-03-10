@@ -21,7 +21,7 @@ using namespace std::chrono;
 template<class key>
 class Sort {
  public:
-  void sort(vector<key>& arr, int ini, int fin, int level);
+  void sort(vector<key>& arr, int ini, int fin, int value, int level);
   string recurrence();
   int getLevel();
  protected:

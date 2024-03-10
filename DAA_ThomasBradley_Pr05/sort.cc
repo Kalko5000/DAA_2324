@@ -20,7 +20,7 @@
  * @param {int} fin Ending position of array to look at
 */
 template<class key>
-void Sort<key>::sort(vector<key>& arr, int ini, int fin, int level) {
+void Sort<key>::sort(vector<key>& arr, int ini, int fin, int value, int level) {
   level++;
   if (level_ < level) level_ = level; // Depth
 
@@ -28,9 +28,15 @@ void Sort<key>::sort(vector<key>& arr, int ini, int fin, int level) {
     SolveSmall(arr);
   } else {
     int med = Divide(arr, ini, fin);
-    sort(arr, ini, med - Minus(), level);
-    sort(arr, med + Plus(), fin, level);
-    Combine(arr, ini, med, fin);
+    if (arr[med] > value || value == -1) {
+      sort(arr, ini, med - Minus(), value, level);
+    }
+    if (arr[med] < value || value == -1) {
+      sort(arr, med + Plus(), fin, value, level);
+    }
+    if (arr[med] == value || value == -1) {
+      Combine(arr, ini, med, fin);
+    }
   }
 }
 

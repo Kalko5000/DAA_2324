@@ -118,12 +118,19 @@ void printAverage(std::vector<int> times) {
 void printResults(Sort<int>* algortithm, std::string name) {
   std::vector<int> times;  // Used for average
   int max{0}; // Used for deepest recurrence level
+  int value{-1}; // Value to search for in Binary search
 
   for(int i{START_SIZE}; i <= MAX_SIZE; ++i) {
     std::vector<int> array = RandomArray(i);
+    if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
+      value = RandomArray(1)[0];
+      QuickSort<int> tempSort;
+      tempSort.sort(array, 0, array.size()-1, -1, 0);
+    }
+    // std::cout << value << std::endl;
 
     auto start = high_resolution_clock::now();
-    algortithm->sort(array, 0, array.size()-1, 0);
+    algortithm->sort(array, 0, array.size()-1, value, 0);
     auto end = high_resolution_clock::now();
     float time = duration_cast<nanoseconds>(end - start).count();
     times.push_back(time);
@@ -144,15 +151,22 @@ void printResults(Sort<int>* algortithm, std::string name) {
  * @param {std::string} name Name of the algorithm 
 */
 void printSingleResult(Sort<int>* algortithm, std::string name) {
+  int value{-1}; // Value to search for in Binary search
   std::cout << "Introduzca el tamaño de array: ";
   int size{0};
   std::cin >> size;
   std::vector<int> array = RandomArray(size);
   std::cout << std::endl << "Random Array size [" << size << "]: " << std::endl;
   printArray(array);
+  if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
+    value = RandomArray(1)[0];
+    QuickSort<int> tempSort;
+    tempSort.sort(array, 0, array.size()-1, -1, 0);
+  }
+  std::cout << value << std::endl;
 
   auto start = high_resolution_clock::now();
-  algortithm->sort(array, 0, array.size()-1, 0);
+  algortithm->sort(array, 0, array.size()-1, value, 0);
   auto end = high_resolution_clock::now();
   float time = duration_cast<nanoseconds>(end - start).count();
 

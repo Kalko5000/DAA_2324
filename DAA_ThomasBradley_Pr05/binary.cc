@@ -22,7 +22,7 @@
 */
 template<class key>
 bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin) {
-  return ini >= fin;
+  return ini > fin;
 }
 
 /**
@@ -31,7 +31,9 @@ bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin) {
 */
 template<class key>
 void BinarySearch<key>::SolveSmall(vector<key>& arr) {
-  // Do nothing since the array is already sorted.
+  // Value doesn't exist in array
+  std::cout << "WRONG" << std::endl;
+  foundPos = -1;
   return;
 }
 
@@ -44,31 +46,7 @@ void BinarySearch<key>::SolveSmall(vector<key>& arr) {
 */
 template<class key>
 int BinarySearch<key>::Divide(vector<key>& arr, int ini, int fin) {
-  int pivot{arr[fin]}, pivotIndex{0};
-  int count{0}, leftIndex{ini}, rightIndex{fin};
-
-  for (int i{ini}; i < fin; i++) { // How many values are lower than the chosen pivot?
-    if (arr[i] <= pivot) {
-      count++;
-    }
-  }
-
-  pivotIndex = ini + count; // Store new pivot pos
-  swap(arr[pivotIndex], arr[fin]);  // Place pivot value in that position
-
-  while (leftIndex < pivotIndex && rightIndex > pivotIndex) { // Until all values are on the correct side
-    while (arr[leftIndex] <= pivot) {
-      leftIndex++;
-    }
-    while (arr[rightIndex] > pivot) {
-      rightIndex--;
-    }
-    if (leftIndex < pivotIndex && rightIndex > pivotIndex) { // Swap bigger element to right, smaller to left
-      swap(arr[leftIndex], arr[rightIndex]);
-    }
-  }
-
-  return pivotIndex;
+  return (ini + fin) / 2;
 }
 
 /**
@@ -80,7 +58,9 @@ int BinarySearch<key>::Divide(vector<key>& arr, int ini, int fin) {
 */
 template<class key>
 void BinarySearch<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
-  // We don't combine in Quicksort
+  // Value has been found
+  std::cout << "Found in pos: " << med << " value -> " << arr[med] << std::endl;
+  foundPos = med;
   return;
 }
 
