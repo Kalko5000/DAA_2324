@@ -21,7 +21,6 @@ using namespace std::chrono;
 template<class key>
 class Sort {
  public:
-  int print(vector<key> arr, string name, bool showArray);
   void sort(vector<key>& arr, int ini, int fin, int level);
   string recurrence();
   int getLevel();

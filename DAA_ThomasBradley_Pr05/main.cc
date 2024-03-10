@@ -18,15 +18,20 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include <cctype>
 #include "merge.h"
+
+const int START_SIZE = 500; // Starting size of arrays to analyze
+const int MAX_SIZE = 550; // Biggest size of arrays to analyze
 
 /**
  * @desc Texto de ayuda para el correcto funcionamiento del código
 */
 const void kHelpText() {
-  std::cout << "dyv" << std::endl << std::endl;
-  std::cout << "Se generara un array aleatorio de varios tamaños y se le pasara por distintos" << std::endl;
-  std::cout << "algoritmos tipo divide y venceras, para comparar su eficiencia" << std::endl;
+  std::cout << "dyv [1]" << std::endl << std::endl;
+  std::cout << "Se generara un array aleatorio y se le pasara a un" << std::endl;
+  std::cout << "algoritmo tipo divide y venceras, para medir su eficiencia" << std::endl;
+  std::cout << "[1] = '1' para modo normal, '2' para modo debug" << std::endl;
 }
 
 /**
@@ -48,8 +53,7 @@ void Usage(const int kArgc, char* argv[]) {
       kHelpText();
       exit(0);
     }
-  }
-  if (kArgc != 1) {
+  } else {
     kFuncText();
     exit(1);
   } 
@@ -73,7 +77,6 @@ std::vector<int> RandomArray(int size) {
  * @param {std::vector<int>} array Array to be printed
 */
 void printArray(std::vector<int> array) {
-  std::cout << "Random Array size [" << array.size() << "]: ";
   for(int j{0}; j < int(array.size()); ++j) {
     std::cout << array[j] << " ";
   }
@@ -86,10 +89,10 @@ void printArray(std::vector<int> array) {
  * @param {std::vector<int>} mergeTimes Times for MergeSort algorithm
  * @param {std::vector<int>} quickTimes Times for QuickSort algorithm
 */
-void printTable(int initialSize, std::vector<int> mergeTimes, std::vector<int> quickTimes) {
-  std::cout << std::setw(6) << "N" << std::setw(16) << "MergeSort" << std::setw(16) << "QuickSort" << std::endl;
-  for (int i{}; i < int(mergeTimes.size()); i++) {
-    std::cout << std::setw(6) << initialSize + i << std::setw(16) << mergeTimes[i] << std::setw(16) << quickTimes[i] << std::endl;
+void printTable(int initialSize, std::vector<int> times) {
+  std::cout << std::setw(6) << "N" << std::setw(16) << "Times (ns)" << std::endl;
+  for (int i{}; i < int(times.size()); i++) {
+    std::cout << std::setw(6) << initialSize + i << std::setw(16) << times[i] << std::endl;
   }
   std::cout << std::endl;
 }
@@ -97,50 +100,95 @@ void printTable(int initialSize, std::vector<int> mergeTimes, std::vector<int> q
 /**
  * @desc Prints the average value in an array, of a certain name
  * @param {std::vector<int>} times Array with values to average out
- * @param {string} name Name given to the array, to be displayed on screen
 */
-void printAverage(std::vector<int> times, string name) {
+void printAverage(std::vector<int> times) {
   int total = 0;
   for (int i{0}; i < int(times.size()); i++) {
     total += times[i];
   }
   total /= times.size();
-  std::cout << name << " average: " << total << "ns" << std::endl;
+  std::cout << "Average Time: " << total << "ns" << std::endl;
+}
+
+/**
+ * @desc Prints results as a table for various executions of an algorithm
+ * @param {Sort<int>*} algorithm Algorithm to use
+ * @param {std::string} name Name of the algorithm 
+*/
+void printResults(Sort<int>* algortithm, std::string name) {
+  std::vector<int> times;  // Used for average
+  int max{0}; // Used for deepest recurrence level
+
+  for(int i{START_SIZE}; i <= MAX_SIZE; ++i) {
+    std::vector<int> array = RandomArray(i);
+
+    auto start = high_resolution_clock::now();
+    algortithm->sort(array, 0, array.size()-1, 0);
+    auto end = high_resolution_clock::now();
+    float time = duration_cast<nanoseconds>(end - start).count();
+    times.push_back(time);
+
+    if (algortithm->getLevel() > max) max = algortithm->getLevel();
+  }
+
+  std::cout << name << std::endl;
+  printTable(START_SIZE, times);
+  std::cout << "Recurrence Ecuation: " << MergeSort<int>().recurrence() << std::endl;
+  printAverage(times);
+  std::cout << "Highest Depth Reached: " << max << std::endl;
+}
+
+/**
+ * @desc Prints a single result from an algorithm execution, used for debug mode
+ * @param {Sort<int>*} algorithm Algorithm to use
+ * @param {std::string} name Name of the algorithm 
+*/
+void printSingleResult(Sort<int>* algortithm, std::string name) {
+  std::cout << "Introduzca el tamaño de array: ";
+  int size{0};
+  std::cin >> size;
+  std::vector<int> array = RandomArray(size);
+  std::cout << std::endl << "Random Array size [" << size << "]: " << std::endl;
+  printArray(array);
+
+  auto start = high_resolution_clock::now();
+  algortithm->sort(array, 0, array.size()-1, 0);
+  auto end = high_resolution_clock::now();
+  float time = duration_cast<nanoseconds>(end - start).count();
+
+  std::cout << std::endl << "Solved Array: " << std::endl;
+  printArray(array);
+  std::cout << std::endl << "Time taken: " << time << "ns" << std::endl;
+  std::cout << "Max Depth in Instance: " << algortithm->getLevel() << std::endl;
 }
 
 int main(int argc, char* argv []) {
   srand(time(0)); // Random Seed, to generate random numbers later
   Usage(argc, argv);
-  const int START_SIZE = 1400; // Starting size of arrays to analyze
-  const int MAX_SIZE = 1500; // Biggest size of arrays to analyze
-  std::vector<int> mergeTimes, quickTimes;  // Used for averages
-  int maxMerge{0}, maxQuick{0}; // Used for deepest recurrence level
+  int modo = std::stoi(argv[1]);
+  bool debug{false};
+  if (modo == 2) debug = true;
 
-  for(int i{START_SIZE}; i <= MAX_SIZE; ++i) {
-    std::vector<int> array = RandomArray(i);
-    printArray(array);
-
-    MergeSort<int> mergesort;
-    mergeTimes.push_back(mergesort.print(array, "Mergesort", false));
-    std::cout << "Max recurrence level reached for MergeSort: " << mergesort.getLevel() << std::endl;
-    if (mergesort.getLevel() > maxMerge) maxMerge = mergesort.getLevel();
-    QuickSort<int> quicksort;
-    quickTimes.push_back(quicksort.print(array, "Quicksort", false));
-    std::cout << "Max recurrence level reached for QuickSort: " << quicksort.getLevel() << std::endl;
-    if (quicksort.getLevel() > maxQuick) maxQuick = quicksort.getLevel();
-    std::cout << std::endl;
+  bool validInput{false};
+  while (!validInput) {
+    std::cout << "Introduzca algoritmo (0: MergeSort, 1: QuickSort): ";
+    int input{0};
+    std::cin >> input;
+    switch (input) {
+      case 0:
+        if (!debug) printResults(new MergeSort<int>(), "MERGESORT");
+        else printSingleResult(new MergeSort<int>(), "MERGESORT");
+        validInput = true;
+        break;
+      case 1:
+        if (!debug) printResults(new QuickSort<int>(), "QUICKSORT");
+        else printSingleResult(new QuickSort<int>(), "QUICKSORT");
+        validInput = true;
+        break;
+      default:
+        std::cout << "Algoritmo no válido, vuelva a intentar" << std::endl;
+        break;
+    }
   }
-
-  printTable(START_SIZE, mergeTimes, quickTimes);
-
-  printAverage(mergeTimes, "Mergesort");
-  printAverage(quickTimes, "Quicksort");
-
-  std::cout << std::endl;
-  std::cout << "Complexity of MergeSort: " << MergeSort<int>().recurrence() << std::endl;
-  std::cout << "Complexity of QuickSort: " << QuickSort<int>().recurrence() << std::endl << std::endl;
-
-  std::cout << "Highest MergeSort depth reached: " << maxMerge << std::endl;
-  std::cout << "Highest QuickSort depth reached: " << maxQuick << std::endl;
   return 0;
 }
