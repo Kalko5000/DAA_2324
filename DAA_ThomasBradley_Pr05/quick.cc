@@ -20,7 +20,8 @@
  * @param {int} fin Ending value where we stop looking at array
  * @return {bool} True if is small enough
 */
-bool QuickSort::small(vector<int>& arr, int ini, int fin) {
+template<class key>
+bool QuickSort<key>::small(vector<key>& arr, int ini, int fin) {
   return ini >= fin;
 }
 
@@ -28,7 +29,8 @@ bool QuickSort::small(vector<int>& arr, int ini, int fin) {
  * @desc Solvers the order of an array for small enough sizes
  * @param {vector<int>&} arr Array to evaluate
 */
-void QuickSort::SolveSmall(vector<int>& arr) {
+template<class key>
+void QuickSort<key>::SolveSmall(vector<key>& arr) {
   // Do nothing since the array is already sorted.
   return;
 }
@@ -40,7 +42,8 @@ void QuickSort::SolveSmall(vector<int>& arr) {
  * @param {int} fin Ending value where we stop looking at array
  * @return {int} Middle position that separates left from right side of array
 */
-int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
+template<class key>
+int QuickSort<key>::Divide(vector<key>& arr, int ini, int fin) {
   int pivot{arr[fin]}, pivotIndex{0};
   int count{0}, leftIndex{ini}, rightIndex{fin};
 
@@ -75,7 +78,8 @@ int QuickSort::Divide(vector<int>& arr, int ini, int fin) {
  * @param {int} med Middle value where we stop looking at first half and start looking at second half of array
  * @param {int} fin Ending value where we stop looking at second part of array
 */
-void QuickSort::Combine(vector<int>& arr, int ini, int med, int fin) {
+template<class key>
+void QuickSort<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
   // We don't combine in Quicksort
   return;
 }
@@ -84,7 +88,8 @@ void QuickSort::Combine(vector<int>& arr, int ini, int med, int fin) {
  * @desc Quantity to subtract from med in first recursive call to sort()
  * @return {int} Amount to subtract
 */
-int QuickSort::Minus() {
+template<class key>
+int QuickSort<key>::Minus() {
   return 1;
 }
 
@@ -92,7 +97,8 @@ int QuickSort::Minus() {
  * @desc Quantity to add onto med in second recursive call to sort()
  * @return {int} Amount to add
 */
-int QuickSort::Plus() {
+template<class key>
+int QuickSort<key>::Plus() {
   return 1;
 }
 
@@ -100,9 +106,13 @@ int QuickSort::Plus() {
  * @desc Returns values a, b and c for a QuickSort recurrence formula
  * @return {std::vector<string>} Vector with values a, b and c
 */
-std::vector<string> QuickSort::values() {
+template<class key>
+vector<string> QuickSort<key>::values() {
   const string valueA = "T(i) + ";
   const string valueB = "n-i-1";
   const string valueC = "cn";
   return {valueA, valueB, valueC};
 }
+
+// DECLARACIONES
+template class QuickSort<int>;

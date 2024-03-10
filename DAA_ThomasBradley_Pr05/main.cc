@@ -120,11 +120,11 @@ int main(int argc, char* argv []) {
     std::vector<int> array = RandomArray(i);
     printArray(array);
 
-    MergeSort mergesort;
+    MergeSort<int> mergesort;
     mergeTimes.push_back(mergesort.print(array, "Mergesort", false));
     std::cout << "Max recurrence level reached for MergeSort: " << mergesort.getLevel() << std::endl;
     if (mergesort.getLevel() > maxMerge) maxMerge = mergesort.getLevel();
-    QuickSort quicksort;
+    QuickSort<int> quicksort;
     quickTimes.push_back(quicksort.print(array, "Quicksort", false));
     std::cout << "Max recurrence level reached for QuickSort: " << quicksort.getLevel() << std::endl;
     if (quicksort.getLevel() > maxQuick) maxQuick = quicksort.getLevel();
@@ -137,8 +137,8 @@ int main(int argc, char* argv []) {
   printAverage(quickTimes, "Quicksort");
 
   std::cout << std::endl;
-  std::cout << "Complexity of MergeSort: " << MergeSort().recurrence() << std::endl;
-  std::cout << "Complexity of QuickSort: " << QuickSort().recurrence() << std::endl << std::endl;
+  std::cout << "Complexity of MergeSort: " << MergeSort<int>().recurrence() << std::endl;
+  std::cout << "Complexity of QuickSort: " << QuickSort<int>().recurrence() << std::endl << std::endl;
 
   std::cout << "Highest MergeSort depth reached: " << maxMerge << std::endl;
   std::cout << "Highest QuickSort depth reached: " << maxQuick << std::endl;

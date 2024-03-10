@@ -17,13 +17,14 @@
 
 using namespace std;
 
-class MergeSort : public Sort {
+template<class key>
+class MergeSort : public Sort<key> {
  private:
-  bool small(vector<int>& arr, int ini, int fin) override;
-  void SolveSmall(vector<int>& arr) override;
-  int Divide(vector<int>& arr, int ini, int fin) override;
-  void Combine(vector<int>& arr, int ini, int med, int fin) override;
+  bool small(vector<key>& arr, int ini, int fin) override;
+  void SolveSmall(vector<key>& arr) override;
+  int Divide(vector<key>& arr, int ini, int fin) override;
+  void Combine(vector<key>& arr, int ini, int med, int fin) override;
   int Minus() override;
   int Plus() override;
-  std::vector<string> values() override;
+  vector<string> values() override;
 };

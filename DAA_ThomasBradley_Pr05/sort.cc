@@ -19,7 +19,8 @@
  * @param {string} name Name of the algorithm
  * @return {int} Time it took (in nanoseconds) to complete the ordering
 */
-int Sort::print(vector<int> arr , string name, bool showArray) {
+template<class key>
+int Sort<key>::print(vector<key> arr , string name, bool showArray) {
   auto start = high_resolution_clock::now();
   sort(arr, 0, arr.size()-1, 0);
   auto end = high_resolution_clock::now();
@@ -43,7 +44,8 @@ int Sort::print(vector<int> arr , string name, bool showArray) {
  * @param {int} ini Starting position of array to look at
  * @param {int} fin Ending position of array to look at
 */
-void Sort::sort(vector<int>& arr, int ini, int fin, int level) {
+template<class key>
+void Sort<key>::sort(vector<key>& arr, int ini, int fin, int level) {
   level++;
   if (level_ < level) level_ = level;
   if (small(arr, ini, fin)) {
@@ -61,11 +63,20 @@ void Sort::sort(vector<int>& arr, int ini, int fin, int level) {
  *       on subclasses
  * @return {string} String with formula
 */
-string Sort::recurrence() {
+template<class key>
+string Sort<key>::recurrence() {
   std::vector<string> constants = values();
   return "T(n) = " + constants[0] + "T(" + constants[1] + ") + " + constants[2];
 }
 
-int Sort::getLevel() {
+/**
+ * @desc Returns max depth level that the algorithm reached
+ * @return {int} Max depth level
+*/
+template<class key>
+int Sort<key>::getLevel() {
   return level_;
 }
+
+// DECLARACIONES 
+template class Sort<int>;

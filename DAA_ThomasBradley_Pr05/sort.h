@@ -18,20 +18,21 @@
 using namespace std;
 using namespace std::chrono;
 
+template<class key>
 class Sort {
  public:
-  int print(vector<int> arr, string name, bool showArray);
-  void sort(vector<int>& arr, int ini, int fin, int level);
+  int print(vector<key> arr, string name, bool showArray);
+  void sort(vector<key>& arr, int ini, int fin, int level);
   string recurrence();
   int getLevel();
  protected:
-  virtual bool small(vector<int>& arr, int ini, int fin) = 0;
-  virtual void SolveSmall(vector<int>& arr) = 0;
-  virtual int Divide(vector<int>& arr, int ini, int fin) = 0;
-  virtual void Combine(vector<int>& arr, int ini, int med, int fin) = 0;
+  virtual bool small(vector<key>& arr, int ini, int fin) = 0;
+  virtual void SolveSmall(vector<key>& arr) = 0;
+  virtual int Divide(vector<key>& arr, int ini, int fin) = 0;
+  virtual void Combine(vector<key>& arr, int ini, int med, int fin) = 0;
   virtual int Minus() = 0;
   virtual int Plus() = 0;
-  virtual std::vector<string> values() = 0;
+  virtual vector<string> values() = 0;
  private:
   int level_ = 0;
 };

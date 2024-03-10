@@ -20,7 +20,8 @@
  * @param {int} fin Ending value where we stop looking at array
  * @return {bool} True if is small enough
 */
-bool MergeSort::small(vector<int>& arr, int ini, int fin) {
+template<class key>
+bool MergeSort<key>::small(vector<key>& arr, int ini, int fin) {
   return ini >= fin;
 }
 
@@ -28,7 +29,8 @@ bool MergeSort::small(vector<int>& arr, int ini, int fin) {
  * @desc Solvers the order of an array for small enough sizes
  * @param {vector<int>&} arr Array to evaluate
 */
-void MergeSort::SolveSmall(vector<int>& arr) {
+template<class key>
+void MergeSort<key>::SolveSmall(vector<key>& arr) {
   // Do nothing since the array is already sorted.
   return;
 }
@@ -40,7 +42,8 @@ void MergeSort::SolveSmall(vector<int>& arr) {
  * @param {int} fin Ending value where we stop looking at array
  * @return {int} Middle position that separates left from right side of array
 */
-int MergeSort::Divide(vector<int>& arr, int ini, int fin) {
+template<class key>
+int MergeSort<key>::Divide(vector<key>& arr, int ini, int fin) {
   return (ini + fin) / 2;
 }
 
@@ -51,7 +54,8 @@ int MergeSort::Divide(vector<int>& arr, int ini, int fin) {
  * @param {int} med Middle value where we stop looking at first half and start looking at second half of array
  * @param {int} fin Ending value where we stop looking at second part of array
 */
-void MergeSort::Combine(vector<int>& arr, int ini, int med, int fin) { // Fix
+template<class key>
+void MergeSort<key>::Combine(vector<key>& arr, int ini, int med, int fin) { // Fix
   int iniCount{ini}, medCount{med + 1};
   std::vector<int> ordered;
 
@@ -84,7 +88,8 @@ void MergeSort::Combine(vector<int>& arr, int ini, int med, int fin) { // Fix
  * @desc Quantity to subtract from med in first recursive call to sort()
  * @return {int} Amount to subtract
 */
-int MergeSort::Minus() {
+template<class key>
+int MergeSort<key>::Minus() {
   return 0;
 }
 
@@ -92,7 +97,8 @@ int MergeSort::Minus() {
  * @desc Quantity to add onto med in second recursive call to sort()
  * @return {int} Amount to add
 */
-int MergeSort::Plus() {
+template<class key>
+int MergeSort<key>::Plus() {
   return 1;
 }
 
@@ -100,9 +106,13 @@ int MergeSort::Plus() {
  * @desc Returns values a, b and c for a MergeSort recurrence formula
  * @return {std::vector<string>} Vector with values a, b and c
 */
-std::vector<string> MergeSort::values() {
+template<class key>
+vector<string> MergeSort<key>::values() {
   const string valueA = "2";
   const string valueB = "n/2";
   const string valueC = "O(n)";
   return {valueA, valueB, valueC};
 }
+
+// DECLARACIONES
+template class MergeSort<int>;
