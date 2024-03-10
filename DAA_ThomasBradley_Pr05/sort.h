@@ -21,12 +21,13 @@ using namespace std::chrono;
 template<class key>
 class Sort {
  public:
-  void sort(vector<key>& arr, int ini, int fin, int value, int level);
+  void sort(vector<key>& arr, int ini, int fin, key value, int level);
   string recurrence();
   int getLevel();
+  virtual void printExtraResult() = 0;
  protected:
   virtual bool small(vector<key>& arr, int ini, int fin) = 0;
-  virtual void SolveSmall(vector<key>& arr) = 0;
+  virtual void SolveSmall(vector<key>& arr, key value) = 0;
   virtual int Divide(vector<key>& arr, int ini, int fin) = 0;
   virtual void Combine(vector<key>& arr, int ini, int med, int fin) = 0;
   virtual int Minus() = 0;

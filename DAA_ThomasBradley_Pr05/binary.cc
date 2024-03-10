@@ -30,10 +30,10 @@ bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin) {
  * @param {vector<int>&} arr Array to evaluate
 */
 template<class key>
-void BinarySearch<key>::SolveSmall(vector<key>& arr) {
+void BinarySearch<key>::SolveSmall(vector<key>& arr, key value) {
   // Value doesn't exist in array
-  std::cout << "WRONG" << std::endl;
   foundPos = -1;
+  searchValue = value;
   return;
 }
 
@@ -59,8 +59,8 @@ int BinarySearch<key>::Divide(vector<key>& arr, int ini, int fin) {
 template<class key>
 void BinarySearch<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
   // Value has been found
-  std::cout << "Found in pos: " << med << " value -> " << arr[med] << std::endl;
   foundPos = med;
+  searchValue = arr[med];
   return;
 }
 
@@ -92,6 +92,16 @@ vector<string> BinarySearch<key>::values() {
   const string valueB = "n-i-1";
   const string valueC = "cn";
   return {valueA, valueB, valueC};
+}
+
+template<class key>
+void BinarySearch<key>::printExtraResult() {
+  if (foundPos == -1) {
+    std::cout << "Value " << searchValue << " was not found in array" << std::endl;
+  } else {
+    std::cout << "Value " << searchValue << " was found in position " << foundPos << std::endl;
+  }
+  std::cout << std::endl;
 }
 
 // DECLARACIONES

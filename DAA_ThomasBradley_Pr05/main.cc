@@ -80,7 +80,7 @@ void printArray(std::vector<int> array) {
   for(int j{0}; j < int(array.size()); ++j) {
     std::cout << array[j] << " ";
   }
-  std::cout << std::endl;
+  std::cout << std::endl << std::endl;
 }
 
 /**
@@ -140,7 +140,7 @@ void printResults(Sort<int>* algortithm, std::string name) {
 
   std::cout << name << std::endl;
   printTable(START_SIZE, times);
-  std::cout << "Recurrence Ecuation: " << MergeSort<int>().recurrence() << std::endl;
+  std::cout << "Recurrence Ecuation: " << algortithm->recurrence() << std::endl;
   printAverage(times);
   std::cout << "Highest Depth Reached: " << max << std::endl;
 }
@@ -163,16 +163,17 @@ void printSingleResult(Sort<int>* algortithm, std::string name) {
     QuickSort<int> tempSort;
     tempSort.sort(array, 0, array.size()-1, -1, 0);
   }
-  std::cout << value << std::endl;
 
   auto start = high_resolution_clock::now();
   algortithm->sort(array, 0, array.size()-1, value, 0);
   auto end = high_resolution_clock::now();
   float time = duration_cast<nanoseconds>(end - start).count();
 
-  std::cout << std::endl << "Solved Array: " << std::endl;
+  std::cout << "Solved Array: " << std::endl;
   printArray(array);
-  std::cout << std::endl << "Time taken: " << time << "ns" << std::endl;
+  algortithm->printExtraResult();
+
+  std::cout << "Time taken: " << time << "ns" << std::endl;
   std::cout << "Max Depth in Instance: " << algortithm->getLevel() << std::endl;
 }
 

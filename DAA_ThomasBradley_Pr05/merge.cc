@@ -30,7 +30,7 @@ bool MergeSort<key>::small(vector<key>& arr, int ini, int fin) {
  * @param {vector<int>&} arr Array to evaluate
 */
 template<class key>
-void MergeSort<key>::SolveSmall(vector<key>& arr) {
+void MergeSort<key>::SolveSmall(vector<key>& arr, key value) {
   // Do nothing since the array is already sorted.
   return;
 }
@@ -112,6 +112,11 @@ vector<string> MergeSort<key>::values() {
   const string valueB = "n/2";
   const string valueC = "O(n)";
   return {valueA, valueB, valueC};
+}
+
+template<class key>
+void MergeSort<key>::printExtraResult() {
+  return;
 }
 
 // DECLARACIONES

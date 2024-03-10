@@ -30,7 +30,7 @@ bool QuickSort<key>::small(vector<key>& arr, int ini, int fin) {
  * @param {vector<int>&} arr Array to evaluate
 */
 template<class key>
-void QuickSort<key>::SolveSmall(vector<key>& arr) {
+void QuickSort<key>::SolveSmall(vector<key>& arr, key value) {
   // Do nothing since the array is already sorted.
   return;
 }
@@ -112,6 +112,11 @@ vector<string> QuickSort<key>::values() {
   const string valueB = "n-i-1";
   const string valueC = "cn";
   return {valueA, valueB, valueC};
+}
+
+template<class key>
+void QuickSort<key>::printExtraResult() {
+  return;
 }
 
 // DECLARACIONES
