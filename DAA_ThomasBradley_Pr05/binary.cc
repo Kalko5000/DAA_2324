@@ -21,7 +21,7 @@
  * @return {bool} True if is small enough
 */
 template<class key>
-bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin) {
+bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin, int level) {
   return ini > fin;
 }
 
@@ -30,7 +30,7 @@ bool BinarySearch<key>::small(vector<key>& arr, int ini, int fin) {
  * @param {vector<int>&} arr Array to evaluate
 */
 template<class key>
-void BinarySearch<key>::SolveSmall(vector<key>& arr, key value) {
+void BinarySearch<key>::SolveSmall(vector<key>& arr, key value, int ini, int fin, int level) {
   // Value doesn't exist in array
   foundPos = -1;
   searchValue = value;
@@ -61,6 +61,11 @@ void BinarySearch<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
   // Value has been found
   foundPos = med;
   searchValue = arr[med];
+  return;
+}
+
+template<class key>
+void BinarySearch<key>::action(vector<key>& arr, int ini, int med, int level) {
   return;
 }
 

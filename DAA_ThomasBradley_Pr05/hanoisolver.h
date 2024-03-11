@@ -8,18 +8,19 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    12.mar.2024
- * @brief:   Algoritmos de Divide y Vencerás. Aqui esta la declaración de la clase QuickSort
+ * @brief:   Algoritmos de Divide y Vencerás. Aqui esta la declaración de la clase BinarySearch
  */
 
 #include <iostream>
 #include <vector>
-#include "binary.h"
+#include "sort.h"
 
 using namespace std;
 
 template<class key>
-class QuickSort : public Sort<key> {
+class HanoiSolver : public Sort<key> {
  public:
+  HanoiSolver(int size);
   void printExtraResult() override;
  private:
   bool small(vector<key>& arr, int ini, int fin, int level) override;
@@ -30,4 +31,9 @@ class QuickSort : public Sort<key> {
   int Minus() override;
   int Plus() override;
   vector<string> values() override;
+
+  int foundPos = -1;
+  int searchValue = 0;
+  vector<vector<int>> gameState;
+  vector<vector<int>> movements;
 };

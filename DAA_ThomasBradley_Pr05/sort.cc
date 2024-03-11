@@ -24,13 +24,14 @@ void Sort<key>::sort(vector<key>& arr, int ini, int fin, key value, int level) {
   level++;
   if (level_ < level) level_ = level; // Depth
 
-  if (small(arr, ini, fin)) {
-    SolveSmall(arr, value);
+  if (small(arr, ini, fin, level)) {
+    SolveSmall(arr, value, ini, fin, level);
   } else {
     int med = Divide(arr, ini, fin);
     if (arr[med] > value || value == -1) {
       sort(arr, ini, med - Minus(), value, level);
     }
+    action(arr, ini, fin, level);
     if (arr[med] < value || value == -1) {
       sort(arr, med + Plus(), fin, value, level);
     }

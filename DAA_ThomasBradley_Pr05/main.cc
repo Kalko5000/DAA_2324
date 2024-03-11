@@ -60,14 +60,14 @@ void Usage(const int kArgc, char* argv[]) {
 }
 
 /**
- * @desc Generates an array of random numbers between 1 and 100 of a certain size
+ * @desc Generates an array of random numbers between 1 and 1000 of a certain size
  * @param {int} size Size of resulting Array
  * @return {std::vector<int>} Randomly generated array
 */
 std::vector<int> RandomArray(int size) {
   std::vector<int> randArray;
   for(int i{0}; i < size; ++i) {
-    randArray.push_back(rand()%100);
+    randArray.push_back(rand()%1000);
   }
   return randArray;
 }
@@ -122,14 +122,21 @@ void printResults(Sort<int>* algortithm, std::string name) {
 
   for(int i{START_SIZE}; i <= MAX_SIZE; ++i) {
     std::vector<int> array = RandomArray(i);
+    int ini{0};
+    int fin{int(array.size() - 1)};
     if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
       value = RandomArray(1)[0];
       QuickSort<int> tempSort;
       tempSort.sort(array, 0, array.size()-1, -1, 0);
     }
+    if (name == "HANOI SOLVER") {
+      array = {4};
+      ini = 1;
+      fin = 3;
+    }
 
     auto start = high_resolution_clock::now();
-    algortithm->sort(array, 0, array.size()-1, value, 0);
+    algortithm->sort(array, ini, fin, value, 0);
     auto end = high_resolution_clock::now();
     float time = duration_cast<nanoseconds>(end - start).count();
     times.push_back(time);
@@ -151,12 +158,20 @@ void printResults(Sort<int>* algortithm, std::string name) {
 */
 void printSingleResult(Sort<int>* algortithm, std::string name) {
   int value{-1}; // Value to search for in Binary search
-  std::cout << "Introduzca el tamaño de array: ";
+  std::cout << "Introduzca el tamaño del problema: ";
   int size{0};
   std::cin >> size;
   std::vector<int> array = RandomArray(size);
-  std::cout << std::endl << "Random Array size [" << size << "]: " << std::endl;
-  printArray(array);
+  int ini{0};
+  int fin{int(array.size() - 1)};
+  if (name == "HANOI SOLVER") {
+    array = {size};
+    ini = 1;
+    fin = 3;
+  } else {
+    std::cout << std::endl << "Random Array size [" << size << "]: " << std::endl;
+    printArray(array);
+  }
   if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
     value = RandomArray(1)[0];
     QuickSort<int> tempSort;
@@ -164,11 +179,11 @@ void printSingleResult(Sort<int>* algortithm, std::string name) {
   }
 
   auto start = high_resolution_clock::now();
-  algortithm->sort(array, 0, array.size()-1, value, 0);
+  algortithm->sort(array, ini, fin, value, 0);
   auto end = high_resolution_clock::now();
   float time = duration_cast<nanoseconds>(end - start).count();
 
-  std::cout << "Solved Array: " << std::endl;
+  std::cout << "Solution: " << std::endl;
   printArray(array);
   algortithm->printExtraResult();
 
@@ -185,7 +200,7 @@ int main(int argc, char* argv []) {
 
   bool validInput{false};
   while (!validInput) {
-    std::cout << "Introduzca algoritmo (0: MergeSort, 1: QuickSort, 2: BinarySearch): ";
+    std::cout << "Introduzca algoritmo (0: MergeSort, 1: QuickSort, 2: BinarySearch, 3: HanoiSolver): ";
     int input{0};
     std::cin >> input;
     switch (input) {
@@ -202,6 +217,11 @@ int main(int argc, char* argv []) {
       case 2:
         if (!debug) printResults(new BinarySearch<int>(), "BINARY SEARCH");
         else printSingleResult(new BinarySearch<int>(), "BINARY SEARCH");
+        validInput = true;
+        break;
+      case 3:
+        if (!debug) printResults(new HanoiSolver<int>(4), "HANOI SOLVER");
+        else printSingleResult(new HanoiSolver<int>(4), "HANOI SOLVER");
         validInput = true;
         break;
       default:

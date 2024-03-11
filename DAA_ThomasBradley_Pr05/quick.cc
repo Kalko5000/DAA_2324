@@ -21,7 +21,7 @@
  * @return {bool} True if is small enough
 */
 template<class key>
-bool QuickSort<key>::small(vector<key>& arr, int ini, int fin) {
+bool QuickSort<key>::small(vector<key>& arr, int ini, int fin, int level) {
   return ini >= fin;
 }
 
@@ -30,7 +30,7 @@ bool QuickSort<key>::small(vector<key>& arr, int ini, int fin) {
  * @param {vector<int>&} arr Array to evaluate
 */
 template<class key>
-void QuickSort<key>::SolveSmall(vector<key>& arr, key value) {
+void QuickSort<key>::SolveSmall(vector<key>& arr, key value, int ini, int fin, int level) {
   // Do nothing since the array is already sorted.
   return;
 }
@@ -81,6 +81,11 @@ int QuickSort<key>::Divide(vector<key>& arr, int ini, int fin) {
 template<class key>
 void QuickSort<key>::Combine(vector<key>& arr, int ini, int med, int fin) {
   // We don't combine in Quicksort
+  return;
+}
+
+template<class key>
+void QuickSort<key>::action(vector<key>& arr, int ini, int med, int level) {
   return;
 }
 
