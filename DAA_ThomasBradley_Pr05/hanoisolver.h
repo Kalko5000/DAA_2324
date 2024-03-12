@@ -13,12 +13,12 @@
 
 #include <iostream>
 #include <vector>
-#include "sort.h"
+#include "solution.h"
 
 using namespace std;
 
 template<class key>
-class HanoiSolver : public Sort<key> {
+class HanoiSolver : public Solution<key> {
  public:
   HanoiSolver(int size);
   void printExtraResult() override;

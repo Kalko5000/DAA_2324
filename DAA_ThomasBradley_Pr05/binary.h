@@ -18,7 +18,7 @@
 using namespace std;
 
 template<class key>
-class BinarySearch : public Sort<key> {
+class BinarySearch : public Solution<key> {
  public:
   void printExtraResult() override;
  private:

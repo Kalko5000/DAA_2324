@@ -18,7 +18,7 @@
 using namespace std;
 
 template<class key>
-class QuickSort : public Sort<key> {
+class QuickSort : public Solution<key> {
  public:
   void printExtraResult() override;
  private:

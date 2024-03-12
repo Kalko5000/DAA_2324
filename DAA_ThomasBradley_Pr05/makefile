@@ -16,7 +16,7 @@ LDFLAGS =
 
 all: dyv
 
-dyv: sort.cc hanoisolver.cc binary.cc quick.cc merge.cc main.cc
+dyv: solution.cc hanoisolver.cc binary.cc quick.cc merge.cc main.cc
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .PHONY: all clean

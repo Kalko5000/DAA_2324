@@ -18,7 +18,7 @@
 using namespace std;
 
 template<class key>
-class MergeSort : public Sort<key> {
+class MergeSort : public Solution<key> {
  public:
   void printExtraResult() override;
  private:

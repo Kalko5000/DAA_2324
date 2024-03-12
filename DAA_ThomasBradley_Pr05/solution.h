@@ -19,9 +19,9 @@ using namespace std;
 using namespace std::chrono;
 
 template<class key>
-class Sort {
+class Solution {
  public:
-  void sort(vector<key>& arr, int ini, int fin, key value, int level);
+  void solve(vector<key>& arr, int ini, int fin, key value, int level);
   string recurrence();
   int getLevel();
   virtual void printExtraResult() = 0;

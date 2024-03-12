@@ -128,7 +128,7 @@ void printHanoiTable() {
     fin = 3;
 
     auto start = high_resolution_clock::now();
-    algorithm.sort(array, ini, fin, value, 0);
+    algorithm.solve(array, ini, fin, value, 0);
     auto end = high_resolution_clock::now();
     float time = duration_cast<nanoseconds>(end - start).count();
     times.push_back(time);
@@ -148,7 +148,7 @@ void printHanoiTable() {
  * @param {Sort<int>*} algorithm Algorithm to use
  * @param {std::string} name Name of the algorithm 
 */
-void printResults(Sort<int>* algortithm, std::string name) {
+void printResults(Solution<int>* algorithm, std::string name) {
   std::vector<int> times;  // Used for average
   int max{0}; // Used for deepest recurrence level
   int value{-1}; // Value to search for in Binary search
@@ -158,21 +158,21 @@ void printResults(Sort<int>* algortithm, std::string name) {
     if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
       value = RandomArray(1)[0];
       QuickSort<int> tempSort;
-      tempSort.sort(array, 0, array.size()-1, -1, 0);
+      tempSort.solve(array, 0, array.size()-1, -1, 0);
     }
 
     auto start = high_resolution_clock::now();
-    algortithm->sort(array, 0, int(array.size() - 1), value, 0);
+    algorithm->solve(array, 0, int(array.size() - 1), value, 0);
     auto end = high_resolution_clock::now();
     float time = duration_cast<nanoseconds>(end - start).count();
     times.push_back(time);
 
-    if (algortithm->getLevel() > max) max = algortithm->getLevel();
+    if (algorithm->getLevel() > max) max = algorithm->getLevel();
   }
 
   std::cout << name << std::endl;
   printTable(START_SIZE, times);
-  std::cout << "Recurrence Ecuation: " << algortithm->recurrence() << std::endl;
+  std::cout << "Recurrence Ecuation: " << algorithm->recurrence() << std::endl;
   printAverage(times);
   std::cout << "Highest Depth Reached: " << max << std::endl;
 }
@@ -182,7 +182,7 @@ void printResults(Sort<int>* algortithm, std::string name) {
  * @param {Sort<int>*} algorithm Algorithm to use
  * @param {std::string} name Name of the algorithm 
 */
-void printSingleResult(Sort<int>* algortithm, std::string name) {
+void printSingleResult(Solution<int>* algorithm, std::string name) {
   int value{-1}; // Value to search for in Binary search
   std::cout << "Introduzca el tamaño del problema: ";
   int size{0};
@@ -201,20 +201,20 @@ void printSingleResult(Sort<int>* algortithm, std::string name) {
   if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
     value = RandomArray(1)[0];
     QuickSort<int> tempSort;
-    tempSort.sort(array, 0, array.size()-1, -1, 0);
+    tempSort.solve(array, 0, array.size()-1, -1, 0);
   }
 
   auto start = high_resolution_clock::now();
-  algortithm->sort(array, ini, fin, value, 0);
+  algorithm->solve(array, ini, fin, value, 0);
   auto end = high_resolution_clock::now();
   float time = duration_cast<nanoseconds>(end - start).count();
 
   std::cout << name << " solution: " << std::endl;
   printArray(array);
-  algortithm->printExtraResult();
+  algorithm->printExtraResult();
 
   std::cout << "Time taken: " << time << "ns" << std::endl;
-  std::cout << "Max Depth in Instance: " << algortithm->getLevel() << std::endl;
+  std::cout << "Max Depth in Instance: " << algorithm->getLevel() << std::endl;
 }
 
 int main(int argc, char* argv []) {
