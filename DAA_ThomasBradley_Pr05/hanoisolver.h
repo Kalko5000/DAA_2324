@@ -32,8 +32,6 @@ class HanoiSolver : public Sort<key> {
   int Plus() override;
   vector<string> values() override;
 
-  int foundPos = -1;
-  int searchValue = 0;
   vector<vector<int>> gameState;
   vector<vector<int>> movements;
 };

@@ -113,8 +113,8 @@ int HanoiSolver<key>::Plus() {
 */
 template<class key>
 vector<string> HanoiSolver<key>::values() {
-  const string valueA = "";
-  const string valueB = "n/2";
+  const string valueA = "2";
+  const string valueB = "n-1";
   const string valueC = "1";
   return {valueA, valueB, valueC};
 }
@@ -122,7 +122,7 @@ vector<string> HanoiSolver<key>::values() {
 template<class key>
 void HanoiSolver<key>::printExtraResult() {
   for (int i{0}; i < int(movements.size()); ++i) {
-    std::cout << "Moved value " << movements[i][0] << " from " << movements[i][1] << " to " << movements[i][2] << std::endl;
+    std::cout << "Moved value " << movements[i][0] << " from (" << movements[i][1] << ") to (" << movements[i][2] << ")" << std::endl;
   }
   std::cout << std::endl;
 }

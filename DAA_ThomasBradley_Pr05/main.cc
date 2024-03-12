@@ -111,6 +111,39 @@ void printAverage(std::vector<int> times) {
 }
 
 /**
+ * @desc Prints a Hanoi Table for multiple instance sizes
+*/
+void printHanoiTable() {
+  std::vector<int> times;  // Used for average
+  int max{0}; // Used for deepest recurrence level
+  int value{-1}; // Value to search for in Binary search
+
+  for(int i{1}; i <= 10; ++i) {
+    HanoiSolver<int> algorithm(i);
+    std::vector<int> array = RandomArray(i);
+    int ini{0};
+    int fin{int(array.size() - 1)};
+    array = {i};
+    ini = 1;
+    fin = 3;
+
+    auto start = high_resolution_clock::now();
+    algorithm.sort(array, ini, fin, value, 0);
+    auto end = high_resolution_clock::now();
+    float time = duration_cast<nanoseconds>(end - start).count();
+    times.push_back(time);
+
+    if (algorithm.getLevel() > max) max = algorithm.getLevel();
+  }
+
+  std::cout << "HANOI SOLVER" << std::endl;
+  printTable(1, times);
+  std::cout << "Recurrence Ecuation: " << HanoiSolver<int>(1).recurrence() << std::endl;
+  printAverage(times);
+  std::cout << "Highest Depth Reached: " << max << std::endl;
+}
+
+/**
  * @desc Prints results as a table for various executions of an algorithm
  * @param {Sort<int>*} algorithm Algorithm to use
  * @param {std::string} name Name of the algorithm 
@@ -122,21 +155,14 @@ void printResults(Sort<int>* algortithm, std::string name) {
 
   for(int i{START_SIZE}; i <= MAX_SIZE; ++i) {
     std::vector<int> array = RandomArray(i);
-    int ini{0};
-    int fin{int(array.size() - 1)};
     if (name == "BINARY SEARCH") { // If binary search, sort array and add value to search for
       value = RandomArray(1)[0];
       QuickSort<int> tempSort;
       tempSort.sort(array, 0, array.size()-1, -1, 0);
     }
-    if (name == "HANOI SOLVER") {
-      array = {4};
-      ini = 1;
-      fin = 3;
-    }
 
     auto start = high_resolution_clock::now();
-    algortithm->sort(array, ini, fin, value, 0);
+    algortithm->sort(array, 0, int(array.size() - 1), value, 0);
     auto end = high_resolution_clock::now();
     float time = duration_cast<nanoseconds>(end - start).count();
     times.push_back(time);
@@ -183,7 +209,7 @@ void printSingleResult(Sort<int>* algortithm, std::string name) {
   auto end = high_resolution_clock::now();
   float time = duration_cast<nanoseconds>(end - start).count();
 
-  std::cout << "Solution: " << std::endl;
+  std::cout << name << " solution: " << std::endl;
   printArray(array);
   algortithm->printExtraResult();
 
@@ -220,8 +246,8 @@ int main(int argc, char* argv []) {
         validInput = true;
         break;
       case 3:
-        if (!debug) printResults(new HanoiSolver<int>(4), "HANOI SOLVER");
-        else printSingleResult(new HanoiSolver<int>(4), "HANOI SOLVER");
+        if (!debug) printHanoiTable();
+        else printSingleResult(new HanoiSolver<int>(1), "HANOI SOLVER");
         validInput = true;
         break;
       default:
