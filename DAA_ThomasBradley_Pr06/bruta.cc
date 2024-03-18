@@ -20,31 +20,29 @@
 void TSPBruta::solve(int maxTime) {
   auto start = high_resolution_clock::now();
 
-  int s{0};
-  std::vector<int> vertex;
-  for (int i{0}; i < int(nodes_.size()); ++i) {
-    if (i != s) vertex.push_back(i);
+  int minCost{INT_MAX}; // s = starting node
+  std::vector<int> sequence;
+
+  for (int i{0}; i < int(nodes_.size()); ++i) { // Add all node indexes to sequence
+    sequence.push_back(i);
   }
-  int min_cost{std::numeric_limits<int>::max()};
-  while(std::next_permutation(vertex.begin(), vertex.end())) {
-    auto mid = high_resolution_clock::now();
-    // std::cout << duration_cast<seconds>(mid - start).count() << std::endl;
-    if (duration_cast<seconds>(mid - start).count() >= maxTime) {  // Over time limit
+
+  while(std::next_permutation(sequence.begin(), sequence.end())) {  // Iterate through all possible combinations of array
+    if (duration_cast<seconds>(high_resolution_clock::now() - start).count() >= maxTime) {  // Over time limit
       time_ = -1;
-      value_ = min_cost;
+      value_ = minCost;
       return;
     }
-    int current_cost{0}, j{s};
-    for (int i{0}; i < int(vertex.size()); ++i) {
-      current_cost += nodes_[j][vertex[i]];
-      j = vertex[i];
+    int currentCost{0};
+    for (int i{0}; i < int(sequence.size() - 1); ++i) { // Calculate cost of current sequence
+      currentCost += nodes_[sequence[i]][sequence[(i+1)]];
     }
-    current_cost += nodes_[j][s];
-    min_cost = std::min(min_cost, current_cost);
+    currentCost += nodes_[sequence[sequence.size() - 1]][sequence[0]];  // Return to starting node
+    minCost = std::min(minCost, currentCost);
 	}
 
   auto end = high_resolution_clock::now();
-  value_ = min_cost;
+  value_ = minCost;
   time_ = duration_cast<nanoseconds>(end - start).count();
 }
 

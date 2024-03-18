@@ -48,9 +48,7 @@ void TSPDinamica::solve(int maxTime) {
  * @returns {int} Minimum distance to visit all unvisited nodes from pos
 */
 int TSPDinamica::recursiveSolve(int pos, int visited, std::vector<std::vector<int>>& state) {
-  auto mid = high_resolution_clock::now();
-  // std::cout << duration_cast<seconds>(mid - start).count() << std::endl;
-  if (duration_cast<seconds>(mid - startTime_).count() >= maxTime_) {  // Over time limit
+  if (duration_cast<seconds>(high_resolution_clock::now() - startTime_).count() >= maxTime_) {  // Over time limit
     throw(state[pos][visited]);
   }
   

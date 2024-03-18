@@ -24,7 +24,7 @@
  * @param {int} min Minimum value of random number
  * @param {int} max Maximum value of random number
 */
-int generateRandom(int min, int max) {
+int randomInt(int min, int max) {
   return min + rand() % (max - min + 1);
 }
 
@@ -37,16 +37,18 @@ int generateRandom(int min, int max) {
 */
 void generateTSPFile(std::string filename, int numNodes, int minValue, int maxValue) {
   std::ofstream file(filename);
+  srand(time(0)); // Seed for random number
+
   if (!file.is_open()) {
     std::cerr << "Error: Unable to create file." << std::endl;
     return;
   }
+  
   file << numNodes << std::endl;
-  srand(time(0)); // Seed for random number
 
   for (char i = 'A'; i < 'A' + numNodes; ++i) { // Left Char in file
     for (char j = i + 1; j < 'A' + numNodes; ++j) { // Right Char in file
-      int value = generateRandom(minValue, maxValue);
+      int value = randomInt(minValue, maxValue);
       file << i << " " << j << " " << value << std::endl;
     }
   }
