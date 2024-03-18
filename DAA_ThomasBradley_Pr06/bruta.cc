@@ -15,12 +15,12 @@
 
 void TSPBruta::solve() {
   auto start = high_resolution_clock::now();
+
   int s{0};
   std::vector<int> vertex;
   for (int i{0}; i < int(nodes_.size()); ++i) {
     if (i != s) vertex.push_back(i);
   }
-
   int min_cost{std::numeric_limits<int>::max()};
   while(std::next_permutation(vertex.begin(), vertex.end())) {
     int current_cost{0}, j{s};
@@ -31,9 +31,18 @@ void TSPBruta::solve() {
     current_cost += nodes_[j][s];
     min_cost = std::min(min_cost, current_cost);
 	}
+
   auto end = high_resolution_clock::now();
   value_ = min_cost;
   time_ = duration_cast<nanoseconds>(end - start).count();
+}
+
+int TSPBruta::getValue() {
+  return value_;
+}
+
+int TSPBruta::getTime() {
+  return time_;
 }
 
 void TSPBruta::printSolution() {

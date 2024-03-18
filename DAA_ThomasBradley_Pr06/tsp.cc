@@ -40,12 +40,6 @@ TSP::TSP(std::string nombre_fichero) {
     exit(1);
   }
   fichero.close();
-  for(int i{0}; i < int(nodes_.size()); ++i) {
-  for(int j{0}; j < int(nodes_[i].size()); ++j) {
-    std::cout << nodes_[i][j] << " ";
-  }
-  std::cout << std::endl;
-}
 }
 
 void TSP::buildNodes(int size) {

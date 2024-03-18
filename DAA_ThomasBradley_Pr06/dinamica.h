@@ -17,5 +17,8 @@ class TSPDinamica : public TSP {
  public:
   TSPDinamica(std::string nombre_fichero) : TSP(nombre_fichero) {};
   void solve();
+  int recursiveSolve(int pos, int visited, std::vector<std::vector<int>>& state);
+  int getValue();
+  int getTime();
   void printSolution();
 };

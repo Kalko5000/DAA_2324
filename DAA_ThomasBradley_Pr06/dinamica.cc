@@ -15,38 +15,60 @@
 
 void TSPDinamica::solve() {
   auto start = high_resolution_clock::now();
-  int memo[16][16]; // memoization table
-  int n{4};
-  // Base case: g(i, {}) = c(i, 0)
-  for (int i{0}; i < n; ++i) {
-    memo[i][0] = nodes_[i][0];
+  
+  std::vector<std::vector<int>> state(int(nodes_.size()));
+  for(auto& neighbors : state) {
+    neighbors = std::vector<int>((1 << int(nodes_.size())) - 1, INT_MAX);
   }
-    
-  // Compute g(i, S) for increasing sizes of S
-  for (int s{1}; s < (1 << n); ++s) {
-    for (int i{0}; i < n; ++i) {
-      if (!(s & (1 << i))) { // node i not in S
-        memo[i][s] = n;
-        for (int j{0}; j < n; ++j) {
-          if (s & (1 << j)) { // node j in S
-            memo[i][s] = std::min(memo[i][s], nodes_[i][j] + memo[j][s ^ (1 << j)]);
-          }
-        }
-      }
-    }
-  }
-  // Compute the final answer g(0, {1, 2, ..., n-1})
-  int ans = std::numeric_limits<int>::max();
-  for (int i{1}; i < n; ++i) {
-    // std::cout << ans << " ";
-    ans = std::min(ans, nodes_[0][i] + memo[i][(1 << n) - 1]);
-  }
+  int ans = recursiveSolve(0, 1, state);   
+
   auto end = high_resolution_clock::now();
   value_ = ans;
   time_ = duration_cast<nanoseconds>(end - start).count();
 }
 
+int TSPDinamica::recursiveSolve(int pos, int visited, std::vector<std::vector<int>>& state) {
+  if(visited == ((1 << nodes_.size()) - 1)) {
+    return nodes_[pos][0]; // return to starting node
+  }
+
+  if(state[pos][visited] != INT_MAX) {
+    return state[pos][visited];
+  }
+
+  for(int i = 0; i < int(nodes_.size()); ++i) {
+    // can't visit ourselves unless we're ending & skip if already visited
+    if(i == pos || (visited & (1 << i))) continue;
+    int distance = nodes_[pos][i] + recursiveSolve(i, visited | (1 << i), state);
+    if(distance < state[pos][visited]) { 
+      state[pos][visited] = distance;
+    }
+  }
+
+  return state[pos][visited];
+}
+
+int TSPDinamica::getValue() {
+  return value_;
+}
+
+int TSPDinamica::getTime() {
+  return time_;
+}
+
+/**
+ * @desc Prints our the value of the chosen routew and the time it took
+*/
 void TSPDinamica::printSolution() {
   std::cout << "Valor Prog Dinámica: " << value_ << std::endl;
-  std::cout << "Tiempo Prog Dinámica (ms): " << time_ << std::endl;
+  std::cout << "Tiempo Prog Dinámica (ns): " << time_ << std::endl;
 }
+
+/*
+for(int i{0}; i < sizeof(memo); ++i) {
+    for(int j{0}; j < sizeof(memo); ++j) {
+      std::cout << memo[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+*/

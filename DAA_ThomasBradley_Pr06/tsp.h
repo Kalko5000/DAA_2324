@@ -11,6 +11,7 @@
  * @brief:   Framework para algoritmos de Programación Dinámica. Aqui se declara la clase base TSP
  */
 
+#include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
 #include <utility>
@@ -28,6 +29,8 @@ class TSP {
   TSP(std::string nombre_fichero);
   void buildNodes(int size);
   virtual void solve() = 0;
+  virtual int getValue() = 0;
+  virtual int getTime() = 0;
   virtual void printSolution() = 0;
  protected:
   std::vector<std::vector<int>> nodes_;
