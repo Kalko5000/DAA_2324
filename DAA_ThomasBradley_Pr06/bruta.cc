@@ -13,6 +13,10 @@
 
 #include "bruta.h"
 
+/**
+ * @desc Applies a Brute Force algorithm for our complete TSP problem
+ * @param {int} maxTime Time after which we want to halt execution and store current result (in seconds)
+*/
 void TSPBruta::solve(int maxTime) {
   auto start = high_resolution_clock::now();
 
@@ -44,14 +48,25 @@ void TSPBruta::solve(int maxTime) {
   time_ = duration_cast<nanoseconds>(end - start).count();
 }
 
+/**
+ * @desc Returns the value of value_ stored within the class
+ * @returns {int} Value of value_
+*/
 int TSPBruta::getValue() {
   return value_;
 }
 
+/**
+ * @desc Returns the value of time_ stored within the class
+ * @returns {int} Value of time_
+*/
 int TSPBruta::getTime() {
   return time_;
 }
 
+/**
+ * @desc Prints our the value of the chosen routew and the time it took
+*/
 void TSPBruta::printSolution() {
   std::cout << "Valor Fuerza Bruta: " << value_ << std::endl;
   std::cout << "Tiempo Fuerza Bruta (ns): " << time_ << std::endl;

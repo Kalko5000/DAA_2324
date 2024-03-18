@@ -13,6 +13,10 @@
 
 #include "dinamica.h"
 
+/**
+ * @desc Applies a top-down Dynamic Programming algorithm for our complete TSP problem
+ * @param {int} maxTime Time after which we want to halt execution and store current result (in seconds)
+*/
 void TSPDinamica::solve(int maxTime) {
   auto start = high_resolution_clock::now();
   int ans{0};
@@ -36,6 +40,13 @@ void TSPDinamica::solve(int maxTime) {
   time_ = duration_cast<nanoseconds>(end - start).count();
 }
 
+/**
+ * @desc Recursive method for our top-down Dynamic Programming complete TSP solver
+ * @param {int} pos Node the algorithm is positioned on, the one we will evaluate
+ * @param {int} visited Used to keep track of which nodes have been visited (bitmask)
+ * @param {std::vector<std::vector<int>>&} state Memoization table where we store the minimum computed values so far
+ * @returns {int} Minimum distance to visit all unvisited nodes from pos
+*/
 int TSPDinamica::recursiveSolve(int pos, int visited, std::vector<std::vector<int>>& state) {
   auto mid = high_resolution_clock::now();
   // std::cout << duration_cast<seconds>(mid - start).count() << std::endl;
@@ -80,18 +91,9 @@ int TSPDinamica::getTime() {
 }
 
 /**
- * @desc Prints our the value of the chosen routew and the time it took
+ * @desc Prints our the value of the chosen route and the time it took
 */
 void TSPDinamica::printSolution() {
   std::cout << "Valor Prog Dinámica: " << value_ << std::endl;
   std::cout << "Tiempo Prog Dinámica (ns): " << time_ << std::endl;
 }
-
-/* CODE TO PRINT OUT VALUE MATRIX
-for(int i{0}; i < sizeof(memo); ++i) {
-    for(int j{0}; j < sizeof(memo); ++j) {
-      std::cout << memo[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-*/

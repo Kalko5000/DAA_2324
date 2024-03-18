@@ -22,6 +22,6 @@ class TSPDinamica : public TSP {
   int getTime();
   void printSolution();
  private:
-  std::chrono::_V2::system_clock::time_point startTime_;
-  int maxTime_;
+  std::chrono::_V2::system_clock::time_point startTime_;  // Stores start time of solve() function
+  int maxTime_; // Stores the maximum allowed time for solve() method to run
 };

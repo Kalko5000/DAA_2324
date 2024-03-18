@@ -13,6 +13,11 @@
 
 #include "tsp.h"
 
+/**
+ * @constructor
+ * @desc Builds a matrix for our TSP problem from the definition of such stored in a file
+ * @param {std::string} nombre_fichero Name of the fiel containing the problem definition
+*/
 TSP::TSP(std::string nombre_fichero) {
   value_ = 0;
   time_ = 0;
@@ -42,6 +47,10 @@ TSP::TSP(std::string nombre_fichero) {
   fichero.close();
 }
 
+/**
+ * @desc Fills the node matrix with zeros
+ * @param {int} size Size we want our node matrix to be
+*/
 void TSP::buildNodes(int size) {
   nodes_.resize(size);
   for(int i{0}; i < int(nodes_.size()); ++i) {
@@ -49,11 +58,11 @@ void TSP::buildNodes(int size) {
   }
 }
 
-/*
-for(int i{0}; i < int(nodes_.size()); ++i) {
-  for(int j{0}; j < int(nodes_[i].size()); ++j) {
-    std::cout << nodes_[i][j] << " ";
+/* CODE TO PRINT OUT VALUE MATRIX
+for(int i{0}; i < sizeof(memo); ++i) {
+    for(int j{0}; j < sizeof(memo); ++j) {
+      std::cout << memo[i][j] << " ";
+    }
+    std::cout << std::endl;
   }
-  std::cout << std::endl;
-}
 */

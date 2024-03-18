@@ -33,7 +33,7 @@ class TSP {
   virtual int getTime() = 0;
   virtual void printSolution() = 0;
  protected:
-  std::vector<std::vector<int>> nodes_;
-  int value_;
-  int time_;
+  std::vector<std::vector<int>> nodes_; // Matrix with definition of TSP problem
+  int value_; // Minimum value found to solve TSP problem
+  int time_;  // Time it took to solve TSP problem
 };

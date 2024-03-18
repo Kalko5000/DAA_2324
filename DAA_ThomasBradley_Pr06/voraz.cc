@@ -13,6 +13,10 @@
 
 #include "voraz.h"
 
+/**
+ * @desc Applies a Greedy algorithm for our complete TSP problem
+ * @param {int} maxTime Time after which we want to halt execution and store current result (in seconds)
+*/
 void TSPVoraz::solve(int maxTime) {
   auto start = high_resolution_clock::now();
 
@@ -38,67 +42,26 @@ void TSPVoraz::solve(int maxTime) {
   time_ = duration_cast<nanoseconds>(end - start).count();
 }
 
+/**
+ * @desc Returns the value of value_ stored within the class
+ * @returns {int} Value of value_
+*/
 int TSPVoraz::getValue() {
   return value_;
 }
 
+/**
+ * @desc Returns the value of time_ stored within the class
+ * @returns {int} Value of time_
+*/
 int TSPVoraz::getTime() {
   return time_;
 }
 
+/**
+ * @desc Prints our the value of the chosen route and the time it took
+*/
 void TSPVoraz::printSolution() {
   std::cout << "Valor Voraz: " << value_ << std::endl;
   std::cout << "Tiempo Voraz (ns): " << time_ << std::endl;
 }
-
-/*
-auto start = high_resolution_clock::now();
-
-  int sum = 0;
-	int counter = 0;
-	int j = 0, i = 0;
-	int min = INT_MAX;
-	std::map<int, int> visitedRouteList;
-	visitedRouteList[0] = 1;  // Starting from first node
-	int route[nodes_.size()];
-	while (i < int(nodes_.size()) && j < int(nodes_[i].size())) { // Traverse adjacencies
-		auto mid = high_resolution_clock::now();
-    // std::cout << duration_cast<seconds>(mid - start).count() << std::endl;
-    if (duration_cast<seconds>(mid - start).count() >= maxTime) {  // Over time limit
-      time_ = -1;
-      value_ = sum;
-      return;
-    }
-    if (counter >= int(nodes_[i].size()) - 1) {  // Corner
-			break;
-		}
-		if (j != i && (visitedRouteList[j] == 0)) { // If node is unvisited + has a smaller cost
-			if (nodes_[i][j] < min) {
-				min = nodes_[i][j];
-				route[counter] = j + 1;
-			}
-		}
-		j++;
-		if (j == int(nodes_[i].size())) {  // Check paths
-			sum += min;
-			min = INT_MAX;
-			visitedRouteList[route[counter] - 1] = 1;
-			j = 0;
-			i = route[counter] - 1;
-			counter++;
-		}
-	}
-  // Update last visited node
-	i = route[counter - 1] - 1; 
-	for (j = 0; j < int(nodes_.size()); j++) {
-		if ((i != j) && nodes_[i][j] < min) {
-			min = nodes_[i][j];
-			route[counter] = j + 1;
-		}
-	}
-	sum += min;
-
-  auto end = high_resolution_clock::now();
-  value_ = sum;
-  time_ = duration_cast<nanoseconds>(end - start).count();
-*/

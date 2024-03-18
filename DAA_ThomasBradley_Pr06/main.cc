@@ -65,7 +65,7 @@ void Usage(const int kArgc, char* argv[]) {
 
 int main(int argc, char* argv []) {
   Usage(argc, argv);
-  const int maxTime = 5; // Set to 5 seconds
+  const int maxTime = 5; // Set to 5 seconds, for 5 minutes -> maxTime = 300;
   const char* directory_path = "./grafos/";
 
   // Results header
@@ -106,5 +106,3 @@ int main(int argc, char* argv []) {
   closedir(dir);
   return 0;
 }
-
-// 5 minutes = 300,000,000,000ns
