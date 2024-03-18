@@ -13,7 +13,7 @@
 
 #include "bruta.h"
 
-void TSPBruta::solve() {
+void TSPBruta::solve(int maxTime) {
   auto start = high_resolution_clock::now();
 
   int s{0};
@@ -23,6 +23,13 @@ void TSPBruta::solve() {
   }
   int min_cost{std::numeric_limits<int>::max()};
   while(std::next_permutation(vertex.begin(), vertex.end())) {
+    auto mid = high_resolution_clock::now();
+    // std::cout << duration_cast<seconds>(mid - start).count() << std::endl;
+    if (duration_cast<seconds>(mid - start).count() >= maxTime) {  // Over time limit
+      time_ = -1;
+      value_ = min_cost;
+      return;
+    }
     int current_cost{0}, j{s};
     for (int i{0}; i < int(vertex.size()); ++i) {
       current_cost += nodes_[j][vertex[i]];

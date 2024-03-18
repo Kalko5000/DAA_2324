@@ -9,10 +9,10 @@
  * @email:   alu0101408248@ull.edu.es
  * @date:    19.mar.2024
  * @brief:   Framework para algoritmos de Programación Dinámica
+ * @example: ./tsp
  */
 
 // g++ --std=c++14 -o tsp tsp.cc main.cc
-// ./tsp 4_nodos.txt
 
 #include <iostream>
 #include <fstream>
@@ -30,16 +30,15 @@ using namespace std::chrono;
 
 /** @desc Texto de ayuda para el correcto funcionamiento del código */
 const void kHelpText() {
-  std::cout << "tsp [1]" << std::endl << std::endl;
-  std::cout << "[1]: Fichero de entrada." << std::endl;
-  std::cout << "Se leera un fichero de entrada que especifique cuantos nodos tendra el problema " << std::endl;
-  std::cout << "y a continuación lista las distancias entre todos estos. Tras esto se resolvera " << std::endl;
-  std::cout << "por tres medios distintos: por fuerza bruta, con un algoritmo voraz y con programación dinámica" << std::endl;
+  std::cout << "tsp" << std::endl << std::endl;
+  std::cout << "Se leeran todos los ficheros en el directorio ./grafos para que luego imprimir " << std::endl;
+  std::cout << "una tabla con todos los valores obtenidos y los tiempos de ejecución de cada algoritmo " << std::endl;
+  std::cout << "en cada fichero. Estos algoritmos siendo: fuerza bruta, programación dinámica y voraz" << std::endl;
 }
 
 /** @desc Texto de como usar el programa y como encontrar más información sobre ella */
 const void kFuncText() {
-  std::cout << "Modo de empleo: tsp [FICHERO]" << std::endl;
+  std::cout << "Modo de empleo: tsp" << std::endl;
   std::cout << "Pruebe 'tsp --help' para más información" << std::endl;
 }
 
@@ -66,11 +65,13 @@ void Usage(const int kArgc, char* argv[]) {
 
 int main(int argc, char* argv []) {
   Usage(argc, argv);
+  const int maxTime = 5; // Set to 5 seconds
   const char* directory_path = "./grafos/";
 
-  std::cout << std::setw(15) << "Fichero" << std::setw(20) <<
-  "Valor FB" << std::setw(20) << "Tiempo(ns) FB" << std::setw(20) <<
-  "Valor PD" << std::setw(20) << "Tiempo(ns) PD" << std::setw(20) <<
+  // Results header
+  std::cout << std::setw(15) << "Fichero" << std::setw(15) <<
+  "Valor FB" << std::setw(20) << "Tiempo(ns) FB" << std::setw(15) <<
+  "Valor PD" << std::setw(20) << "Tiempo(ns) PD" << std::setw(15) <<
   "Valor V" << std::setw(20) << "Tiempo(ns) V" << std::endl;
 
   // Open the directory
@@ -85,16 +86,20 @@ int main(int argc, char* argv []) {
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
       std::string nombre_fichero = directory_path + std::string(entry->d_name);
       TSPBruta bruta(nombre_fichero);
-      bruta.solve();
+      bruta.solve(maxTime);
+      std::string brutaTime = ((bruta.getTime() >= 0) ? std::to_string(bruta.getTime()) : "EXCESIVO");
       TSPVoraz voraz(nombre_fichero);
-      voraz.solve();
+      voraz.solve(maxTime);
+      std::string vorazTime = ((voraz.getTime() >= 0) ? std::to_string(voraz.getTime()) : "EXCESIVO");
       TSPDinamica dinamica(nombre_fichero);
-      dinamica.solve();
+      dinamica.solve(maxTime);
+      std::string dinamicaTime = ((dinamica.getTime() >= 0) ? std::to_string(dinamica.getTime()) : "EXCESIVO");
 
-      std::cout << std::setw(15) << entry->d_name << std::setw(20) <<
-      bruta.getValue() << std::setw(20) << bruta.getTime() << std::setw(20) <<
-      dinamica.getValue() << std::setw(20) << dinamica.getTime() << std::setw(20) <<
-      voraz.getValue() << std::setw(20) << voraz.getTime() << std::endl;
+      // Results for this file
+      std::cout << std::setw(15) << entry->d_name << std::setw(15) <<
+      bruta.getValue() << std::setw(20) << brutaTime << std::setw(15) <<
+      dinamica.getValue() << std::setw(20) << dinamicaTime << std::setw(15) <<
+      voraz.getValue() << std::setw(20) << vorazTime << std::endl;
     }
   }
 

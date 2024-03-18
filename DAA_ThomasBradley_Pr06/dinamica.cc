@@ -13,14 +13,23 @@
 
 #include "dinamica.h"
 
-void TSPDinamica::solve() {
+void TSPDinamica::solve(int maxTime) {
   auto start = high_resolution_clock::now();
+  int ans{0};
+  startTime_ = start;
+  maxTime_ = maxTime;
   
   std::vector<std::vector<int>> state(int(nodes_.size()));
   for(auto& neighbors : state) {
     neighbors = std::vector<int>((1 << int(nodes_.size())) - 1, INT_MAX);
   }
-  int ans = recursiveSolve(0, 1, state);   
+  try {
+    ans = recursiveSolve(0, 1, state);
+  } catch (const int value) { // Gone over time
+    time_ = -1;
+    value_ = value;
+    return;
+  }
 
   auto end = high_resolution_clock::now();
   value_ = ans;
@@ -28,6 +37,12 @@ void TSPDinamica::solve() {
 }
 
 int TSPDinamica::recursiveSolve(int pos, int visited, std::vector<std::vector<int>>& state) {
+  auto mid = high_resolution_clock::now();
+  // std::cout << duration_cast<seconds>(mid - start).count() << std::endl;
+  if (duration_cast<seconds>(mid - startTime_).count() >= maxTime_) {  // Over time limit
+    throw(state[pos][visited]);
+  }
+  
   if(visited == ((1 << nodes_.size()) - 1)) {
     return nodes_[pos][0]; // return to starting node
   }
@@ -48,10 +63,18 @@ int TSPDinamica::recursiveSolve(int pos, int visited, std::vector<std::vector<in
   return state[pos][visited];
 }
 
+/**
+ * @desc Returns the value of value_ stored within the class
+ * @returns {int} Value of value_
+*/
 int TSPDinamica::getValue() {
   return value_;
 }
 
+/**
+ * @desc Returns the value of time_ stored within the class
+ * @returns {int} Value of time_
+*/
 int TSPDinamica::getTime() {
   return time_;
 }
@@ -64,7 +87,7 @@ void TSPDinamica::printSolution() {
   std::cout << "Tiempo Prog Dinámica (ns): " << time_ << std::endl;
 }
 
-/*
+/* CODE TO PRINT OUT VALUE MATRIX
 for(int i{0}; i < sizeof(memo); ++i) {
     for(int j{0}; j < sizeof(memo); ++j) {
       std::cout << memo[i][j] << " ";

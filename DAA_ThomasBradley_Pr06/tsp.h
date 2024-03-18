@@ -28,7 +28,7 @@ class TSP {
  public:
   TSP(std::string nombre_fichero);
   void buildNodes(int size);
-  virtual void solve() = 0;
+  virtual void solve(int maxTime) = 0;
   virtual int getValue() = 0;
   virtual int getTime() = 0;
   virtual void printSolution() = 0;

@@ -16,7 +16,7 @@
 class TSPVoraz : public TSP {
  public:
   TSPVoraz(std::string nombre_fichero) : TSP(nombre_fichero) {};
-  void solve();
+  void solve(int maxTime);
   int getValue();
   int getTime();
   void printSolution();
