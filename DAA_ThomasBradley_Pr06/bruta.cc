@@ -20,7 +20,7 @@
 void TSPBruta::solve(int maxTime) {
   auto start = high_resolution_clock::now();
 
-  int minCost{INT_MAX}; // s = starting node
+  int minCost{INT_MAX};
   std::vector<int> sequence;
 
   for (int i{0}; i < int(nodes_.size()); ++i) { // Add all node indexes to sequence
@@ -38,7 +38,7 @@ void TSPBruta::solve(int maxTime) {
       currentCost += nodes_[sequence[i]][sequence[(i+1)]];
     }
     currentCost += nodes_[sequence[sequence.size() - 1]][sequence[0]];  // Return to starting node
-    minCost = std::min(minCost, currentCost);
+    minCost = std::min(minCost, currentCost); // Check if smaller than shortest iteration found
 	}
 
   auto end = high_resolution_clock::now();
