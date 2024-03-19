@@ -23,6 +23,7 @@ void TSPVoraz::solve(int maxTime) {
   std::vector<int> visitedRouteList(nodes_.size(), 0);
   visitedRouteList[0] = 1;  // Starting node = 0
   int current{0}, sum{0};   // ^
+  path_.push_back(current); // ^
   for (int i{0}; i < int(nodes_.size() - 1); ++i) { // Visit every node
     if (duration_cast<seconds>(high_resolution_clock::now() - start).count() >= maxTime) {  // Over time limit
       time_ = -1;
@@ -39,6 +40,7 @@ void TSPVoraz::solve(int maxTime) {
     sum += min;
     visitedRouteList[minIndex] = 1;
     current = minIndex;
+    path_.push_back(minIndex);  // Update path
   }
   sum += nodes_[current][0];  // Return to beginning
 

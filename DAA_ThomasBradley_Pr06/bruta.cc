@@ -27,7 +27,7 @@ void TSPBruta::solve(int maxTime) {
     sequence.push_back(i);
   }
 
-  while(std::next_permutation(sequence.begin(), sequence.end())) {  // Iterate through all possible combinations of array
+  while (std::next_permutation(sequence.begin(), sequence.end())) {  // Iterate through all possible combinations of array
     if (duration_cast<seconds>(high_resolution_clock::now() - start).count() >= maxTime) {  // Over time limit
       time_ = -1;
       value_ = minCost;
@@ -39,6 +39,7 @@ void TSPBruta::solve(int maxTime) {
     }
     currentCost += nodes_[sequence[sequence.size() - 1]][sequence[0]];  // Return to starting node
     minCost = std::min(minCost, currentCost); // Check if smaller than shortest iteration found
+    if (minCost == currentCost) path_ = sequence; // Update path
 	}
 
   auto end = high_resolution_clock::now();
