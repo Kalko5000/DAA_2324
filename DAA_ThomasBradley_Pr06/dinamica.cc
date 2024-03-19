@@ -56,14 +56,14 @@ int TSPDinamica::recursiveSolve(int pos, int visited, std::vector<std::vector<in
     return nodes_[pos][0]; // return to starting node
   }
 
-  if(state[pos][visited] != INT_MAX) {
+  if(state[pos][visited] != INT_MAX) {  // Checks if from pos to visited has already been computed
     return state[pos][visited];
   }
 
   for(int i = 0; i < int(nodes_.size()); ++i) {
     // can't visit ourselves unless we're ending & skip if already visited
     if(i == pos || (visited & (1 << i))) continue;
-    int distance = nodes_[pos][i] + recursiveSolve(i, visited | (1 << i), state);
+    int distance = nodes_[pos][i] + recursiveSolve(i, visited | (1 << i), state); // Min distance from every node after current
     if(distance < state[pos][visited]) { 
       state[pos][visited] = distance;
     }
