@@ -9,7 +9,7 @@
  * @email:   alu0101408248@ull.edu.es
  * @date:    19.mar.2024
  * @brief:   Framework para algoritmos de Programación Dinámica
- * @example: ./tsp
+ * @example: ./tsp grafos
  */
 
 // g++ --std=c++14 -o tsp tsp.cc main.cc
@@ -30,15 +30,16 @@ using namespace std::chrono;
 
 /** @desc Texto de ayuda para el correcto funcionamiento del código */
 const void kHelpText() {
-  std::cout << "tsp" << std::endl << std::endl;
-  std::cout << "Se leeran todos los ficheros en el directorio ./grafos para que luego imprimir " << std::endl;
+  std::cout << "tsp [1]" << std::endl << std::endl;
+  std::cout << "[1] - Nombre del directorio donde se encuentran los TSP, no se debe poner '/' al final de este" << std::endl << std::endl;
+  std::cout << "Se leeran todos los ficheros en el directorio pasado para que luego imprimir " << std::endl;
   std::cout << "una tabla con todos los valores obtenidos y los tiempos de ejecución de cada algoritmo " << std::endl;
   std::cout << "en cada fichero. Estos algoritmos siendo: fuerza bruta, programación dinámica y voraz" << std::endl;
 }
 
 /** @desc Texto de como usar el programa y como encontrar más información sobre ella */
 const void kFuncText() {
-  std::cout << "Modo de empleo: tsp" << std::endl;
+  std::cout << "Modo de empleo: tsp [DIRECTORIO]" << std::endl;
   std::cout << "Pruebe 'tsp --help' para más información" << std::endl;
 }
 
@@ -53,11 +54,8 @@ void Usage(const int kArgc, char* argv[]) {
     if (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h") {
       kHelpText();
       exit(0);
-    } else {
-      kFuncText();
-      exit(1);
-    }
-  } else if (kArgc != 1) {
+    } 
+  } else {
     kFuncText();
     exit(1);
   }
@@ -65,8 +63,10 @@ void Usage(const int kArgc, char* argv[]) {
 
 int main(int argc, char* argv []) {
   Usage(argc, argv);
-  const int maxTime = 8; // Set to 8 seconds, for 5 minutes -> maxTime = 300;
-  const char* directory_path = "./grafos/";
+  const int maxTime = 180; // 3 minutes, for 5 minutes -> maxTime = 300;
+  char* directoryPath = new char[std::strlen(argv[1]) + std::strlen("/")];  // Set length to be correct, so we can add necesarry elements
+  std::strcpy(directoryPath, argv[1]);
+  std::strcat(directoryPath, "/");
 
   // Results header
   std::cout << std::setw(15) << "Fichero" << std::setw(15) <<
@@ -75,7 +75,7 @@ int main(int argc, char* argv []) {
   "Valor V" << std::setw(20) << "Tiempo(ns) V" << std::endl;
 
   // Open the directory
-  DIR* dir = opendir(directory_path);
+  DIR* dir = opendir(directoryPath);
   if (dir == nullptr) {
     std::cerr << "Error opening directory\n";
     return 1;
@@ -84,7 +84,7 @@ int main(int argc, char* argv []) {
   dirent* entry;
   while ((entry = readdir(dir)) != nullptr) { // Read the directory entries
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
-      std::string nombre_fichero = directory_path + std::string(entry->d_name);
+      std::string nombre_fichero = directoryPath + std::string(entry->d_name);
       TSPBruta bruta(nombre_fichero);
       bruta.solve(maxTime);
       std::string brutaTime = ((bruta.getTime() >= 0) ? std::to_string(bruta.getTime()) : "EXCESIVO");

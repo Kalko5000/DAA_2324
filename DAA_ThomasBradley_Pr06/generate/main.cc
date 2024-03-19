@@ -58,6 +58,8 @@ void generateTSPFile(std::string filename, int numNodes, int minValue, int maxVa
 }
 
 int main() {
-  generateTSPFile("../grafos/3_nodos.txt", 3, 5, 50);
+  generateTSPFile("../grafos/7_nodos.txt", 7, 5, 50);
+  generateTSPFile("../grafos/15_nodos.txt", 15, 5, 50);
+  generateTSPFile("../grafos/25_nodos.txt", 25, 5, 50);
   return 0;
 }
