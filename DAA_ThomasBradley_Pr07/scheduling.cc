@@ -15,17 +15,30 @@
 
 /**
  * @constructor
- * @desc Builds a matrix for our TSP problem from the definition of such stored in a file
- * @param {std::string} nombre_fichero Name of the fiel containing the problem definition
+ * @desc Builds the values needed to evaluate a parallel machine scheduling problem given a
+ *       file with the declaration of these
+ * @param {std::string} nombre_fichero Name of the file containing the problem definition
 */
 Scheduling::Scheduling(std::string nombre_fichero) {
-  value_ = 0;
-  time_ = 0;
-  path_ = {};
   std::ifstream fichero;
   fichero.open(nombre_fichero);
   if (fichero.is_open()) { 
-    std::cout << "Reading file" << std::endl;
+    int value{0};
+    fichero >> new char >> tareas_;
+    fichero >> new char >> maquinas_;
+    fichero >> new char;
+    for (int i{0}; i < tareas_; ++i) {
+      fichero >> value;
+      procesamiento_.push_back(value);
+    }
+    fichero >> new char;
+    setup_.resize(tareas_ + 1);
+    for (int i{0}; i <= tareas_; ++i) {
+      for (int j{0}; j <= tareas_; ++j) {
+        fichero >> value;
+        setup_[i].push_back(value);
+      }
+    }
   } else { // Fichero no se pudo abrir
     std::cerr << "Error al abrir fichero" << std::endl;
     exit(1);
@@ -33,22 +46,17 @@ Scheduling::Scheduling(std::string nombre_fichero) {
   fichero.close();
 }
 
-/**
- * @desc Fills the node matrix with zeros
- * @param {int} size Size we want our node matrix to be
-*/
-void Scheduling::buildNodes(int size) {
-  nodes_.resize(size);
-  for(int i{0}; i < int(nodes_.size()); ++i) {
-    nodes_[i].resize(size);
+/* CODE TO PRINT OUT STORED VALUES
+std::cout << "Tareas: " << tareas_ << std::endl;
+  std::cout << "Maquinas: " << maquinas_ << std::endl << std::endl;
+  for (int i{0}; i < procesamiento_.size(); ++i) {
+    std::cout << procesamiento_[i] << " ";
   }
-}
-
-/* CODE TO PRINT OUT VALUE MATRIX
-for(int i{0}; i < int(nodes_.size()); ++i) {
-      for(int j{0}; j < int(nodes_[0].size()); ++j) {
-        std::cout << nodes_[i][j] << " ";
-      }
-    std::cout << std::endl;
+  std::cout << std::endl << std::endl;
+  for (int i{0}; i < setup_.size(); ++i) {
+    for (int j{0}; j < setup_[0].size(); ++j) {
+      std::cout << setup_[i][j] << " ";
     }
+    std::cout << std::endl;
+  }
 */

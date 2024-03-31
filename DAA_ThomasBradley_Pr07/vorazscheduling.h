@@ -16,8 +16,5 @@
 class VorazScheduling : public Scheduling {
  public:
   VorazScheduling(std::string nombre_fichero) : Scheduling(nombre_fichero) {};
-  void solve(int maxTime);
-  int getValue();
-  int getTime();
-  void printSolution();
+  void evaluate();
 };

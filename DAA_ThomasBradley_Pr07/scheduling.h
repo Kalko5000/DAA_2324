@@ -27,14 +27,10 @@ using namespace std::chrono;
 class Scheduling {
  public:
   Scheduling(std::string nombre_fichero);
-  void buildNodes(int size);
-  virtual void solve(int maxTime) = 0;
-  virtual int getValue() = 0;
-  virtual int getTime() = 0;
-  virtual void printSolution() = 0;
+  virtual void evaluate() = 0;
  protected:
-  std::vector<std::vector<int>> nodes_; // Matrix with definition of TSP problem
-  int value_; // Minimum value found to solve TSP problem
-  int time_;  // Time it took to solve TSP problem
-  std::vector<int> path_;  // Path chosen in final sequence
+  int tareas_;
+  int maquinas_;
+  std::vector<int> procesamiento_;
+  std::vector<std::vector<int>> setup_;
 };
