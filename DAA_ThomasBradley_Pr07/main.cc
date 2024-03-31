@@ -69,8 +69,8 @@ int main(int argc, char* argv []) {
 
   // Results header
   std::cout << std::setw(20) << "Problema" << std::setw(5) <<
-  "n" << std::setw(12) << "Ejecución" << std::setw(10) <<
-  "TCT" << std::setw(10) << "CPU" << std::endl;
+  "n" << std::setw(5) << "m" << std::setw(12) << "Ejecución" << std::setw(10) <<
+  "TCT" << std::setw(15) << "CPU" << std::endl;
 
   // Open the directory
   DIR* dir = opendir(directoryPath);
@@ -85,11 +85,13 @@ int main(int argc, char* argv []) {
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
       std::string nombre_fichero = directoryPath + std::string(entry->d_name);
       VorazScheduling voraz(nombre_fichero);
+      auto start = std::chrono::high_resolution_clock::now();
       voraz.evaluate();
+      auto end = std::chrono::high_resolution_clock::now();
       
       std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
-      voraz.getTasks() << std::setw(11) << counter << std::setw(10) <<
-      voraz.getTCT() << std::setw(10) << voraz.getMachines() << std::endl;
+      voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) << counter << std::setw(10) <<
+      voraz.getTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
 
       counter++;
     }

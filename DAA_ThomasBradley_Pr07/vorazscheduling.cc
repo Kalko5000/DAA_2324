@@ -18,6 +18,7 @@
 */
 void VorazScheduling::evaluate() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
+  buildT();
   setupS(used);
 
   do {
@@ -35,8 +36,8 @@ void VorazScheduling::evaluate() {
         continue;
       } 
       int task = S_[minMachine][int(S_[minMachine].size() - 1)];  // Final task in machine with lowest total cost
-      if (setup_[task + 1][j + 1] < setup_[task + 1][minDest + 1]) { // Here we need to evaluate the TCT, also
-        if (!inVector(used, j)) {                                       // +1 because setup_ is (n+1)x(n+1)
+      if (t_[task + 1][j] < t_[task + 1][minDest]) { // We use t to detect which tasks will have a lower overall cost
+        if (!inVector(used, j)) {                    
           minDest = j;
         }
       }
@@ -51,13 +52,13 @@ void VorazScheduling::evaluate() {
  * @return {int} Temporal value of the TCT post-evaluation
 */
 int VorazScheduling::getTCT() {
-  int max{0};
+  int sum{0};
   for (int i{0}; i < int(S_.size()); ++i) {
-    int candidate = costOfArc(S_[i]);
-    if (candidate > max) max = candidate;
-    // std::cout << " |Candidate for " << i  << " = " << candidate << "| " << std::endl;
+    sum += costOfArc(S_[i]);
+    sum += setup_[S_[i][int(S_[i].size() - 1)] + 1][0]; // Tiempo en finalizar último trabajo
+    // std::cout << " |Cost for " << i  << " = " << costOfArc(S_[i]) << "| " << std::endl;
   }
-  return max;
+  return sum;
 }
 
 /**
@@ -85,30 +86,42 @@ bool VorazScheduling::inVector(std::vector<int> vect, int val) {
 void VorazScheduling::setupS(std::vector<int>& used) {
   for (int i{0}; i < maquinas_; ++i) {
     int minIndex{0};
-    for (int j{1}; j < int(setup_[0].size()); ++j) {
-      if (setup_[0][j] < setup_[0][minIndex] || minIndex == 0) {
-        if (!inVector(used, j - 1)) { // Used stores indexes of tasks in procesamiento_ so -1
+    for (int j{0}; j < int(t_[0].size()); ++j) {
+      if (t_[0][j] < t_[0][minIndex] || minIndex == 0) {
+        if (!inVector(used, j)) { // Used stores indexes of tasks in procesamiento_ so -1
           minIndex = j;
         }
       }
     }
-    S_[i].push_back(minIndex - 1);
-    used.push_back(minIndex - 1);
+    S_[i].push_back(minIndex);
+    used.push_back(minIndex);
   }
 }
 
 /**
- * @desc 
- * @param {std::vector<int>} tasks
- * @return {int}
+ * @desc Returns the cost of running all currently assigned tasks on a machine
+ * @param {std::vector<int>} tasks List of tasks to run
+ * @return {int} Total cost of running all tasks
 */
 int VorazScheduling::costOfArc(std::vector<int> tasks) {
   int sum{0}, previous{0};
   for (int i{0}; i < int(tasks.size()); ++i) {
-    sum += setup_[previous][tasks[i] + 1] + procesamiento_[tasks[i]];
-    previous = tasks[i] + 1;
+    sum += t_[previous][tasks[i]];
+    previous = tasks[i];
   }
   return sum;
+}
+
+/**
+ * @desc Builds the t matrix comprized of Pi + Sij
+*/
+void VorazScheduling::buildT() {
+  t_.resize(tareas_ + 1);
+  for (int i{0}; i < tareas_ + 1; ++i) {
+    for (int j{0}; j < tareas_; ++j) {
+      t_[i].push_back(procesamiento_[j] + setup_[i][j + 1]);
+    }
+  }
 }
 
 /* CODE TO SHOW VALUES OF S
