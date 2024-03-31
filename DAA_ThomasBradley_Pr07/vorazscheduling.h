@@ -20,4 +20,5 @@ class VorazScheduling : public Scheduling {
   int getTCT();
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);
+  int costOfArc(std::vector<int> tasks);
 };
