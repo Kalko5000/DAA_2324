@@ -68,10 +68,9 @@ int main(int argc, char* argv []) {
   std::strcat(directoryPath, "/");
 
   // Results header
-  std::cout << std::setw(15) << "Fichero" << std::setw(15) <<
-  "Valor FB" << std::setw(20) << "Tiempo(ns) FB" << std::setw(15) <<
-  "Valor PD" << std::setw(20) << "Tiempo(ns) PD" << std::setw(15) <<
-  "Valor V" << std::setw(20) << "Tiempo(ns) V" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) <<
+  "n" << std::setw(12) << "Ejecución" << std::setw(10) <<
+  "TCT" << std::setw(10) << "CPU" << std::endl;
 
   // Open the directory
   DIR* dir = opendir(directoryPath);
@@ -80,12 +79,19 @@ int main(int argc, char* argv []) {
     return 1;
   }
 
+  int counter{1};
   dirent* entry;
   while ((entry = readdir(dir)) != nullptr) { // Read the directory entries
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
       std::string nombre_fichero = directoryPath + std::string(entry->d_name);
       VorazScheduling voraz(nombre_fichero);
       voraz.evaluate();
+      
+      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
+      voraz.getTasks() << std::setw(11) << counter << std::setw(10) <<
+      voraz.getTCT() << std::setw(10) << voraz.getMachines() << std::endl;
+
+      counter++;
     }
   }
 

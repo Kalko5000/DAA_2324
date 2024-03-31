@@ -39,11 +39,28 @@ Scheduling::Scheduling(std::string nombre_fichero) {
         setup_[i].push_back(value);
       }
     }
+    S_.resize(maquinas_);
   } else { // Fichero no se pudo abrir
     std::cerr << "Error al abrir fichero" << std::endl;
     exit(1);
   }
   fichero.close();
+}
+
+/**
+ * @desc Returns the number of tasks
+ * @return {int} Number of tasks
+*/
+int Scheduling::getTasks() {
+  return tareas_;
+}
+
+/**
+ * @desc Returns the number of machines
+ * @return {int} Number of machines
+*/
+int Scheduling::getMachines() {
+  return maquinas_;
 }
 
 /* CODE TO PRINT OUT STORED VALUES

@@ -17,81 +17,84 @@
  * @desc Constructive Greedy algorithm for a parallel machine scheduling problem
 */
 void VorazScheduling::evaluate() {
-  std::vector<std::vector<int>> S(maquinas_); // Stores de indexes of the tasks
-  std::vector<int> used; // Stores used tasks in an easier format
-  for (int i{0}; i < maquinas_; ++i) {
-    int minIndex = 0;
-    for (int j{0}; j < int(procesamiento_.size()); ++j) {
-      if (procesamiento_[j] < procesamiento_[minIndex]) {
-        bool valid{true};
-        for (int n{0}; n < int(used.size()); ++n) {
-          if (j == used[n]) {
-            valid = false;
-            break;
-          }
-        }
-        if (valid) {
-          minIndex = j;
-        }
-      }
-    }
-    S[i].push_back(minIndex);
-    used.push_back(minIndex);
-  }
+  std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
+  setupS(used);
 
   do {
     int minMachine{-1}, minDest{-1};
     for (int i{0}; i < maquinas_; ++i) {
       for (int j{0}; j < tareas_; ++j) {
         if (minMachine == -1 || minDest == -1) {
-          bool valid{true};
-          for (int n{0}; n < int(used.size()); ++n) {
-            if (j == used[n]) {
-              valid = false;
-              break;
-            }
-          }
-          if (valid) {
+          if (!inVector(used, j)) {
             minMachine = i;
             minDest = j;
           }
           continue;
         } 
-        int task = S[i][int(S[i].size() - 1)];
-        int minTask = S[minMachine][int(S[minMachine].size() - 1)];
-        if (setup_[task + 1][j + 1] < setup_[minTask + 1][minDest + 1]) {
-          bool valid{true};
-          for (int n{0}; n < int(used.size()); ++n) {
-            if (j == used[n]) {
-              valid = false;
-              break;
-            }
-          }
-          if (valid) {
+        int task = S_[i][int(S_[i].size() - 1)];  // Task to check if leap is optimal 
+        int minTask = S_[minMachine][int(S_[minMachine].size() - 1)]; // Lowest cost task to leap from found so far
+        if (setup_[task + 1][j + 1] < setup_[minTask + 1][minDest + 1]) { // Here we need to evaluate the TCT, also
+          if (!inVector(used, j)) {                                       // +1 because setup is (n+1)x(n+1)
             minMachine = i;
             minDest = j;
           }
         }
       }
     }
-    S[minMachine].push_back(minDest);
+    S_[minMachine].push_back(minDest);
     used.push_back(minDest);
   } while (int(used.size()) < tareas_);
+}
 
+/**
+ * @desc Calculates and returns the total time value of the TCT with the solution previously calculated
+ * @return {int} Temporal value of the TCT post-evaluation
+*/
+int VorazScheduling::getTCT() {
+  return 0;
+}
 
-  for (int i{0}; i < int(S.size()); ++i) {
-    for (int j{0}; j < int(S[i].size()); ++j) {
-      std::cout << S[i][j] << " ";
+/**
+ * @desc Checks if a value is found in a vector
+ * @param {std::vector<int>} vect Vector to search for value in
+ * @param {int} val Value to look for
+ * @return {bool} Returns true if is found
+*/
+bool VorazScheduling::inVector(std::vector<int> vect, int val) {
+  bool valid{false};
+  for (int n{0}; n < int(vect.size()); ++n) {
+    if (val == vect[n]) {
+      valid = true;
+      break;
     }
-    std::cout << std::endl;
   }
-  std::cout << std::endl;
+  return valid;
+}
+
+/**
+ * @desc Sets up S with values of the 4 taks with the lowest initial setup time
+ * @param {std::vector<int>&} used Vector of parameters already used that we need to update
+ *                                 as we go along
+*/
+void VorazScheduling::setupS(std::vector<int>& used) {
+  for (int i{0}; i < maquinas_; ++i) {
+    int minIndex{0};
+    for (int j{1}; j < int(setup_[0].size()); ++j) {
+      if (setup_[0][j] < setup_[0][minIndex] || minIndex == 0) {
+        if (!inVector(used, j - 1)) { // Used stores indexes of tasks in procesamiento_ so -1
+          minIndex = j;
+        }
+      }
+    }
+    S_[i].push_back(minIndex - 1);
+    used.push_back(minIndex - 1);
+  }
 }
 
 /* CODE TO SHOW VALUES OF S
-for (int i{0}; i < S.size(); ++i) {
-    for (int j{0}; j < S[0].size(); ++j) {
-      std::cout << S[i][j] << " ";
+for (int i{0}; i < int(S_.size()); ++i) {
+    for (int j{0}; j < int(S_[i].size()); ++j) {
+      std::cout << S_[i][j] << " ";
     }
     std::cout << std::endl;
   }
