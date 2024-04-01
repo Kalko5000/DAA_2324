@@ -113,3 +113,15 @@ void VorazScheduling::setupS(std::vector<int>& used) {
     used.push_back(minIndex);
   }
 }
+
+/* TCT DEBUG CODE
+std::cout << "Machine " << i << ": " << std::endl;
+    int add{0}, previous{0};
+    for (int j{0}; j < int(S_[i].size()); ++j) {
+      add += (t_[previous][S_[i][j]] * (S_[i].size() - j));
+      std::cout << "Task " << S_[i][j] + 1 << ": " << t_[previous][S_[i][j]] << std::endl;
+      previous = S_[i][j];
+    }
+    sum += add;
+    std::cout << std::endl;
+*/
