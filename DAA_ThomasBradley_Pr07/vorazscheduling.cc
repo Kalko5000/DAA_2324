@@ -24,7 +24,7 @@ void VorazScheduling::evaluate() {
   do {
     int minMachine{0}, minDest{-1};
     for (int i{1}; i < maquinas_; ++i) {  // Pick machine with the lowest total cost
-      if (costOfArc(S_[i]) < costOfArc(S_[minMachine])) {
+      if (getMachineTCT(S_[i]) < getMachineTCT(S_[minMachine])) {
         minMachine = i;
       }
     }
@@ -48,15 +48,26 @@ void VorazScheduling::evaluate() {
 }
 
 /**
- * @desc Calculates and returns the total time value of the TCT with the solution previously calculated
+ * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int VorazScheduling::getTCT() {
+int VorazScheduling::getGlobalTCT() {
   int sum{0};
   for (int i{0}; i < int(S_.size()); ++i) {
-    sum += costOfArc(S_[i]);
-    sum += setup_[S_[i][int(S_[i].size() - 1)] + 1][0]; // Tiempo en finalizar último trabajo
-    // std::cout << " |Cost for " << i  << " = " << costOfArc(S_[i]) << "| " << std::endl;
+    sum += getMachineTCT(S_[i]);
+  }
+  return sum;
+}
+
+/**
+ * @desc Calculates the TCT value of a single machine
+ * @return {int} Temporal value of the machine's TCT post-evaluation
+*/
+int VorazScheduling::getMachineTCT(std::vector<int> tasks) {
+  int sum{0}, previous{0};
+  for (int i{0}; i < int(tasks.size()); ++i) {
+    sum += (t_[previous][tasks[i]] * (tasks.size() - i));
+    previous = tasks[i];
   }
   return sum;
 }

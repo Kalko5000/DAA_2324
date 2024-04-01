@@ -91,7 +91,7 @@ int main(int argc, char* argv []) {
       
       std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
       voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      voraz.getTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
+      voraz.getGlobalTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
 
       counter++;
     }

@@ -28,7 +28,8 @@ class Scheduling {
  public:
   Scheduling(std::string nombre_fichero);
   virtual void evaluate() = 0;
-  virtual int getTCT() = 0;
+  virtual int getGlobalTCT() = 0;
+  virtual int getMachineTCT(std::vector<int> tasks) = 0;
   int getTasks();
   int getMachines();
  protected:

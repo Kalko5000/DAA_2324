@@ -17,7 +17,8 @@ class VorazScheduling : public Scheduling {
  public:
   VorazScheduling(std::string nombre_fichero) : Scheduling(nombre_fichero) {};
   void evaluate();
-  int getTCT();
+  int getGlobalTCT();
+  int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);
   int costOfArc(std::vector<int> tasks);
