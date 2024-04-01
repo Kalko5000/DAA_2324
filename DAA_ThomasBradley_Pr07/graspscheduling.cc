@@ -8,55 +8,64 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we define the VorazScheduling class
+ * @brief:   Program that solves titular problem. Here we define the GraspScheduling class
  */
 
-#include "vorazscheduling.h"
+#include "graspscheduling.h"
 
 /**
  * @desc Constructive Greedy algorithm for a parallel machine scheduling problem
 */
-void VorazScheduling::evaluate() {
+void GraspScheduling::evaluate() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
+  srand(time(0)); // Seed for random number
   buildT();
   setupS(used);
 
   do {
-    int minMachine{0}, minDest{-1}, minTCT{INT_MAX};
-    for (int i{0}; i < maquinas_; ++i) {
-      for (int j{0}; j < tareas_; ++j) {
-        std::vector<int> temp = S_[i];
-        temp.push_back(j);  // Resulting Machine queue if we added the task j
-        if (minDest == -1) {  // We still need to initialize minimum values
-          if (!inVector(used, j)) {
-            minMachine = i;
-            minDest = j;
-            minTCT = getMachineTCT(temp);
-          }
-          continue;
-        } 
-        int newTCT = getMachineTCT(temp); // Get value of TCT with new workflow
-        if (newTCT < minTCT) { // Check if value of new Workflow is cheaper than previous minimum TCT
-          if (!inVector(used, j)) {                    
-            minMachine = i;
-            minDest = j;
-            minTCT = newTCT;
-          }
+    construct(used);
+  } while (int(used.size()) < tareas_);
+}
+
+/**
+ * @desc
+ * @param {std::vector<int>&}
+*/
+void GraspScheduling::construct(std::vector<int>& used) {
+  std::vector<int> candidates = {}, canMachines = {}, canTasks = {};
+  for (int i{0}; i < maquinas_; ++i) {
+    for (int j{0}; j < tareas_; ++j) {
+      std::vector<int> temp = S_[i];
+      temp.push_back(j);  // Resulting Machine queue if we added the task j
+      if (int(candidates.size()) < candidateSize_) {  // We still need to initialize minimum values
+        if (!inVector(used, j)) {
+          canMachines.push_back(i);
+          canTasks.push_back(j);
+          candidates.push_back(getMachineTCT(temp));
+        }
+        continue;
+      } 
+      int highestIndex = indexOfBiggest(candidates);
+      int newTCT = getMachineTCT(temp); // Get value of TCT with new workflow
+      if (newTCT < candidates[highestIndex]) { // Check if value of new Workflow is cheaper than previous minimum TCT
+        if (!inVector(used, j)) {                    
+          canMachines[highestIndex] = i;
+          canTasks[highestIndex] = j;
+          candidates[highestIndex] = newTCT;
         }
       }
     }
-    S_[minMachine].push_back(minDest);
-    used.push_back(minDest);
-  } while (int(used.size()) < tareas_);
-
-  // PrintS();
+  }
+  int index = randomInt(candidateSize_ - 1);
+  S_[canMachines[index]].push_back(canTasks[index]);
+  used.push_back(canTasks[index]);
 }
 
 /**
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int VorazScheduling::getGlobalTCT() {
+int GraspScheduling::getGlobalTCT() {
   int sum{0};
   for (int i{0}; i < int(S_.size()); ++i) {
     sum += getMachineTCT(S_[i]);
@@ -68,7 +77,7 @@ int VorazScheduling::getGlobalTCT() {
  * @desc Calculates the TCT value of a single machine
  * @return {int} Temporal value of the machine's TCT post-evaluation
 */
-int VorazScheduling::getMachineTCT(std::vector<int> tasks) {
+int GraspScheduling::getMachineTCT(std::vector<int> tasks) {
   int sum{0}, previous{0};
   for (int i{0}; i < int(tasks.size()); ++i) {
     sum += (t_[previous][tasks[i]] * (tasks.size() - i));
@@ -83,7 +92,7 @@ int VorazScheduling::getMachineTCT(std::vector<int> tasks) {
  * @param {int} val Value to look for
  * @return {bool} Returns true if is found
 */
-bool VorazScheduling::inVector(std::vector<int> vect, int val) {
+bool GraspScheduling::inVector(std::vector<int> vect, int val) {
   bool valid{false};
   for (int n{0}; n < int(vect.size()); ++n) {
     if (val == vect[n]) {
@@ -99,7 +108,7 @@ bool VorazScheduling::inVector(std::vector<int> vect, int val) {
  * @param {std::vector<int>&} used Vector of parameters already used that we need to update
  *                                 as we go along
 */
-void VorazScheduling::setupS(std::vector<int>& used) {
+void GraspScheduling::setupS(std::vector<int>& used) {
   for (int i{0}; i < maquinas_; ++i) {
     int minIndex{0};
     for (int j{0}; j < int(t_[0].size()); ++j) {
@@ -117,7 +126,7 @@ void VorazScheduling::setupS(std::vector<int>& used) {
 /**
  * @desc Builds the t matrix comprized of Pi + Sij
 */
-void VorazScheduling::buildT() {
+void GraspScheduling::buildT() {
   t_.resize(tareas_ + 1);
   for (int i{0}; i < tareas_ + 1; ++i) {
     for (int j{0}; j < tareas_; ++j) {
@@ -128,23 +137,33 @@ void VorazScheduling::buildT() {
 
 /**
  * @desc
+ * @param {std::vector<int>} arr
 */
-void VorazScheduling::PrintS() {
-  for (int i{0}; i < int(S_.size()); ++i) {
-    std::cout << "Maquina " << i + 1 << ": ";
-    for (int j{0}; j < int(S_[i].size()); ++j) {
-      std::cout << S_[i][j] << " ";
+int GraspScheduling::indexOfBiggest(std::vector<int> arr) {
+  int max{0}, maxIndex{0};
+  for (int i{0}; i < int(arr.size()); ++i) {
+    if (arr[i] > max) {
+      max = arr[i];
+      maxIndex = i;
     }
-    std::cout << std::endl;
   }
+  return maxIndex;
+}
+
+/**
+ * @desc
+ * @param {int}
+*/
+int GraspScheduling::randomInt(int max) {
+  return rand() % (max + 1);
 }
 
 /* CODE TO SHOW VALUES OF S
 for (int i{0}; i < int(S_.size()); ++i) {
-    std::cout << "Maquina " << i + 1 << ": ";
     for (int j{0}; j < int(S_[i].size()); ++j) {
       std::cout << S_[i][j] << " ";
     }
     std::cout << std::endl;
   }
+  std::cout << std::endl;
 */

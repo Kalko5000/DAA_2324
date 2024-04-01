@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <dirent.h>
 #include <cstring>
-#include "vorazscheduling.h"
+#include "graspscheduling.h"
 
 using namespace std::chrono;
 

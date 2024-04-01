@@ -15,7 +15,7 @@ LDFLAGS =
 
 all: machine
 
-machine: scheduling.cc vorazscheduling.cc main.cc
+machine: scheduling.cc vorazscheduling.cc graspscheduling.cc main.cc
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .PHONY: all clean
