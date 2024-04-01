@@ -48,6 +48,31 @@ Scheduling::Scheduling(std::string nombre_fichero) {
 }
 
 /**
+ * @desc Builds the t matrix comprized of Pi + Sij
+*/
+void Scheduling::buildT() {
+  t_.resize(tareas_ + 1);
+  for (int i{0}; i < tareas_ + 1; ++i) {
+    for (int j{0}; j < tareas_; ++j) {
+      t_[i].push_back(procesamiento_[j] + setup_[i][j + 1]);
+    }
+  }
+}
+
+/**
+ * @desc Prints Machines and the tasks they've been assigned
+*/
+void Scheduling::printS() {
+  for (int i{0}; i < int(S_.size()); ++i) {
+    std::cout << "Maquina " << i + 1 << ": ";
+    for (int j{0}; j < int(S_[i].size()); ++j) {
+      std::cout << S_[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+/**
  * @desc Returns the number of tasks
  * @return {int} Number of tasks
 */

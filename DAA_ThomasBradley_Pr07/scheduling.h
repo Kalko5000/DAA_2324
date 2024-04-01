@@ -30,6 +30,8 @@ class Scheduling {
   virtual void evaluate() = 0;
   virtual int getGlobalTCT() = 0;
   virtual int getMachineTCT(std::vector<int> tasks) = 0;
+  void buildT();
+  void printS();
   int getTasks();
   int getMachines();
  protected:
@@ -38,4 +40,5 @@ class Scheduling {
   std::vector<int> procesamiento_;
   std::vector<std::vector<int>> setup_;
   std::vector<std::vector<int>> S_;
+  std::vector<std::vector<int>> t_;
 };

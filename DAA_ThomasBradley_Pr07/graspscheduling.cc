@@ -14,7 +14,7 @@
 #include "graspscheduling.h"
 
 /**
- * @desc Constructive Greedy algorithm for a parallel machine scheduling problem
+ * @desc GRASP template, specific functionality in other methods
 */
 void GraspScheduling::evaluate() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
@@ -28,8 +28,8 @@ void GraspScheduling::evaluate() {
 }
 
 /**
- * @desc
- * @param {std::vector<int>&}
+ * @desc Constructive methods for GRASP
+ * @param {std::vector<int>&} used Helps keeps track of what tasks ahve already been assigned
 */
 void GraspScheduling::construct(std::vector<int>& used) {
   std::vector<int> candidates = {}, canMachines = {}, canTasks = {};
@@ -124,20 +124,9 @@ void GraspScheduling::setupS(std::vector<int>& used) {
 }
 
 /**
- * @desc Builds the t matrix comprized of Pi + Sij
-*/
-void GraspScheduling::buildT() {
-  t_.resize(tareas_ + 1);
-  for (int i{0}; i < tareas_ + 1; ++i) {
-    for (int j{0}; j < tareas_; ++j) {
-      t_[i].push_back(procesamiento_[j] + setup_[i][j + 1]);
-    }
-  }
-}
-
-/**
- * @desc
- * @param {std::vector<int>} arr
+ * @desc Returns the index of the biggest element in an array
+ * @param {std::vector<int>} arr Array to check for biggest element in
+ * @return {int} Index of biggest element
 */
 int GraspScheduling::indexOfBiggest(std::vector<int> arr) {
   int max{0}, maxIndex{0};
@@ -151,19 +140,10 @@ int GraspScheduling::indexOfBiggest(std::vector<int> arr) {
 }
 
 /**
- * @desc
- * @param {int}
+ * @desc Generates a random number between 0 and a specified amount
+ * @param {int} max Highets number that can be generated
+ * @return {int} Randomly generated number
 */
 int GraspScheduling::randomInt(int max) {
   return rand() % (max + 1);
 }
-
-/* CODE TO SHOW VALUES OF S
-for (int i{0}; i < int(S_.size()); ++i) {
-    for (int j{0}; j < int(S_[i].size()); ++j) {
-      std::cout << S_[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-  std::cout << std::endl;
-*/

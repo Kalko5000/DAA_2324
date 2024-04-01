@@ -24,10 +24,8 @@ class GraspScheduling : public Scheduling {
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);
-  void buildT();
   int indexOfBiggest(std::vector<int> arr);
   int randomInt(int max);
  private:
-  std::vector<std::vector<int>> t_;
   int candidateSize_;
 };

@@ -21,8 +21,4 @@ class VorazScheduling : public Scheduling {
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);
-  void buildT();
-  void PrintS();
- private:
-  std::vector<std::vector<int>> t_;
 };

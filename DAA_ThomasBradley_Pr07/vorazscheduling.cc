@@ -113,38 +113,3 @@ void VorazScheduling::setupS(std::vector<int>& used) {
     used.push_back(minIndex);
   }
 }
-
-/**
- * @desc Builds the t matrix comprized of Pi + Sij
-*/
-void VorazScheduling::buildT() {
-  t_.resize(tareas_ + 1);
-  for (int i{0}; i < tareas_ + 1; ++i) {
-    for (int j{0}; j < tareas_; ++j) {
-      t_[i].push_back(procesamiento_[j] + setup_[i][j + 1]);
-    }
-  }
-}
-
-/**
- * @desc
-*/
-void VorazScheduling::PrintS() {
-  for (int i{0}; i < int(S_.size()); ++i) {
-    std::cout << "Maquina " << i + 1 << ": ";
-    for (int j{0}; j < int(S_[i].size()); ++j) {
-      std::cout << S_[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-}
-
-/* CODE TO SHOW VALUES OF S
-for (int i{0}; i < int(S_.size()); ++i) {
-    std::cout << "Maquina " << i + 1 << ": ";
-    for (int j{0}; j < int(S_[i].size()); ++j) {
-      std::cout << S_[i][j] << " ";
-    }
-    std::cout << std::endl;
-  }
-*/
