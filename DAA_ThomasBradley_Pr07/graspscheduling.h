@@ -19,12 +19,13 @@ class GraspScheduling : public Scheduling {
     candidateSize_ = candidateSize;
   };
   void evaluate();
-  void construct(std::vector<int>& used);
+  int construct();
   int getGlobalTCT();
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);
   int indexOfBiggest(std::vector<int> arr);
+  int indexOfSmallest(std::vector<int> arr);
   int randomInt(int max);
  private:
   int candidateSize_;

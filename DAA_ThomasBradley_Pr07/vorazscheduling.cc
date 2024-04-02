@@ -49,7 +49,7 @@ void VorazScheduling::evaluate() {
     used.push_back(minDest);
   } while (int(used.size()) < tareas_);
 
-  // PrintS();
+  // printS();
 }
 
 /**

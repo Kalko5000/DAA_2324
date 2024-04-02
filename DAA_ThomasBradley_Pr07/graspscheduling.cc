@@ -17,48 +17,60 @@
  * @desc GRASP template, specific functionality in other methods
 */
 void GraspScheduling::evaluate() {
-  std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
+  int counter{0}, max{1};
+  std::vector<int> tctValues{{}};
   srand(time(0)); // Seed for random number
   buildT();
-  setupS(used);
 
   do {
-    construct(used);
-  } while (int(used.size()) < tareas_);
+    int newVal = construct();
+    tctValues.push_back(newVal);
+    counter++;
+  } while (counter <= max);
+
+  int smallest = indexOfSmallest(tctValues);
+
+  // printS();
 }
 
 /**
  * @desc Constructive methods for GRASP
  * @param {std::vector<int>&} used Helps keeps track of what tasks ahve already been assigned
 */
-void GraspScheduling::construct(std::vector<int>& used) {
-  std::vector<int> candidates = {}, canMachines = {}, canTasks = {};
-  for (int i{0}; i < maquinas_; ++i) {
-    for (int j{0}; j < tareas_; ++j) {
-      std::vector<int> temp = S_[i];
-      temp.push_back(j);  // Resulting Machine queue if we added the task j
-      if (int(candidates.size()) < candidateSize_) {  // We still need to initialize minimum values
-        if (!inVector(used, j)) {
-          canMachines.push_back(i);
-          canTasks.push_back(j);
-          candidates.push_back(getMachineTCT(temp));
-        }
-        continue;
-      } 
-      int highestIndex = indexOfBiggest(candidates);
-      int newTCT = getMachineTCT(temp); // Get value of TCT with new workflow
-      if (newTCT < candidates[highestIndex]) { // Check if value of new Workflow is cheaper than previous minimum TCT
-        if (!inVector(used, j)) {                    
-          canMachines[highestIndex] = i;
-          canTasks[highestIndex] = j;
-          candidates[highestIndex] = newTCT;
+int GraspScheduling::construct() {
+  std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
+  setupS(used);
+  do {
+    std::vector<int> candidates = {}, canMachines = {}, canTasks = {};
+    for (int i{0}; i < maquinas_; ++i) {
+      for (int j{0}; j < tareas_; ++j) {
+        std::vector<int> temp = S_[i];
+        temp.push_back(j);  // Resulting Machine queue if we added the task j
+        if (int(candidates.size()) < candidateSize_) {  // We still need to initialize minimum values
+          if (!inVector(used, j)) {
+            canMachines.push_back(i);
+            canTasks.push_back(j);
+            candidates.push_back(getMachineTCT(temp));
+          }
+          continue;
+        } 
+        int highestIndex = indexOfBiggest(candidates);
+        int newTCT = getMachineTCT(temp); // Get value of TCT with new workflow
+        if (newTCT < candidates[highestIndex]) { // Check if value of new Workflow is cheaper than previous minimum TCT
+          if (!inVector(used, j)) {                    
+            canMachines[highestIndex] = i;
+            canTasks[highestIndex] = j;
+            candidates[highestIndex] = newTCT;
+          }
         }
       }
     }
-  }
-  int index = randomInt(candidateSize_ - 1);
-  S_[canMachines[index]].push_back(canTasks[index]);
-  used.push_back(canTasks[index]);
+    int index = randomInt(candidateSize_ - 1);
+    S_[canMachines[index]].push_back(canTasks[index]);
+    used.push_back(canTasks[index]);
+  } while (int(used.size()) < tareas_);
+
+  return getGlobalTCT();
 }
 
 /**
@@ -109,6 +121,8 @@ bool GraspScheduling::inVector(std::vector<int> vect, int val) {
  *                                 as we go along
 */
 void GraspScheduling::setupS(std::vector<int>& used) {
+  S_ = {};
+  S_.resize(maquinas_);
   for (int i{0}; i < maquinas_; ++i) {
     int minIndex{0};
     for (int j{0}; j < int(t_[0].size()); ++j) {
@@ -137,6 +151,17 @@ int GraspScheduling::indexOfBiggest(std::vector<int> arr) {
     }
   }
   return maxIndex;
+}
+
+int GraspScheduling::indexOfSmallest(std::vector<int> arr) {
+  int min{INT_MAX}, minIndex{0};
+  for (int i{0}; i < int(arr.size()); ++i) {
+    if (arr[i] < min) {
+      min = arr[i];
+      minIndex = i;
+    }
+  }
+  return minIndex;
 }
 
 /**

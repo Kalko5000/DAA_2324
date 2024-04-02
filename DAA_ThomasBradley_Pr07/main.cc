@@ -84,6 +84,8 @@ int main(int argc, char* argv []) {
   while ((entry = readdir(dir)) != nullptr) { // Read the directory entries
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
       std::string nombre_fichero = directoryPath + std::string(entry->d_name);
+      
+      std::cout << "VORAZ" << std::endl;
       VorazScheduling voraz(nombre_fichero);
       auto start = std::chrono::high_resolution_clock::now();
       voraz.evaluate();
@@ -93,6 +95,17 @@ int main(int argc, char* argv []) {
       voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) << counter << std::setw(10) <<
       voraz.getGlobalTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
 
+      std::cout << "GRASP" << std::endl;
+      GraspScheduling grasp(nombre_fichero, 3);
+      auto startGrasp = std::chrono::high_resolution_clock::now();
+      grasp.evaluate();
+      auto endGrasp = std::chrono::high_resolution_clock::now();
+      
+      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
+      grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << counter << std::setw(10) <<
+      grasp.getGlobalTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(endGrasp - startGrasp).count() << std::endl;
+
+      std::cout << std::endl;
       counter++;
     }
   }
