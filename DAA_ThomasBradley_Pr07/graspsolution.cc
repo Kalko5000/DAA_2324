@@ -17,19 +17,29 @@
  * @desc GRASP template, specific functionality in other methods
 */
 int GraspSolution::evaluate() {
-  int oldVal{INT_MAX}, newVal{INT_MAX};
+  int newVal{INT_MAX}, counter{0}, min{INT_MAX};
   srand(time(0)); // Seed for random number
   buildT();
 
   do {
-    oldVal = newVal;
     construct();
-    newVal = firstProcessing();
-  } while (newVal < oldVal);
+    newVal = firstProcessing();  // Swap out final element to end
+    if (newVal < min) min = newVal;
+    newVal = secondProcessing();  // Swap out first element to start
+    if (newVal < min) min = newVal;
+    newVal = thirdProcessing();  // Swap out final element to start
+    if (newVal < min) min = newVal;
+    newVal = fourthProcessing();  // Swap out first element to end
+    if (newVal < min) min = newVal;
+    newVal = fifthProcessing();  // Swap out every element for every element
+    if (newVal < min) min = newVal;
+    counter++;
+    // std::cout << "Test" << std::endl;
+  } while (counter < 10);
 
   // printS();
 
-  return newVal;
+  return min;
 }
 
 /**
@@ -64,7 +74,7 @@ int GraspSolution::construct() {
         }
       }
     }
-    int index = randomInt(candidateSize_ - 1);
+    int index = randomInt(int(candidates.size()) - 1);
     S_[canMachines[index]].push_back(canTasks[index]);
     used.push_back(canTasks[index]);
   } while (int(used.size()) < tareas_);
@@ -72,8 +82,128 @@ int GraspSolution::construct() {
   return getGlobalTCT();
 }
 
+/**
+ * @desc Removes the final element from a machine and adds it to the end of another
+ * @returns {int} TCT of the lowest resulting Solution
+*/
 int GraspSolution::firstProcessing() {
-  return getGlobalTCT();
+  int base{getGlobalTCT()}, min{base};
+  for (int i{0}; i < maquinas_; ++i) {
+    for (int j{0}; j < maquinas_; ++j) {
+      if (i == j) continue;
+      int takeAwayI = getMachineTCT(S_[i]);
+      int takeAwayJ = getMachineTCT(S_[j]);
+      std::vector<int> removedI = S_[i];
+      removedI.pop_back();
+      int addI = getMachineTCT(removedI);
+      std::vector<int> addedJ = S_[j];
+      addedJ.push_back(S_[i][int(S_[i].size() - 1)]);
+      int addJ = getMachineTCT(addedJ);
+      int result = base - takeAwayI - takeAwayJ + addI + addJ;
+      if (result < min) min = result;
+    }
+  }
+  return min;
+}
+
+/**
+ * @desc Removes the first element from a machine and adds it to the start of another
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int GraspSolution::secondProcessing() {
+  int base{getGlobalTCT()}, min{base};
+  for (int i{0}; i < maquinas_; ++i) {
+    for (int j{0}; j < maquinas_; ++j) {
+      if (i == j) continue;
+      int takeAwayI = getMachineTCT(S_[i]);
+      int takeAwayJ = getMachineTCT(S_[j]);
+      std::vector<int> removedI = S_[i];
+      removedI.erase(removedI.begin());
+      int addI = getMachineTCT(removedI);
+      std::vector<int> addedJ = S_[j];
+      addedJ.insert(addedJ.begin(), S_[i][0]);
+      int addJ = getMachineTCT(addedJ);
+      int result = base - takeAwayI - takeAwayJ + addI + addJ;
+      if (result < min) min = result;
+    }
+  }
+  return min;
+}
+
+/**
+ * @desc Removes the final element from a machine and adds it to the start of another
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int GraspSolution::thirdProcessing() {
+  int base{getGlobalTCT()}, min{base};
+  for (int i{0}; i < maquinas_; ++i) {
+    for (int j{0}; j < maquinas_; ++j) {
+      if (i == j) continue;
+      int takeAwayI = getMachineTCT(S_[i]);
+      int takeAwayJ = getMachineTCT(S_[j]);
+      std::vector<int> removedI = S_[i];
+      removedI.pop_back();
+      int addI = getMachineTCT(removedI);
+      std::vector<int> addedJ = S_[j];
+      addedJ.insert(addedJ.begin(), S_[i][int(S_[i].size() - 1)]);
+      int addJ = getMachineTCT(addedJ);
+      int result = base - takeAwayI - takeAwayJ + addI + addJ;
+      if (result < min) min = result;
+    }
+  }
+  return min;
+}
+
+/**
+ * @desc Removes the first element from a machine and adds it to the end of another
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int GraspSolution::fourthProcessing() {
+  int base{getGlobalTCT()}, min{base};
+  for (int i{0}; i < maquinas_; ++i) {
+    for (int j{0}; j < maquinas_; ++j) {
+      if (i == j) continue;
+      int takeAwayI = getMachineTCT(S_[i]);
+      int takeAwayJ = getMachineTCT(S_[j]);
+      std::vector<int> removedI = S_[i];
+      removedI.erase(removedI.begin());
+      int addI = getMachineTCT(removedI);
+      std::vector<int> addedJ = S_[j];
+      addedJ.push_back(S_[i][0]);
+      int addJ = getMachineTCT(addedJ);
+      int result = base - takeAwayI - takeAwayJ + addI + addJ;
+      if (result < min) min = result;
+    }
+  }
+  return min;
+}
+
+/**
+ * @desc Checks all elements in the place of all others
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int GraspSolution::fifthProcessing() {
+  int base{getGlobalTCT()}, min{base};
+  for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
+    for (int j{0}; j < maquinas_; ++j) {  // Machine to recieve
+      for (int k{0}; k < int(S_[i].size()); ++k) {  // Tasks locationg to give from giver
+        for (int n{0}; n < int(S_[j].size()); ++n) {  // Place to receive task for receiver
+          if (k == n && i == j) continue;
+          int takeAwayI = getMachineTCT(S_[i]);
+          int takeAwayJ = getMachineTCT(S_[j]);
+          std::vector<int> removedI = S_[i];
+          removedI.erase(removedI.begin() + k);
+          int addI = getMachineTCT(removedI);
+          std::vector<int> addedJ = S_[j];
+          addedJ.insert(addedJ.begin() + n, S_[i][k]);
+          int addJ = getMachineTCT(addedJ);
+          int result = base - takeAwayI - takeAwayJ + addI + addJ;
+          if (result < min) min = result;
+        }
+      }
+    }
+  }
+  return min;
 }
 
 /**

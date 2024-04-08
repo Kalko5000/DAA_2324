@@ -21,6 +21,10 @@ class GraspSolution : public Solution {
   int evaluate();
   int construct();
   int firstProcessing();
+  int secondProcessing();
+  int thirdProcessing();
+  int fourthProcessing();
+  int fifthProcessing();
   int getGlobalTCT();
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
