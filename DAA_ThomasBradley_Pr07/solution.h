@@ -8,7 +8,7 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we declare the Scheduling class
+ * @brief:   Program that solves titular problem. Here we declare the Solution class
  */
 
 #include <bits/stdc++.h>
@@ -24,10 +24,10 @@
 
 using namespace std::chrono;
 
-class Scheduling {
+class Solution {
  public:
-  Scheduling(std::string nombre_fichero);
-  virtual void evaluate() = 0;
+  Solution(std::string nombre_fichero);
+  virtual int evaluate() = 0;
   virtual int getGlobalTCT() = 0;
   virtual int getMachineTCT(std::vector<int> tasks) = 0;
   void buildT();

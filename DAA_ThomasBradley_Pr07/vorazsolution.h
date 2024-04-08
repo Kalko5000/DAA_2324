@@ -8,25 +8,17 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we declare the GraspScheduling class
+ * @brief:   Program that solves titular problem. Here we declare the VorazSolution class
  */
 
-#include "vorazscheduling.h"
+#include "solution.h"
 
-class GraspScheduling : public Scheduling {
+class VorazSolution : public Solution {
  public:
-  GraspScheduling(std::string nombre_fichero, int candidateSize) : Scheduling(nombre_fichero) {
-    candidateSize_ = candidateSize;
-  };
-  void evaluate();
-  int construct();
+  VorazSolution(std::string nombre_fichero) : Solution(nombre_fichero) {};
+  int evaluate();
   int getGlobalTCT();
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);
-  int indexOfBiggest(std::vector<int> arr);
-  int indexOfSmallest(std::vector<int> arr);
-  int randomInt(int max);
- private:
-  int candidateSize_;
 };

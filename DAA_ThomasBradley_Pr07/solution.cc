@@ -8,10 +8,10 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we define the Scheduling class
+ * @brief:   Program that solves titular problem. Here we define the Solution class
  */
 
-#include "scheduling.h"
+#include "solution.h"
 
 /**
  * @constructor
@@ -19,7 +19,7 @@
  *       file with the declaration of these
  * @param {std::string} nombre_fichero Name of the file containing the problem definition
 */
-Scheduling::Scheduling(std::string nombre_fichero) {
+Solution::Solution(std::string nombre_fichero) {
   std::ifstream fichero;
   fichero.open(nombre_fichero);
   if (fichero.is_open()) { 
@@ -50,7 +50,7 @@ Scheduling::Scheduling(std::string nombre_fichero) {
 /**
  * @desc Builds the t matrix comprized of Pi + Sij
 */
-void Scheduling::buildT() {
+void Solution::buildT() {
   t_.resize(tareas_ + 1);
   for (int i{0}; i < tareas_ + 1; ++i) {
     for (int j{0}; j < tareas_; ++j) {
@@ -62,7 +62,7 @@ void Scheduling::buildT() {
 /**
  * @desc Prints Machines and the tasks they've been assigned
 */
-void Scheduling::printS() {
+void Solution::printS() {
   for (int i{0}; i < int(S_.size()); ++i) {
     std::cout << "Maquina " << i + 1 << ": ";
     for (int j{0}; j < int(S_[i].size()); ++j) {
@@ -76,7 +76,7 @@ void Scheduling::printS() {
  * @desc Returns the number of tasks
  * @return {int} Number of tasks
 */
-int Scheduling::getTasks() {
+int Solution::getTasks() {
   return tareas_;
 }
 
@@ -84,7 +84,7 @@ int Scheduling::getTasks() {
  * @desc Returns the number of machines
  * @return {int} Number of machines
 */
-int Scheduling::getMachines() {
+int Solution::getMachines() {
   return maquinas_;
 }
 

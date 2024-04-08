@@ -8,15 +8,15 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we define the VorazScheduling class
+ * @brief:   Program that solves titular problem. Here we define the VorazSolution class
  */
 
-#include "vorazscheduling.h"
+#include "vorazsolution.h"
 
 /**
  * @desc Constructive Greedy algorithm for a parallel machine scheduling problem
 */
-void VorazScheduling::evaluate() {
+int VorazSolution::evaluate() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
   buildT();
   setupS(used);
@@ -50,13 +50,15 @@ void VorazScheduling::evaluate() {
   } while (int(used.size()) < tareas_);
 
   // printS();
+
+  return getGlobalTCT();
 }
 
 /**
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int VorazScheduling::getGlobalTCT() {
+int VorazSolution::getGlobalTCT() {
   int sum{0};
   for (int i{0}; i < int(S_.size()); ++i) {
     sum += getMachineTCT(S_[i]);
@@ -68,7 +70,7 @@ int VorazScheduling::getGlobalTCT() {
  * @desc Calculates the TCT value of a single machine
  * @return {int} Temporal value of the machine's TCT post-evaluation
 */
-int VorazScheduling::getMachineTCT(std::vector<int> tasks) {
+int VorazSolution::getMachineTCT(std::vector<int> tasks) {
   int sum{0}, previous{0};
   for (int i{0}; i < int(tasks.size()); ++i) {
     sum += (t_[previous][tasks[i]] * (tasks.size() - i));
@@ -83,7 +85,7 @@ int VorazScheduling::getMachineTCT(std::vector<int> tasks) {
  * @param {int} val Value to look for
  * @return {bool} Returns true if is found
 */
-bool VorazScheduling::inVector(std::vector<int> vect, int val) {
+bool VorazSolution::inVector(std::vector<int> vect, int val) {
   bool valid{false};
   for (int n{0}; n < int(vect.size()); ++n) {
     if (val == vect[n]) {
@@ -99,7 +101,7 @@ bool VorazScheduling::inVector(std::vector<int> vect, int val) {
  * @param {std::vector<int>&} used Vector of parameters already used that we need to update
  *                                 as we go along
 */
-void VorazScheduling::setupS(std::vector<int>& used) {
+void VorazSolution::setupS(std::vector<int>& used) {
   for (int i{0}; i < maquinas_; ++i) {
     int minIndex{0};
     for (int j{0}; j < int(t_[0].size()); ++j) {

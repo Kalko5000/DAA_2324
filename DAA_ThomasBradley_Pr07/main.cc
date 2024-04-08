@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <dirent.h>
 #include <cstring>
-#include "graspscheduling.h"
+#include "graspsolution.h"
 
 using namespace std::chrono;
 
@@ -86,24 +86,24 @@ int main(int argc, char* argv []) {
       std::string nombre_fichero = directoryPath + std::string(entry->d_name);
       
       std::cout << "VORAZ" << std::endl;
-      VorazScheduling voraz(nombre_fichero);
+      VorazSolution voraz(nombre_fichero);
       auto start = std::chrono::high_resolution_clock::now();
-      voraz.evaluate();
+      int VorTCT = voraz.evaluate();
       auto end = std::chrono::high_resolution_clock::now();
       
       std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
       voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      voraz.getGlobalTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
+      VorTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
 
       std::cout << "GRASP" << std::endl;
-      GraspScheduling grasp(nombre_fichero, 3);
+      GraspSolution grasp(nombre_fichero, 3);
       auto startGrasp = std::chrono::high_resolution_clock::now();
-      grasp.evaluate();
+      int GraspTCT = grasp.evaluate();
       auto endGrasp = std::chrono::high_resolution_clock::now();
       
       std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
       grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      grasp.getGlobalTCT() << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(endGrasp - startGrasp).count() << std::endl;
+      GraspTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(endGrasp - startGrasp).count() << std::endl;
 
       std::cout << std::endl;
       counter++;

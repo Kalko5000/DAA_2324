@@ -4,40 +4,39 @@
  * Grado en Ingeniería Informática
  * Diseño y Análisis de Algoritmos
  *
- * PRACTICA 07: Parallel Machine Scheduling Problem with Dependent Setup Times
+ * PRACTICA 07: Parallel Machine Sscheduling Problem with Dependent Setup Times
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we define the GraspScheduling class
+ * @brief:   Program that solves titular problem. Here we define the GraspSolution class
  */
 
-#include "graspscheduling.h"
+#include "graspsolution.h"
 
 /**
  * @desc GRASP template, specific functionality in other methods
 */
-void GraspScheduling::evaluate() {
-  int counter{0}, max{1};
-  std::vector<int> tctValues{{}};
+int GraspSolution::evaluate() {
+  int oldVal{INT_MAX}, newVal{INT_MAX};
   srand(time(0)); // Seed for random number
   buildT();
 
   do {
-    int newVal = construct();
-    tctValues.push_back(newVal);
-    counter++;
-  } while (counter <= max);
-
-  int smallest = indexOfSmallest(tctValues);
+    oldVal = newVal;
+    construct();
+    newVal = firstProcessing();
+  } while (newVal < oldVal);
 
   // printS();
+
+  return newVal;
 }
 
 /**
  * @desc Constructive methods for GRASP
  * @param {std::vector<int>&} used Helps keeps track of what tasks ahve already been assigned
 */
-int GraspScheduling::construct() {
+int GraspSolution::construct() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
   setupS(used);
   do {
@@ -73,11 +72,15 @@ int GraspScheduling::construct() {
   return getGlobalTCT();
 }
 
+int GraspSolution::firstProcessing() {
+  return getGlobalTCT();
+}
+
 /**
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int GraspScheduling::getGlobalTCT() {
+int GraspSolution::getGlobalTCT() {
   int sum{0};
   for (int i{0}; i < int(S_.size()); ++i) {
     sum += getMachineTCT(S_[i]);
@@ -89,7 +92,7 @@ int GraspScheduling::getGlobalTCT() {
  * @desc Calculates the TCT value of a single machine
  * @return {int} Temporal value of the machine's TCT post-evaluation
 */
-int GraspScheduling::getMachineTCT(std::vector<int> tasks) {
+int GraspSolution::getMachineTCT(std::vector<int> tasks) {
   int sum{0}, previous{0};
   for (int i{0}; i < int(tasks.size()); ++i) {
     sum += (t_[previous][tasks[i]] * (tasks.size() - i));
@@ -104,7 +107,7 @@ int GraspScheduling::getMachineTCT(std::vector<int> tasks) {
  * @param {int} val Value to look for
  * @return {bool} Returns true if is found
 */
-bool GraspScheduling::inVector(std::vector<int> vect, int val) {
+bool GraspSolution::inVector(std::vector<int> vect, int val) {
   bool valid{false};
   for (int n{0}; n < int(vect.size()); ++n) {
     if (val == vect[n]) {
@@ -120,7 +123,7 @@ bool GraspScheduling::inVector(std::vector<int> vect, int val) {
  * @param {std::vector<int>&} used Vector of parameters already used that we need to update
  *                                 as we go along
 */
-void GraspScheduling::setupS(std::vector<int>& used) {
+void GraspSolution::setupS(std::vector<int>& used) {
   S_ = {};
   S_.resize(maquinas_);
   for (int i{0}; i < maquinas_; ++i) {
@@ -142,7 +145,7 @@ void GraspScheduling::setupS(std::vector<int>& used) {
  * @param {std::vector<int>} arr Array to check for biggest element in
  * @return {int} Index of biggest element
 */
-int GraspScheduling::indexOfBiggest(std::vector<int> arr) {
+int GraspSolution::indexOfBiggest(std::vector<int> arr) {
   int max{0}, maxIndex{0};
   for (int i{0}; i < int(arr.size()); ++i) {
     if (arr[i] > max) {
@@ -153,7 +156,7 @@ int GraspScheduling::indexOfBiggest(std::vector<int> arr) {
   return maxIndex;
 }
 
-int GraspScheduling::indexOfSmallest(std::vector<int> arr) {
+int GraspSolution::indexOfSmallest(std::vector<int> arr) {
   int min{INT_MAX}, minIndex{0};
   for (int i{0}; i < int(arr.size()); ++i) {
     if (arr[i] < min) {
@@ -169,6 +172,6 @@ int GraspScheduling::indexOfSmallest(std::vector<int> arr) {
  * @param {int} max Highets number that can be generated
  * @return {int} Randomly generated number
 */
-int GraspScheduling::randomInt(int max) {
+int GraspSolution::randomInt(int max) {
   return rand() % (max + 1);
 }
