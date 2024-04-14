@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <dirent.h>
 #include <cstring>
-#include "graspsolution.h"
+#include "gvnssolution.h"
 
 using namespace std::chrono;
 
@@ -93,7 +93,7 @@ int main(int argc, char* argv []) {
       
       std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
       voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      VorTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
+      VorTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
 
       std::cout << "GRASP" << std::endl;
       GraspSolution grasp(nombre_fichero, 3);
@@ -103,7 +103,17 @@ int main(int argc, char* argv []) {
       
       std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
       grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      GraspTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::nanoseconds>(endGrasp - startGrasp).count() << std::endl;
+      GraspTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
+
+      std::cout << "GVNS" << std::endl;
+      GvnsSolution gvns(nombre_fichero, 3);
+      auto startGvns = std::chrono::high_resolution_clock::now();
+      int GvnsTCT = gvns.evaluate();
+      auto endGvns = std::chrono::high_resolution_clock::now();
+      
+      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
+      gvns.getTasks() << std::setw(5) << gvns.getMachines() << std::setw(11) << counter << std::setw(10) <<
+      GvnsTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(endGvns - startGvns).count() << std::endl;
 
       std::cout << std::endl;
       counter++;

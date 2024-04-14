@@ -8,15 +8,15 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    02.apr.2024
- * @brief:   Program that solves titular problem. Here we define the GraspSolution class
+ * @brief:   Program that solves titular problem. Here we define the GvnsSolution class
  */
 
-#include "graspsolution.h"
+#include "gvnssolution.h"
 
 /**
- * @desc GRASP template, specific functionality in other methods
+ * @desc GVNS template, specific functionality in other methods
 */
-int GraspSolution::evaluate() {
+int GvnsSolution::evaluate() {
   int newVal{INT_MAX}, counter{0}, min{INT_MAX};
   srand(time(0)); // Seed for random number
   buildT();
@@ -28,7 +28,7 @@ int GraspSolution::evaluate() {
     newVal = internalInterchange();  // Swap out every element for every element
     if (newVal < min) min = newVal;
     counter++;
-  } while (counter < 5);
+  } while (counter < 100);
 
   // printS();
 
@@ -39,7 +39,7 @@ int GraspSolution::evaluate() {
  * @desc Constructive methods for GRASP
  * @param {std::vector<int>&} used Helps keeps track of what tasks ahve already been assigned
 */
-int GraspSolution::construct() {
+int GvnsSolution::construct() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these
   setupS(used);
   do {
@@ -79,7 +79,7 @@ int GraspSolution::construct() {
  * @desc Checks inserting all elements into all other positions in other machines
  * @returns {int} TCT of the lowest resulting Solution
 */
-int GraspSolution::externalInsertion() {
+int GvnsSolution::externalInsertion() {
   std::vector<std::vector<int>> S = S_;
   int min{getGlobalTCT()}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
   do {
@@ -122,7 +122,7 @@ int GraspSolution::externalInsertion() {
  * @desc Checks swapping elements of all tasks within a machine
  * @returns {int} TCT of the lowest resulting Solution
 */
-int GraspSolution::internalInterchange() {
+int GvnsSolution::internalInterchange() {
   std::vector<std::vector<int>> S = S_;
   int min{getGlobalTCT()}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
   do {
@@ -158,7 +158,7 @@ int GraspSolution::internalInterchange() {
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int GraspSolution::getGlobalTCT() {
+int GvnsSolution::getGlobalTCT() {
   int sum{0};
   for (int i{0}; i < int(S_.size()); ++i) {
     sum += getMachineTCT(S_[i]);
@@ -170,7 +170,7 @@ int GraspSolution::getGlobalTCT() {
  * @desc Calculates the TCT value of a single machine
  * @return {int} Temporal value of the machine's TCT post-evaluation
 */
-int GraspSolution::getMachineTCT(std::vector<int> tasks) {
+int GvnsSolution::getMachineTCT(std::vector<int> tasks) {
   int sum{0}, previous{0};
   for (int i{0}; i < int(tasks.size()); ++i) {
     sum += (t_[previous][tasks[i]] * (tasks.size() - i));
@@ -185,7 +185,7 @@ int GraspSolution::getMachineTCT(std::vector<int> tasks) {
  * @param {int} val Value to look for
  * @return {bool} Returns true if is found
 */
-bool GraspSolution::inVector(std::vector<int> vect, int val) {
+bool GvnsSolution::inVector(std::vector<int> vect, int val) {
   bool valid{false};
   for (int n{0}; n < int(vect.size()); ++n) {
     if (val == vect[n]) {
@@ -201,7 +201,7 @@ bool GraspSolution::inVector(std::vector<int> vect, int val) {
  * @param {std::vector<int>&} used Vector of parameters already used that we need to update
  *                                 as we go along
 */
-void GraspSolution::setupS(std::vector<int>& used) {
+void GvnsSolution::setupS(std::vector<int>& used) {
   S_ = {};
   S_.resize(maquinas_);
   for (int i{0}; i < maquinas_; ++i) {
@@ -223,7 +223,7 @@ void GraspSolution::setupS(std::vector<int>& used) {
  * @param {std::vector<int>} arr Array to check for biggest element in
  * @return {int} Index of biggest element
 */
-int GraspSolution::indexOfBiggest(std::vector<int> arr) {
+int GvnsSolution::indexOfBiggest(std::vector<int> arr) {
   int max{0}, maxIndex{0};
   for (int i{0}; i < int(arr.size()); ++i) {
     if (arr[i] > max) {
@@ -234,7 +234,7 @@ int GraspSolution::indexOfBiggest(std::vector<int> arr) {
   return maxIndex;
 }
 
-int GraspSolution::indexOfSmallest(std::vector<int> arr) {
+int GvnsSolution::indexOfSmallest(std::vector<int> arr) {
   int min{INT_MAX}, minIndex{0};
   for (int i{0}; i < int(arr.size()); ++i) {
     if (arr[i] < min) {
@@ -250,6 +250,6 @@ int GraspSolution::indexOfSmallest(std::vector<int> arr) {
  * @param {int} max Highets number that can be generated
  * @return {int} Randomly generated number
 */
-int GraspSolution::randomInt(int max) {
+int GvnsSolution::randomInt(int max) {
   return rand() % (max + 1);
 }

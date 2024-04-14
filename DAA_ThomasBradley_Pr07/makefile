@@ -15,7 +15,7 @@ LDFLAGS =
 
 all: machine
 
-machine: solution.cc vorazsolution.cc graspsolution.cc main.cc
+machine: solution.cc vorazsolution.cc graspsolution.cc gvnssolution.cc main.cc
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .PHONY: all clean
