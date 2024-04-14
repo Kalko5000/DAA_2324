@@ -18,28 +18,45 @@
  * @returns {int} Resulting TCT value of optimal grouping
 */
 int GraspSolution::evaluate() {
+  std::vector<std::vector<int>> bestS{S_};
   int newVal{INT_MAX}, counter{0}, min{INT_MAX};
   srand(time(0)); // Seed for random number
   buildT();
 
-  do {
+  do {  // Local Optimal Search method implementations can be found in the base class -> Solution
     construct();
     std::vector<std::vector<int>> S = S_;
     newVal = internalInsertion(S);
-    if (newVal < min) min = newVal;
+    if (newVal < min) {
+      min = newVal;
+      bestS = S;
+    }
     S = S_;
     newVal = externalInsertion(S);
-    if (newVal < min) min = newVal;
+    if (newVal < min) {
+      min = newVal;
+      bestS = S;
+    }
     S = S_;
     newVal = internalInterchange(S);
-    if (newVal < min) min = newVal;
+    if (newVal < min) {
+      min = newVal;
+      bestS = S;
+    }
     S = S_;
     newVal = externalInterchange(S);
-    if (newVal < min) min = newVal;
+    if (newVal < min) {
+      min = newVal;
+      bestS = S;
+    }
     counter++;
   } while (counter < 10);
+  S_ = bestS;
 
+  // DEBUG OPTIONS
   // printS();
+  // std::cout << "TCT Manual -> " << getGlobalTCT(S_) << std::endl;
+
   return min;
 }
 

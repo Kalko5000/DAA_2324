@@ -18,6 +18,7 @@
  * @returns {int} Resulting TCT value of optimal grouping
 */
 int GvnsSolution::evaluate() {
+  std::vector<std::vector<int>> bestS{S_};
   int counter{0}, min{INT_MAX};
   int k{1};
   srand(time(0)); // Seed for random number
@@ -34,6 +35,7 @@ int GvnsSolution::evaluate() {
       if (newVal < caseMin) { // Best sol for current iteration
         if (newVal < min) { // Best sol found so far
           min = newVal;
+          bestS = S2;
         }
         caseMin = newVal;
         S = S2;
@@ -45,8 +47,12 @@ int GvnsSolution::evaluate() {
     k = 1;
     counter++;
   } while (counter < 100);
+  S_ = bestS;
 
+  // DEBUG OPTIONS
   // printS();
+  // std::cout << "TCT Manual -> " << getGlobalTCT(S_) << std::endl;
+
   return min;
 }
 

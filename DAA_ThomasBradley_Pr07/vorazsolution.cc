@@ -50,7 +50,9 @@ int VorazSolution::evaluate() {
     used.push_back(minDest);
   } while (int(used.size()) < tareas_);
 
+  // DEBUG OPTIONS
   // printS();
+  // std::cout << "TCT Manual -> " << getGlobalTCT(S_) << std::endl;
 
   return getGlobalTCT(S_);
 }
