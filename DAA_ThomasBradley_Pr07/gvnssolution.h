@@ -20,9 +20,11 @@ class GvnsSolution : public Solution {
   };
   int evaluate();
   int construct();
-  int externalInsertion();
-  int internalInterchange();
-  int getGlobalTCT();
+  std::vector<std::vector<int>> shake(std::vector<std::vector<int>> S, int k);
+  std::vector<std::vector<int>> vnd(std::vector<std::vector<int>> S);
+  int externalInsertion(std::vector<std::vector<int>>& S);
+  int internalInterchange(std::vector<std::vector<int>>& S);
+  int getGlobalTCT(std::vector<std::vector<int>> S);
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);

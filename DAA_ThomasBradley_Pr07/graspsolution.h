@@ -22,7 +22,7 @@ class GraspSolution : public Solution {
   int construct();
   int externalInsertion();
   int internalInterchange();
-  int getGlobalTCT();
+  int getGlobalTCT(std::vector<std::vector<int>> S);
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);

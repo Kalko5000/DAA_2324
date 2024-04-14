@@ -23,9 +23,9 @@ int GraspSolution::evaluate() {
 
   do {
     construct();
-    newVal = externalInsertion();  // Swap out first element to end
+    newVal = externalInsertion();
     if (newVal < min) min = newVal;
-    newVal = internalInterchange();  // Swap out every element for every element
+    newVal = internalInterchange();
     if (newVal < min) min = newVal;
     counter++;
   } while (counter < 5);
@@ -72,7 +72,7 @@ int GraspSolution::construct() {
     used.push_back(canTasks[index]);
   } while (int(used.size()) < tareas_);
 
-  return getGlobalTCT();
+  return getGlobalTCT(S_);
 }
 
 /**
@@ -81,7 +81,7 @@ int GraspSolution::construct() {
 */
 int GraspSolution::externalInsertion() {
   std::vector<std::vector<int>> S = S_;
-  int min{getGlobalTCT()}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
   do {
     prevMin = min;
     for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
@@ -124,7 +124,7 @@ int GraspSolution::externalInsertion() {
 */
 int GraspSolution::internalInterchange() {
   std::vector<std::vector<int>> S = S_;
-  int min{getGlobalTCT()}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
   do {
     prevMin = min;
     for (int i{0}; i < maquinas_; ++i) {  // Chosen Machine
@@ -158,10 +158,10 @@ int GraspSolution::internalInterchange() {
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int GraspSolution::getGlobalTCT() {
+int GraspSolution::getGlobalTCT(std::vector<std::vector<int>> S) {
   int sum{0};
-  for (int i{0}; i < int(S_.size()); ++i) {
-    sum += getMachineTCT(S_[i]);
+  for (int i{0}; i < int(S.size()); ++i) {
+    sum += getMachineTCT(S[i]);
   }
   return sum;
 }

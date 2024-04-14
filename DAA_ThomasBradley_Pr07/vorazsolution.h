@@ -17,7 +17,7 @@ class VorazSolution : public Solution {
  public:
   VorazSolution(std::string nombre_fichero) : Solution(nombre_fichero) {};
   int evaluate();
-  int getGlobalTCT();
+  int getGlobalTCT(std::vector<std::vector<int>> S);
   int getMachineTCT(std::vector<int> tasks);
   void setupS(std::vector<int>& used);
   bool inVector(std::vector<int> vect, int val);

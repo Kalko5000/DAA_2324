@@ -51,17 +51,17 @@ int VorazSolution::evaluate() {
 
   // printS();
 
-  return getGlobalTCT();
+  return getGlobalTCT(S_);
 }
 
 /**
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int VorazSolution::getGlobalTCT() {
+int VorazSolution::getGlobalTCT(std::vector<std::vector<int>> S) {
   int sum{0};
-  for (int i{0}; i < int(S_.size()); ++i) {
-    sum += getMachineTCT(S_[i]);
+  for (int i{0}; i < int(S.size()); ++i) {
+    sum += getMachineTCT(S[i]);
   }
   return sum;
 }

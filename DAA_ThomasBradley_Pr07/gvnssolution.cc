@@ -17,18 +17,34 @@
  * @desc GVNS template, specific functionality in other methods
 */
 int GvnsSolution::evaluate() {
-  int newVal{INT_MAX}, counter{0}, min{INT_MAX};
+  int counter{0}, min{INT_MAX};
+  int k{1}, kMax{7};
   srand(time(0)); // Seed for random number
   buildT();
 
   do {
+    // std::cout << "In loop ";
+    int caseMin{INT_MAX}, newVal{INT_MAX};
     construct();
-    newVal = externalInsertion();  // Swap out first element to end
-    if (newVal < min) min = newVal;
-    newVal = internalInterchange();  // Swap out every element for every element
-    if (newVal < min) min = newVal;
+    std::vector<std::vector<int>> S{S_};
+    while (k < kMax) {
+      std::vector<std::vector<int>> S1 = shake(S, k);
+      std::vector<std::vector<int>> S2 = vnd(S1);
+      newVal = getGlobalTCT(S2);
+      if (newVal < caseMin) { // Best sol for current iteration
+        if (newVal < min) { // Best sol found so far
+          min = newVal;
+        }
+        caseMin = newVal;
+        S = S2;
+        k = 1;
+      } else {
+        k++;
+      }
+    }
+    k = 1;
     counter++;
-  } while (counter < 100);
+  } while (counter < 200);
 
   // printS();
 
@@ -72,16 +88,57 @@ int GvnsSolution::construct() {
     used.push_back(canTasks[index]);
   } while (int(used.size()) < tareas_);
 
-  return getGlobalTCT();
+  return getGlobalTCT(S_);
+}
+
+/**
+ * @desc
+*/
+std::vector<std::vector<int>> GvnsSolution::shake(std::vector<std::vector<int>> S, int k) {
+  int counter{0};
+  while (counter < k) {
+    int startMachine = randomInt(maquinas_ - 1);
+    int destMachine = randomInt(maquinas_ - 1);
+    int startTask = randomInt(int(S[startMachine].size() - 1));
+    int destTask = randomInt(int(S[destMachine].size() - 1));
+    int temp = S[startMachine][startTask];
+    S[startMachine][startTask] = S[destMachine][destTask];
+    S[destMachine][destTask] = temp;
+    counter++;
+  }
+  return S;
+}
+
+/**
+ * @desc
+*/
+std::vector<std::vector<int>> GvnsSolution::vnd(std::vector<std::vector<int>> S) {
+  int newVal{INT_MAX}, min{INT_MAX}, counter{0};
+  do {
+    // std::cout << "Test ";
+    newVal = externalInsertion(S);
+    if (newVal < min) {
+      min = newVal;
+      // std::cout << "Check ";
+      continue;
+    }
+    newVal = internalInterchange(S);
+    if (newVal < min) {
+      min = newVal;
+      continue;
+    }
+    counter++;
+  } while (counter < 1);
+  // std::cout << std::endl;
+  return S;
 }
 
 /**
  * @desc Checks inserting all elements into all other positions in other machines
  * @returns {int} TCT of the lowest resulting Solution
 */
-int GvnsSolution::externalInsertion() {
-  std::vector<std::vector<int>> S = S_;
-  int min{getGlobalTCT()}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
+int GvnsSolution::externalInsertion(std::vector<std::vector<int>>& S) {
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
   do {
     prevMin = min;
     for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
@@ -122,9 +179,8 @@ int GvnsSolution::externalInsertion() {
  * @desc Checks swapping elements of all tasks within a machine
  * @returns {int} TCT of the lowest resulting Solution
 */
-int GvnsSolution::internalInterchange() {
-  std::vector<std::vector<int>> S = S_;
-  int min{getGlobalTCT()}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
+int GvnsSolution::internalInterchange(std::vector<std::vector<int>>& S) {
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
   do {
     prevMin = min;
     for (int i{0}; i < maquinas_; ++i) {  // Chosen Machine
@@ -158,10 +214,10 @@ int GvnsSolution::internalInterchange() {
  * @desc Calculates and returns the total time value of the TCT taking into account all machines
  * @return {int} Temporal value of the TCT post-evaluation
 */
-int GvnsSolution::getGlobalTCT() {
+int GvnsSolution::getGlobalTCT(std::vector<std::vector<int>> S) {
   int sum{0};
-  for (int i{0}; i < int(S_.size()); ++i) {
-    sum += getMachineTCT(S_[i]);
+  for (int i{0}; i < int(S.size()); ++i) {
+    sum += getMachineTCT(S[i]);
   }
   return sum;
 }

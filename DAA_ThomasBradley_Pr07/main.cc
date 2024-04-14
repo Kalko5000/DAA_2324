@@ -106,7 +106,7 @@ int main(int argc, char* argv []) {
       GraspTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
 
       std::cout << "GVNS" << std::endl;
-      GvnsSolution gvns(nombre_fichero, 3);
+      GvnsSolution gvns(nombre_fichero, 4);
       auto startGvns = std::chrono::high_resolution_clock::now();
       int GvnsTCT = gvns.evaluate();
       auto endGvns = std::chrono::high_resolution_clock::now();

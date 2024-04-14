@@ -28,7 +28,7 @@ class Solution {
  public:
   Solution(std::string nombre_fichero);
   virtual int evaluate() = 0;
-  virtual int getGlobalTCT() = 0;
+  virtual int getGlobalTCT(std::vector<std::vector<int>> S) = 0;
   virtual int getMachineTCT(std::vector<int> tasks) = 0;
   void buildT();
   void printS();
