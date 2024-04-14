@@ -61,16 +61,93 @@ void Usage(const int kArgc, char* argv[]) {
   }
 }
 
+/**
+ * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
+*/
+void printVoraz(std::vector<std::pair<std::string, std::string>> files) {
+  int counter{1};
+  std::cout << "-- VORAZ --" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) 
+  << "n" << std::setw(5) << "m" << std::setw(12) << "Ejecución" << std::setw(10) << "TCT" 
+  << std::setw(15) << "CPU(ms)" << std::endl;
+
+  for (int i{0}; i < int(files.size()); ++i) {
+    VorazSolution voraz(files[i].first);
+    auto start = std::chrono::high_resolution_clock::now();
+    int VorTCT = voraz.evaluate();
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
+    << voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) 
+    << counter << std::setw(10) << VorTCT << std::setw(15) 
+    << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+    counter++;
+  }
+  std::cout << std::endl;
+}
+
+/**
+ * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
+ * @param {int} candidates How many candidates GRASP's constructive phase will use
+*/
+void printGrasp(std::vector<std::pair<std::string, std::string>> files, int candidates) {
+  int counter{1};
+  std::cout << "-- GRASP --" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) 
+  << "n" << std::setw(5) << "m" << std::setw(7) << "|LRC|" 
+  << std::setw(12) << "Ejecución" << std::setw(10) << "TCT" << std::setw(15) << "CPU(ms)" << std::endl;
+
+  for (int i{0}; i < int(files.size()); ++i) {
+    GraspSolution grasp(files[i].first, candidates);
+    auto startGrasp = std::chrono::high_resolution_clock::now();
+    int GraspTCT = grasp.evaluate();
+    auto endGrasp = std::chrono::high_resolution_clock::now();
+    
+    std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
+    << grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << std::setw(7) << grasp.getCandidateSize()
+    << std::setw(11) << counter << std::setw(10) << GraspTCT << std::setw(15) 
+    << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
+    counter++;
+  }
+  std::cout << std::endl;
+}
+
+/**
+ * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
+ * @param {int} candidates How many candidates GRASP's constructive phase will use
+ * @param {int} k Maximum value of k in GVNS algorithm
+*/
+void printGvns(std::vector<std::pair<std::string, std::string>> files, int candidates, int k) {
+  int counter{1};
+  std::cout << "-- GVNS --" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) 
+  << "n" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(7) << "kMax" 
+  << std::setw(12) << "Ejecución" << std::setw(10) << "TCT" << std::setw(15) << "CPU(ms)" << std::endl;
+
+  for (int i{0}; i < int(files.size()); ++i) {  
+    GvnsSolution gvns(files[i].first, candidates, k);
+    auto startGvns = std::chrono::high_resolution_clock::now();
+    int GvnsTCT = gvns.evaluate();
+    auto endGvns = std::chrono::high_resolution_clock::now();
+    
+    std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
+    << gvns.getTasks() << std::setw(5) << gvns.getMachines() << std::setw(11) << std::setw(7) 
+    << gvns.getCandidateSize() << std::setw(7) << gvns.getKMax()
+    << std::setw(11) << counter << std::setw(10) << GvnsTCT << std::setw(15)
+    << std::chrono::duration_cast<std::chrono::microseconds>(endGvns - startGvns).count() << std::endl;
+    counter++;
+  }
+  std::cout << std::endl;
+}
+
 int main(int argc, char* argv []) {
   Usage(argc, argv);
   char* directoryPath = new char[std::strlen(argv[1]) + std::strlen("/")];  // Set length to be correct, so we can add necesarry elements
   std::strcpy(directoryPath, argv[1]);
   std::strcat(directoryPath, "/");
-
-  // Results header
-  std::cout << std::setw(20) << "Problema" << std::setw(5) 
-  << "n" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(7) << "kMax" 
-  << std::setw(12) << "Ejecución" << std::setw(10) << "TCT" << std::setw(15) << "CPU(ms)" << std::endl;
 
   // Open the directory
   DIR* dir = opendir(directoryPath);
@@ -79,53 +156,22 @@ int main(int argc, char* argv []) {
     return 1;
   }
 
-  int counter{1};
+  std::vector<std::pair<std::string, std::string>> files{};
   dirent* entry;
   while ((entry = readdir(dir)) != nullptr) { // Read the directory entries
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
       std::string nombre_fichero = directoryPath + std::string(entry->d_name);
-      
-      // VORAZ
-      std::cout << "VORAZ" << std::endl;
-      VorazSolution voraz(nombre_fichero);
-      auto start = std::chrono::high_resolution_clock::now();
-      int VorTCT = voraz.evaluate();
-      auto end = std::chrono::high_resolution_clock::now();
-      
-      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) 
-      << voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(7) << "-" << std::setw(7) << "-" 
-      << std::setw(11) << counter << std::setw(10) << VorTCT << std::setw(15) 
-      << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
-
-      // GRASP
-      std::cout << "GRASP" << std::endl;
-      GraspSolution grasp(nombre_fichero, 3);
-      auto startGrasp = std::chrono::high_resolution_clock::now();
-      int GraspTCT = grasp.evaluate();
-      auto endGrasp = std::chrono::high_resolution_clock::now();
-      
-      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) 
-      << grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << std::setw(7) << grasp.getCandidateSize() << std::setw(7) << "-"
-      << std::setw(11) << counter << std::setw(10) << GraspTCT << std::setw(15) 
-      << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
-
-      // GVNS
-      std::cout << "GVNS" << std::endl;
-      GvnsSolution gvns(nombre_fichero, 4, 6);
-      auto startGvns = std::chrono::high_resolution_clock::now();
-      int GvnsTCT = gvns.evaluate();
-      auto endGvns = std::chrono::high_resolution_clock::now();
-      
-      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) 
-      << gvns.getTasks() << std::setw(5) << gvns.getMachines() << std::setw(11) << std::setw(7) << gvns.getCandidateSize() << std::setw(7) << gvns.getKMax()
-      << std::setw(11) << counter << std::setw(10) << GvnsTCT << std::setw(15)
-      << std::chrono::duration_cast<std::chrono::microseconds>(endGvns - startGvns).count() << std::endl;
-
-      std::cout << std::endl;
-      counter++;
+      files.push_back(std::pair<std::string, std::string>({nombre_fichero, entry->d_name}));
     }
   }
-
   closedir(dir);
+
+  printVoraz(files);
+  printGrasp(files, 2);
+  printGrasp(files, 3);
+  printGrasp(files, 4);
+  printGvns(files, 2, 3);
+  printGvns(files, 4, 6);
+
   return 0;
 }
