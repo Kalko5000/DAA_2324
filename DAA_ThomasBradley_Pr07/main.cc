@@ -143,6 +143,16 @@ void printGvns(std::vector<std::pair<std::string, std::string>> files, int candi
   std::cout << std::endl;
 }
 
+/**
+ * @desc Compares the second string of two pairs and returns true if the first is smaller
+ * @param {std::pair<std::string, std::string> } string01 First pair of strings to check second value of
+ * @param {std::pair<std::string, std::string> } string02 Second pair of strings to check second value of
+ * @returns {bool} True if first paramater is smaller
+*/
+bool stringPairCompare(std::pair<std::string, std::string> string01, std::pair<std::string, std::string> string02) { 
+  return string01.second < string02.second; 
+}
+
 int main(int argc, char* argv []) {
   Usage(argc, argv);
   char* directoryPath = new char[std::strlen(argv[1]) + std::strlen("/")];  // Set length to be correct, so we can add necesarry elements
@@ -165,6 +175,7 @@ int main(int argc, char* argv []) {
     }
   }
   closedir(dir);
+  std::sort(files.begin(),files.end(), stringPairCompare);  // Sort files by unicode order
 
   printVoraz(files);
   printGrasp(files, 2);
