@@ -15,8 +15,9 @@
 
 class GvnsSolution : public Solution {
  public:
-  GvnsSolution(std::string nombre_fichero, int candidateSize) : Solution(nombre_fichero) {
+  GvnsSolution(std::string nombre_fichero, int candidateSize, int kMax) : Solution(nombre_fichero) {
     candidateSize_ = candidateSize;
+    kMax_ = kMax;
   };
   int evaluate();
   int construct();
@@ -29,6 +30,9 @@ class GvnsSolution : public Solution {
   int indexOfBiggest(std::vector<int> arr);
   int indexOfSmallest(std::vector<int> arr);
   int randomInt(int max);
+  int getCandidateSize();
+  int getKMax();
  private:
   int candidateSize_;
+  int kMax_;
 };

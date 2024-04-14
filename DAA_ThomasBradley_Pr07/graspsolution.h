@@ -27,6 +27,7 @@ class GraspSolution : public Solution {
   int indexOfBiggest(std::vector<int> arr);
   int indexOfSmallest(std::vector<int> arr);
   int randomInt(int max);
+  int getCandidateSize();
  private:
   int candidateSize_;
 };

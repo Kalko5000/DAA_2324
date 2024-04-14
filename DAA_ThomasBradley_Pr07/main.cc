@@ -68,9 +68,9 @@ int main(int argc, char* argv []) {
   std::strcat(directoryPath, "/");
 
   // Results header
-  std::cout << std::setw(20) << "Problema" << std::setw(5) <<
-  "n" << std::setw(5) << "m" << std::setw(12) << "Ejecución" << std::setw(10) <<
-  "TCT" << std::setw(15) << "CPU" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) 
+  << "n" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(7) << "kMax" 
+  << std::setw(12) << "Ejecución" << std::setw(10) << "TCT" << std::setw(15) << "CPU(ms)" << std::endl;
 
   // Open the directory
   DIR* dir = opendir(directoryPath);
@@ -91,9 +91,10 @@ int main(int argc, char* argv []) {
       int VorTCT = voraz.evaluate();
       auto end = std::chrono::high_resolution_clock::now();
       
-      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
-      voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      VorTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) 
+      << voraz.getTasks() << std::setw(5) << voraz.getMachines() << std::setw(7) << "-" << std::setw(7) << "-" 
+      << std::setw(11) << counter << std::setw(10) << VorTCT << std::setw(15) 
+      << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
 
       std::cout << "GRASP" << std::endl;
       GraspSolution grasp(nombre_fichero, 3);
@@ -101,19 +102,21 @@ int main(int argc, char* argv []) {
       int GraspTCT = grasp.evaluate();
       auto endGrasp = std::chrono::high_resolution_clock::now();
       
-      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
-      grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      GraspTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
+      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) 
+      << grasp.getTasks() << std::setw(5) << grasp.getMachines() << std::setw(11) << std::setw(7) << grasp.getCandidateSize() << std::setw(7) << "-"
+      << std::setw(11) << counter << std::setw(10) << GraspTCT << std::setw(15) 
+      << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
 
       std::cout << "GVNS" << std::endl;
-      GvnsSolution gvns(nombre_fichero, 4);
+      GvnsSolution gvns(nombre_fichero, 4, 6);
       auto startGvns = std::chrono::high_resolution_clock::now();
       int GvnsTCT = gvns.evaluate();
       auto endGvns = std::chrono::high_resolution_clock::now();
       
-      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) <<
-      gvns.getTasks() << std::setw(5) << gvns.getMachines() << std::setw(11) << counter << std::setw(10) <<
-      GvnsTCT << std::setw(15) << std::chrono::duration_cast<std::chrono::microseconds>(endGvns - startGvns).count() << std::endl;
+      std::cout << std::setw(20) << std::string(entry->d_name) << std::setw(5) 
+      << gvns.getTasks() << std::setw(5) << gvns.getMachines() << std::setw(11) << std::setw(7) << gvns.getCandidateSize() << std::setw(7) << gvns.getKMax()
+      << std::setw(11) << counter << std::setw(10) << GvnsTCT << std::setw(15)
+      << std::chrono::duration_cast<std::chrono::microseconds>(endGvns - startGvns).count() << std::endl;
 
       std::cout << std::endl;
       counter++;

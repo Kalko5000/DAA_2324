@@ -182,3 +182,7 @@ int GraspSolution::indexOfSmallest(std::vector<int> arr) {
 int GraspSolution::randomInt(int max) {
   return rand() % (max + 1);
 }
+
+int GraspSolution::getCandidateSize() {
+  return candidateSize_;
+}

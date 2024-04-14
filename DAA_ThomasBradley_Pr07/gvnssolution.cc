@@ -19,7 +19,7 @@
 */
 int GvnsSolution::evaluate() {
   int counter{0}, min{INT_MAX};
-  int k{1}, kMax{6};
+  int k{1};
   srand(time(0)); // Seed for random number
   buildT();
 
@@ -27,7 +27,7 @@ int GvnsSolution::evaluate() {
     int caseMin{INT_MAX}, newVal{INT_MAX};
     construct();
     std::vector<std::vector<int>> S{S_};
-    while (k <= kMax) {
+    while (k <= kMax_) {
       std::vector<std::vector<int>> S1 = shake(S, k);
       std::vector<std::vector<int>> S2 = vnd(S1);
       newVal = getGlobalTCT(S2);
@@ -242,4 +242,12 @@ int GvnsSolution::indexOfSmallest(std::vector<int> arr) {
 */
 int GvnsSolution::randomInt(int max) {
   return rand() % (max + 1);
+}
+
+int GvnsSolution::getCandidateSize() {
+  return candidateSize_;
+}
+
+int GvnsSolution::getKMax() {
+  return kMax_;
 }
