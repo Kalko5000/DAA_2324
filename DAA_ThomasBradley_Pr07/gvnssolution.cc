@@ -15,19 +15,19 @@
 
 /**
  * @desc GVNS template, specific functionality in other methods
+ * @returns {int} Resulting TCT value of optimal grouping
 */
 int GvnsSolution::evaluate() {
   int counter{0}, min{INT_MAX};
-  int k{1}, kMax{7};
+  int k{1}, kMax{6};
   srand(time(0)); // Seed for random number
   buildT();
 
   do {
-    // std::cout << "In loop ";
     int caseMin{INT_MAX}, newVal{INT_MAX};
     construct();
     std::vector<std::vector<int>> S{S_};
-    while (k < kMax) {
+    while (k <= kMax) {
       std::vector<std::vector<int>> S1 = shake(S, k);
       std::vector<std::vector<int>> S2 = vnd(S1);
       newVal = getGlobalTCT(S2);
@@ -44,10 +44,9 @@ int GvnsSolution::evaluate() {
     }
     k = 1;
     counter++;
-  } while (counter < 200);
+  } while (counter < 100);
 
   // printS();
-
   return min;
 }
 
@@ -92,7 +91,10 @@ int GvnsSolution::construct() {
 }
 
 /**
- * @desc
+ * @desc Swaps two random tasks between a group of machines, k times
+ * @param {std::vector<std::vector<int>>} S Original group of machines
+ * @param {int} k Times we wants to swap elements
+ * @returns {std::vector<std::vector<int>>} Shaken group of machines
 */
 std::vector<std::vector<int>> GvnsSolution::shake(std::vector<std::vector<int>> S, int k) {
   int counter{0};
@@ -110,16 +112,21 @@ std::vector<std::vector<int>> GvnsSolution::shake(std::vector<std::vector<int>> 
 }
 
 /**
- * @desc
+ * @desc Calculates the local optimal of a group of machines
+ * @param {std::vector<std::vector<int>>} S Original group of machines
+ * @returns {std::vector<std::vector<int>>} Optimized grouping after being passed through all local optimization methods
 */
 std::vector<std::vector<int>> GvnsSolution::vnd(std::vector<std::vector<int>> S) {
   int newVal{INT_MAX}, min{INT_MAX}, counter{0};
   do {
-    // std::cout << "Test ";
+    newVal = internalInsertion(S);
+    if (newVal < min) {
+      min = newVal;
+      continue;
+    }
     newVal = externalInsertion(S);
     if (newVal < min) {
       min = newVal;
-      // std::cout << "Check ";
       continue;
     }
     newVal = internalInterchange(S);
@@ -127,87 +134,14 @@ std::vector<std::vector<int>> GvnsSolution::vnd(std::vector<std::vector<int>> S)
       min = newVal;
       continue;
     }
+    newVal = externalInterchange(S);
+    if (newVal < min) {
+      min = newVal;
+      continue;
+    }
     counter++;
   } while (counter < 1);
-  // std::cout << std::endl;
   return S;
-}
-
-/**
- * @desc Checks inserting all elements into all other positions in other machines
- * @returns {int} TCT of the lowest resulting Solution
-*/
-int GvnsSolution::externalInsertion(std::vector<std::vector<int>>& S) {
-  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
-  do {
-    prevMin = min;
-    for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
-      for (int j{0}; j < maquinas_; ++j) {  // Machine to recieve
-        if (i == j) continue;
-        for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
-          for (int n{0}; n <= int(S[j].size()); ++n) {  // Place to receive task for receiver
-            int takeAwayI = getMachineTCT(S[i]);
-            int takeAwayJ = getMachineTCT(S[j]);
-            std::vector<int> removedI = S[i];
-            removedI.erase(removedI.begin() + k);
-            int addI = getMachineTCT(removedI);
-            std::vector<int> addedJ = S[j];
-            addedJ.insert(addedJ.begin() + n, S[i][k]);
-            int addJ = getMachineTCT(addedJ);
-            int result = prevMin - takeAwayI - takeAwayJ + addI + addJ;
-            if (result < min) {
-              min = result;
-              bestK = k;
-              bestN = n;
-              bestI = i;
-              bestJ = j;
-            }
-          }
-        }
-      }
-    }
-    if (min < prevMin) {
-      int insertVal = S[bestI][bestK];
-      S[bestI].erase(S[bestI].begin() + bestK);
-      S[bestJ].insert(S[bestJ].begin() + bestN, insertVal);
-    }
-  } while (min < prevMin);
-  return min;
-}
-
-/**
- * @desc Checks swapping elements of all tasks within a machine
- * @returns {int} TCT of the lowest resulting Solution
-*/
-int GvnsSolution::internalInterchange(std::vector<std::vector<int>>& S) {
-  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
-  do {
-    prevMin = min;
-    for (int i{0}; i < maquinas_; ++i) {  // Chosen Machine
-      for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
-        for (int n{0}; n < int(S[i].size()); ++n) {  // Place to receive task for receiver
-          if (k == n) continue;
-          std::vector<int> tester = S[i];
-          int temp = tester[k];
-          tester[k] = tester[n];
-          tester[n] = temp;
-          int result = prevMin - getMachineTCT(S[i]) + getMachineTCT(tester);
-          if (result < min) {
-            min = result;
-            bestK = k;
-            bestN = n;
-            bestI = i;
-          }
-        }
-      }
-    }
-    if (min < prevMin) {
-      int temp = S[bestI][bestK];
-      S[bestI][bestK] = S[bestI][bestN];
-      S[bestI][bestN] = temp;
-    }
-  } while (min < prevMin);
-  return min;
 }
 
 /**

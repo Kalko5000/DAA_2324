@@ -15,6 +15,7 @@
 
 /**
  * @desc Constructive Greedy algorithm for a parallel machine scheduling problem
+ * @returns {int} Resulting TCT value of optimal grouping
 */
 int VorazSolution::evaluate() {
   std::vector<int> used; // Stores used tasks in an easier format, so we don't repeat these

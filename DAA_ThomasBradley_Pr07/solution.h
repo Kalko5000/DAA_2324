@@ -34,6 +34,10 @@ class Solution {
   void printS();
   int getTasks();
   int getMachines();
+  int internalInsertion(std::vector<std::vector<int>>& S);
+  int externalInsertion(std::vector<std::vector<int>>& S);
+  int internalInterchange(std::vector<std::vector<int>>& S);
+  int externalInterchange(std::vector<std::vector<int>>& S);
  protected:
   int tareas_;
   int maquinas_;

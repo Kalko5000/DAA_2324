@@ -15,6 +15,7 @@
 
 /**
  * @desc GRASP template, specific functionality in other methods
+ * @returns {int} Resulting TCT value of optimal grouping
 */
 int GraspSolution::evaluate() {
   int newVal{INT_MAX}, counter{0}, min{INT_MAX};
@@ -23,15 +24,22 @@ int GraspSolution::evaluate() {
 
   do {
     construct();
-    newVal = externalInsertion();
+    std::vector<std::vector<int>> S = S_;
+    newVal = internalInsertion(S);
     if (newVal < min) min = newVal;
-    newVal = internalInterchange();
+    S = S_;
+    newVal = externalInsertion(S);
+    if (newVal < min) min = newVal;
+    S = S_;
+    newVal = internalInterchange(S);
+    if (newVal < min) min = newVal;
+    S = S_;
+    newVal = externalInterchange(S);
     if (newVal < min) min = newVal;
     counter++;
   } while (counter < 5);
 
   // printS();
-
   return min;
 }
 
@@ -73,85 +81,6 @@ int GraspSolution::construct() {
   } while (int(used.size()) < tareas_);
 
   return getGlobalTCT(S_);
-}
-
-/**
- * @desc Checks inserting all elements into all other positions in other machines
- * @returns {int} TCT of the lowest resulting Solution
-*/
-int GraspSolution::externalInsertion() {
-  std::vector<std::vector<int>> S = S_;
-  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
-  do {
-    prevMin = min;
-    for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
-      for (int j{0}; j < maquinas_; ++j) {  // Machine to recieve
-        if (i == j) continue;
-        for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
-          for (int n{0}; n <= int(S[j].size()); ++n) {  // Place to receive task for receiver
-            int takeAwayI = getMachineTCT(S[i]);
-            int takeAwayJ = getMachineTCT(S[j]);
-            std::vector<int> removedI = S[i];
-            removedI.erase(removedI.begin() + k);
-            int addI = getMachineTCT(removedI);
-            std::vector<int> addedJ = S[j];
-            addedJ.insert(addedJ.begin() + n, S[i][k]);
-            int addJ = getMachineTCT(addedJ);
-            int result = prevMin - takeAwayI - takeAwayJ + addI + addJ;
-            if (result < min) {
-              min = result;
-              bestK = k;
-              bestN = n;
-              bestI = i;
-              bestJ = j;
-            }
-          }
-        }
-      }
-    }
-    if (min < prevMin) {
-      int insertVal = S[bestI][bestK];
-      S[bestI].erase(S[bestI].begin() + bestK);
-      S[bestJ].insert(S[bestJ].begin() + bestN, insertVal);
-    }
-  } while (min < prevMin);
-  return min;
-}
-
-/**
- * @desc Checks swapping elements of all tasks within a machine
- * @returns {int} TCT of the lowest resulting Solution
-*/
-int GraspSolution::internalInterchange() {
-  std::vector<std::vector<int>> S = S_;
-  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
-  do {
-    prevMin = min;
-    for (int i{0}; i < maquinas_; ++i) {  // Chosen Machine
-      for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
-        for (int n{0}; n < int(S[i].size()); ++n) {  // Place to receive task for receiver
-          if (k == n) continue;
-          std::vector<int> tester = S[i];
-          int temp = tester[k];
-          tester[k] = tester[n];
-          tester[n] = temp;
-          int result = prevMin - getMachineTCT(S[i]) + getMachineTCT(tester);
-          if (result < min) {
-            min = result;
-            bestK = k;
-            bestN = n;
-            bestI = i;
-          }
-        }
-      }
-    }
-    if (min < prevMin) {
-      int temp = S[bestI][bestK];
-      S[bestI][bestK] = S[bestI][bestN];
-      S[bestI][bestN] = temp;
-    }
-  } while (min < prevMin);
-  return min;
 }
 
 /**

@@ -88,6 +88,163 @@ int Solution::getMachines() {
   return maquinas_;
 }
 
+/**
+ * @desc Checks inserting all tasks within a machine into different positions
+ * @param {std::vector<std::vector<int>>&} Reference to grouping of machines to find local optimal for
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int Solution::internalInsertion(std::vector<std::vector<int>>& S) {
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
+  do {
+    prevMin = min;
+    for (int i{0}; i < maquinas_; ++i) {  // Chosen Machine
+      for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
+        for (int n{0}; n < int(S[i].size()); ++n) {  // Place to receive task for receiver, to <= because we reduce size when erasing
+          if (k == n) continue;
+          int takeAway = getMachineTCT(S[i]);
+          std::vector<int> tester = S[i];
+          tester.erase(tester.begin() + k);
+          tester.insert(tester.begin() + n, S[i][k]);
+          int result = prevMin - takeAway + getMachineTCT(tester);
+          if (result < min) {
+            min = result;
+            bestK = k;
+            bestN = n;
+            bestI = i;
+          }
+        }
+      }
+    }
+    if (min < prevMin) {
+      int insertVal = S[bestI][bestK];
+      S[bestI].erase(S[bestI].begin() + bestK);
+      S[bestI].insert(S[bestI].begin() + bestN, insertVal);
+    }
+  } while (min < prevMin);
+  return min;
+}
+
+/**
+ * @desc Checks inserting all elements into all other positions in other machines
+ * @param {std::vector<std::vector<int>>&} Reference to grouping of machines to find local optimal for
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int Solution::externalInsertion(std::vector<std::vector<int>>& S) {
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
+  do {
+    prevMin = min;
+    for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
+      for (int j{0}; j < maquinas_; ++j) {  // Machine to recieve
+        if (i == j) continue;
+        for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
+          for (int n{0}; n <= int(S[j].size()); ++n) {  // Place to receive task for receiver
+            int takeAwayI = getMachineTCT(S[i]);
+            int takeAwayJ = getMachineTCT(S[j]);
+            std::vector<int> removedI = S[i];
+            removedI.erase(removedI.begin() + k);
+            int addI = getMachineTCT(removedI);
+            std::vector<int> addedJ = S[j];
+            addedJ.insert(addedJ.begin() + n, S[i][k]);
+            int addJ = getMachineTCT(addedJ);
+            int result = prevMin - takeAwayI - takeAwayJ + addI + addJ;
+            if (result < min) {
+              min = result;
+              bestK = k;
+              bestN = n;
+              bestI = i;
+              bestJ = j;
+            }
+          }
+        }
+      }
+    }
+    if (min < prevMin) {
+      int insertVal = S[bestI][bestK];
+      S[bestI].erase(S[bestI].begin() + bestK);
+      S[bestJ].insert(S[bestJ].begin() + bestN, insertVal);
+    }
+  } while (min < prevMin);
+  return min;
+}
+
+/**
+ * @desc Checks swapping elements of all tasks within a machine
+ * @param {std::vector<std::vector<int>>&} Reference to grouping of machines to find local optimal for
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int Solution::internalInterchange(std::vector<std::vector<int>>& S) {
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0};
+  do {
+    prevMin = min;
+    for (int i{0}; i < maquinas_; ++i) {  // Chosen Machine
+      for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
+        for (int n{0}; n < int(S[i].size()); ++n) {  // Place to receive task for receiver
+          if (k == n) continue;
+          std::vector<int> tester = S[i];
+          int temp = tester[k];
+          tester[k] = tester[n];
+          tester[n] = temp;
+          int result = prevMin - getMachineTCT(S[i]) + getMachineTCT(tester);
+          if (result < min) {
+            min = result;
+            bestK = k;
+            bestN = n;
+            bestI = i;
+          }
+        }
+      }
+    }
+    if (min < prevMin) {
+      int temp = S[bestI][bestK];
+      S[bestI][bestK] = S[bestI][bestN];
+      S[bestI][bestN] = temp;
+    }
+  } while (min < prevMin);
+  return min;
+}
+
+/**
+ * @desc Checks swapping elements of all tasks between machines
+ * @param {std::vector<std::vector<int>>&} Reference to grouping of machines to find local optimal for
+ * @returns {int} TCT of the lowest resulting Solution
+*/
+int Solution::externalInterchange(std::vector<std::vector<int>>& S) {
+  int min{getGlobalTCT(S_)}, prevMin{min}, bestK{0}, bestN{0}, bestI{0}, bestJ{0};
+  do {
+    prevMin = min;
+    for (int i{0}; i < maquinas_; ++i) {  // Machine to take from
+      for (int j{0}; j < maquinas_; ++j) {  // Machine to recieve
+        if (i == j) continue;
+        for (int k{0}; k < int(S[i].size()); ++k) {  // Tasks locationg to give from giver
+          for (int n{0}; n < int(S[j].size()); ++n) {  // Place to receive task for receiver
+            int takeAwayI = getMachineTCT(S[i]);
+            int takeAwayJ = getMachineTCT(S[j]);
+            std::vector<int> testerI = S[i];
+            std::vector<int> testerJ = S[j];
+            int temp = testerI[k];
+            testerI[k] = testerJ[n];
+            testerJ[n] = temp;
+            int result = prevMin - takeAwayI - takeAwayJ + getMachineTCT(testerI) + getMachineTCT(testerJ);
+            if (result < min) {
+              min = result;
+              bestK = k;
+              bestN = n;
+              bestI = i;
+              bestJ = j;
+            }
+          }
+        }
+      }
+    }
+    if (min < prevMin) {
+      int temp = S[bestI][bestK];
+      S[bestI][bestK] = S[bestJ][bestN];
+      S[bestJ][bestN] = temp;
+    }
+  } while (min < prevMin);
+  return min;
+}
+
 /* CODE TO PRINT OUT STORED VALUES
 std::cout << "Tareas: " << tareas_ << std::endl;
   std::cout << "Maquinas: " << maquinas_ << std::endl << std::endl;
