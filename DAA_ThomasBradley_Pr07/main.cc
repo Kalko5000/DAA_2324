@@ -85,6 +85,7 @@ int main(int argc, char* argv []) {
     if (std::strcmp(entry->d_name, ".") != 0 && std::strcmp(entry->d_name, "..") != 0) {  // Filter out "." and ".."
       std::string nombre_fichero = directoryPath + std::string(entry->d_name);
       
+      // VORAZ
       std::cout << "VORAZ" << std::endl;
       VorazSolution voraz(nombre_fichero);
       auto start = std::chrono::high_resolution_clock::now();
@@ -96,6 +97,7 @@ int main(int argc, char* argv []) {
       << std::setw(11) << counter << std::setw(10) << VorTCT << std::setw(15) 
       << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
 
+      // GRASP
       std::cout << "GRASP" << std::endl;
       GraspSolution grasp(nombre_fichero, 3);
       auto startGrasp = std::chrono::high_resolution_clock::now();
@@ -107,6 +109,7 @@ int main(int argc, char* argv []) {
       << std::setw(11) << counter << std::setw(10) << GraspTCT << std::setw(15) 
       << std::chrono::duration_cast<std::chrono::microseconds>(endGrasp - startGrasp).count() << std::endl;
 
+      // GVNS
       std::cout << "GVNS" << std::endl;
       GvnsSolution gvns(nombre_fichero, 4, 6);
       auto startGvns = std::chrono::high_resolution_clock::now();

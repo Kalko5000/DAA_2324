@@ -1,0 +1,44 @@
+\section{Algoritmo consturictivo voraz}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Un constructivo voraz}
+Un algoritmo constructivo voraz muy sencillo para este problema parte del subconjunto, $S$, formado por las $m$ tareas con menores valores de $t_{0j}$ asignadas a los $m$ arrays que representan la secuenciaci\'on de tareas en las m\'aquinas. A continuaci\'on, a\~nade a este subconjunto, iterativamente, la tarea-m\'aquina-posici\'on que menor incremento produce en la funci\'on objetivo. El pseudoc\'odigo de este algoritmo se muestra a conti\-nuaci\'on.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h!]
+{\small
+ \hrule \
+ {\bf\small Algoritmo constructivo voraz}
+ \hrule
+\begin{center}
+\begin{tabbing}
+\ 1: Seleccionar la $m$ tareas $j_1, j_2,.., j_m$ con menores valores de $t_{0j}$ para ser introducidas en las \\ primeras posiciones de los arrays que forman la solucion $S$;\\
+\ 2: S = \{A_1=\{j_1\}, A_2=\{j_2\},.., A_m=\{j_m\}\};\\
+\ 3: {\bf rep}\={\bf eat}\\
+\ 4: \> $S^* = S$;\\
+\ 5: \> Obtener la tarea-maquina-posicion que minimiza el incremento del $TCT$;\\
+\ 6: \> Insertarla en la posicion que corresponda y actualizar $S^*$;\\
+\ 7: {\bf until} (todas las tareas han sido asignadas a alguna maquina)\\
+\ 9: Devolver $S^*$;
+\end{tabbing}
+\end{center}
+\hrule
+}
+\caption{Algoritmo constructivo voraz}
+\label{constructivo}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Búsquedas Locales}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{GRASP}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{GVNS}
+

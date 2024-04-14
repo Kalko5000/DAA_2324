@@ -115,7 +115,7 @@ int Solution::internalInsertion(std::vector<std::vector<int>>& S) {
         }
       }
     }
-    if (min < prevMin) {
+    if (min < prevMin) {  // Done every loop to prepare for next
       int insertVal = S[bestI][bestK];
       S[bestI].erase(S[bestI].begin() + bestK);
       S[bestI].insert(S[bestI].begin() + bestN, insertVal);
@@ -158,7 +158,7 @@ int Solution::externalInsertion(std::vector<std::vector<int>>& S) {
         }
       }
     }
-    if (min < prevMin) {
+    if (min < prevMin) {  // Done every loop to prepare for next
       int insertVal = S[bestI][bestK];
       S[bestI].erase(S[bestI].begin() + bestK);
       S[bestJ].insert(S[bestJ].begin() + bestN, insertVal);
@@ -194,7 +194,7 @@ int Solution::internalInterchange(std::vector<std::vector<int>>& S) {
         }
       }
     }
-    if (min < prevMin) {
+    if (min < prevMin) {  // Done every loop to prepare for next
       int temp = S[bestI][bestK];
       S[bestI][bestK] = S[bestI][bestN];
       S[bestI][bestN] = temp;
@@ -236,7 +236,7 @@ int Solution::externalInterchange(std::vector<std::vector<int>>& S) {
         }
       }
     }
-    if (min < prevMin) {
+    if (min < prevMin) {  // Done every loop to prepare for next
       int temp = S[bestI][bestK];
       S[bestI][bestK] = S[bestJ][bestN];
       S[bestJ][bestN] = temp;

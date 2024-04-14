@@ -37,7 +37,7 @@ int GraspSolution::evaluate() {
     newVal = externalInterchange(S);
     if (newVal < min) min = newVal;
     counter++;
-  } while (counter < 5);
+  } while (counter < 10);
 
   // printS();
   return min;

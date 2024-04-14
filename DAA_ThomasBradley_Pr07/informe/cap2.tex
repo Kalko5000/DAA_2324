@@ -1,0 +1,50 @@
+\section{Descripción}\label{Problem_PMP}
+
+En esta pr\'actica estudiaremos un problema de secuenciaci\'on de tareas en m\'aquinas paralelas con tiempos de setup dependientes; Parallel Machine Scheduling Problem
+with Dependent Setup Times \cite{Baez2019}. El objetivo del problema es asignar tareas a las m\'aquinas y determinar el orden en el que deben ser procesadas en las m\'aquinas de tal manera que la suma de los tiempos de finalizaci\'on de todos los trabajos, es decir, el tiempo total de finalizaci\'on (\textit{TCT}), sea minimizado.
+
+El tiempo de setup es el tiempo necesario para preparar los recursos necesarios (personas, m\'aquinas) para realizar una tarea (operaci\'on, trabajo). En algunas situaciones, los tiempos de setup var\'ian seg\'un la secuencia de trabajos realizados en una m\'aquina; por ejemplo en las industrias qu\'imica, farmac\'eutica y de procesamiento de metales, donde se deben realizar tareas de limpieza o reparaci\'on para preparar el equipo para realizar la siguiente tarea.
+
+Existen varios criterios de desempe\~no para medir la calidad de una secuenciaci\'on de tareas dada. Los criterios m\'as utilizados son la minimizaci\'on del tiempo m\'aximo de finalizaci\'on (\textit{makespan}) y la minimizaci\'on del \textit{TCT}. En particular, la minimizaci\'on del \textit{TCT} es un criterio que contribuye a la maximizaci\'on del flujo de producci\'on, la minimizaci\'on de los inventarios en proceso y el uso equilibrado de los recursos.
+
+El problema abordado en esta pr\'actica tiene las siguientes caracter\'isticas:
+\begin{itemize}
+	\item Se dispone de \textit{m} m\'aquinas paralelas id\'enticas que est\'an continuamente disponibles.
+  \item Hay \textit{n} tareas independientes que se programar\'an en las m\'aquinas. Todas las tareas est\'an disponibles en el momento cero.
+  \item Cada m\'aquina puede procesar una tarea a la vez sin preferencia y deben usarse todas las m\'aquinas.
+	\item Cualquier m\'aquina puede procesar cualquiera de las tareas.
+	\item Cada tarea tiene un tiempo de procesamiento asociado $p_j$.
+	\item Hay tiempos de setup de la m\'aquina $s_{ij}$ para procesar la tarea $j$ justo despu\'es de la tarea $i$, con $s_{ij} \neq s_{ji}$, en general. Hay un tiempo de setup $s_{0j}$ para procesar la primera tarea en cada m\'aquina.
+  \item El objetivo es minimizar la suma de los tiempos de finalizaci\'on de los trabajos, es decir, minimizar el TCT.
+\end{itemize}
+
+El problema consiste en asignar las \textit{n} tareas a las \textit{m} m\'aquinas y determinar el orden en el que deben ser procesadas de tal manera que se minimice el TCT.
+
+El problema se puede definir en un grafo completo $G = (V,A)$, donde \linebreak $V = \{0,1,2, \cdots, n\}$ es el conjunto de nodos y $A$ es el conjunto de arcos. El nodo $0$ representa el estado inicial de las m\'aquinas (trabajo ficticio) y los nodos del conjunto $I = \{1,2, \cdots, n\}$ corresponden a las tareas. Para cada par de nodos $i, j \in V$, hay dos arcos $(i, j), (j, i) \in A$ que tienen asociados los tiempos de setup $s_{ij}, s_{ji}$ seg\'un la direcci\'on del arco. Cada nodo $j \in V$ tiene asociado un tiempo de procesamiento $p_j$ con $p_0 = 0 $. Usando los tiempos de setup $s_{ij}$ y los tiempos de procesamiento $p_j$, asociamos a cada arco $(i, j) \in A$ un valor $t_{ij} = s_{ij} + p_j, (i \in V, j \in I)$.
+
+Sea $P_r = \{0, [1_r], [2_r], \cdots, [k_r] \}$ una secuencia de $k_r + 1$ tareas en la m\'aquina \textit{r} con el trabajo ficticio $0$ en el posici\'on cero de $P_r$, donde $[i_r]$ significa el nodo (tarea) en la posici\'on $i_r$ en la secuencia \textit{r}. Luego, el tiempo de finalizaci\'on $C_{[i_r]}$ del trabajo en la posici\'on $i_r$ se calcula como $C_{[i_r]} = \sum_ {j = 1} ^ {i_r} t _ {[j-1 ] [j]} $. Tenga en cuenta que en el grafo \textit{G} representa la longitud de la ruta desde el nodo $0$ al nodo $[i_r]$.
+
+Sumando los tiempos de finalizaci\'on de los trabajos en $P_r$ obtenemos la suma de las longitudes de las rutas desde el nodo 0 a cada nodo en $P_r$ ($TCT(P_r)$) como:
+
+\begin{align}
+\label{form1}TCT(P_r) = \sum_{i=1}^k C_{[i]} =  
+kt_{[0][1]} + (k-1) t_{[1][2]} + \nonumber \\ \cdots + 2t_{[k-2][k-1]} + t_{[k-1][k]}
+\end{align}
+
+Usando lo anterior, el problema se puede formular como encontrar \textit{m} rutas simples disjuntas en $G$ que comienzan en el nodo ra\'iz 0, que juntas cubren todos los nodos en \textit{I} y minimizan la funci\'on objetivo.
+
+\begin{align}
+\label{form2}z= \sum_{r=1}^{m} TCT(P_r ) =  \sum_{r=1}^{m}\sum_{i=1_{r}}^{k_{r}}(k_{r}-i+1)t_{[i-1][i]}
+\end{align}
+
+Tenga en cuenta que el coeficiente $(k_{r} - i + 1)$ indica el n\'umero de nodos despu\'es del nodo en la posici\'on $i_r-1 $.
+
+%Por ejemplo, una soluci\'on para el problema con 10 tareas con tiempos de procesamiento {t1(2),t2(3), t3(5), t4(8), t5(1), t6(4), t7(6), t8(9), t9(10), t10(4)} y 2 m\'aquinas, podr\'ia ser la siguiente: M\'aquina 1 - tareas 9, 10, 8 y 6; M\'aquina 2 - tareas 3, 5, 4, 7, 1 y 2; con un TCT de 92 (TCT m\'aquina 1 = (10 + (10+4) + (10+4+9) + (10+4+9+4)) = 74; TCT m\'aquina 2 = (5 + (5+1) + (5+1+8) + (5+1+8+6) + (5+1+8+6+2) + (5+1+8+6+2+3)) = 92). 
+
+
+\subsection{Representaci\'on de las soluciones}
+
+Podemos generar un array por cada una de las m\'aquinas, S=\{$A_1$, $A_2$,.., $A_m$\}. En ellos se insertar\'an las tareas a ser procesadas en cada m\'aquina en el orden establecido. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
