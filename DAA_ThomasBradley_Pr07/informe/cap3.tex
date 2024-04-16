@@ -1,4 +1,4 @@
-\section{Algoritmo consturictivo voraz}
+    \section{Algoritmo consturictivo voraz}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Un constructivo voraz}
@@ -31,14 +31,46 @@ Un algoritmo constructivo voraz muy sencillo para este problema parte del subcon
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Búsquedas Locales}
 
-
+Se han implementado 4 busquedas locales, las cuales se detallaran a continuación:
+\begin{itemize}
+  \item \textbf{Inserción Interna} - Trata de insertar cada tarea de una maquinas en todas las posiciones restantes de la misma
+  \item \textbf{Inserción Externa} -Trata de insertar cada tarea de las maquinas en todas las posiciones posibles en otras maquinas
+  \item \textbf{Intercambio Interno} - Trata de intercambiar todos las tareas de una maquian entre si
+  \item \textbf{Intercambio Externo} - Trata de intercambiar todas las tareas de las maquinas por todas las tareas de otras
+\end{itemize}
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{GRASP}
+Para el algoritmo GRASP empleado, tras experimentar con varios tanmaños de instancias (veces que corremos la fase constructiva) opte por 10 ya que era un buen balance entre buenos resultados y una ejecución rápida.
 
+\begin{figure}[h!]
+{\small
+ \hrule \
+ {\bf\small Algoritmo constructivo voraz}
+ \hrule
+\begin{center}
+\begin{tabbing}
+\textbf{Procedure} \= \textbf{GRASP} \\
+\textbf{Begin} \\
+\> Preprocesamiento \\
+\> \textbf{Repeat} \\
+\> \> Fase Constructiva(Solución); Usando para ello una lista de n candidatos \\
+\> \> PostProcesamiento(Solución); Miramos optimos locales para obtener una nueva solución \\
+\> \> Actualizar(Solución, MejorSolución); Si es mejor que la mejor encontrada, se guarda \\
+\> \textbf{Until} (Se halla llegado a las iteraciones deseadas); \\
+\textbf{End.} \\
+\end{tabbing}
+\end{center}
+\hrule
+}
+\caption{Algoritmo constructivo grasp}
+\label{constructivo}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{GVNS}
 
+En cuanto a las instancias (veces que corremos la fase constructiva) opte por 100, ya que era un buen número para obtener resultados y no tardaba una cantidad de tiempo excesivo (por no optimizar las busquedas locales tanto como podria, llevar  acabo las 1000 iteraciones simplemente llevaba demasiado tiempo).
