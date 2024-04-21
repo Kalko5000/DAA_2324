@@ -34,7 +34,7 @@ float VorazSolution::evaluate(int m) {
         continue;
       }
       float newDistance = distanceTo(puntos_[i], center);
-      if (newDistance > farthestPointDistance) {
+      if (newDistance > farthestPointDistance) { // Update if distance from center is greater (maximize)
         farthestPointIndex = i;
         farthestPointDistance = newDistance;
       }

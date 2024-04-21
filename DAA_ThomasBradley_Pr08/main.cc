@@ -71,7 +71,7 @@ void printVoraz(std::vector<std::pair<std::string, std::string>> files, int m) {
   std::cout << "-- VORAZ --" << std::endl;
   std::cout << std::setw(20) << "Problema" << std::setw(5) 
   << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(11) << "z" 
-  << std::setw(22) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
+  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
 
   for (int i{0}; i < int(files.size()); ++i) {
     VorazSolution voraz(files[i].first);
@@ -81,7 +81,7 @@ void printVoraz(std::vector<std::pair<std::string, std::string>> files, int m) {
     
     std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
     << voraz.getSize() << std::setw(5) << voraz.getDimension() << std::setw(5) 
-    << m << std::setw(11) << distance << std::setw(22) << voraz.getS() << std::setw(15)
+    << m << std::setw(11) << distance << std::setw(32) << voraz.getS() << std::setw(15)
     << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
     counter++;
   }
