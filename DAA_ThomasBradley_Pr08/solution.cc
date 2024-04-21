@@ -57,6 +57,37 @@ float Solution::stringToFloat(std::string word) {
 }
 
 /**
+ * @desc Calculates the distance between two points
+ * @param {std::vector<float>} start Initial point
+ * @param {std::vector<float>} end Destination point
+ * @returns {float} Resulting distance between the two
+*/
+float Solution::distanceTo(std::vector<float> start, std::vector<float> end) {
+  float totalSum = 0.0;
+  for (int i{0}; i < dimension_; ++i) {
+    totalSum += std::pow(end[i] - start[i], 2);
+  }
+  return std::sqrt(totalSum);
+}
+
+/**
+ * @desc Returns the distance between all points in the solution
+ * @returns {float} Resulting distance
+*/
+float Solution::getTotalDistance(std::vector<int> S) {
+  std::vector<int> indexList;
+  for (int i{0}; i < size_; ++i) {
+    if (S[i] == 1) indexList.push_back(i);
+  }
+  float totalSum = 0.0;
+  for (int i{0}; i < int(indexList.size() - 1); ++i) {
+    totalSum += distanceTo(puntos_[indexList[i]], puntos_[indexList[i + 1]]);
+  }
+  totalSum += distanceTo(puntos_[indexList[int(indexList.size() - 1)]], puntos_[indexList[0]]);
+  return totalSum;
+}
+
+/**
  * @desc Prints all points and whether or not they are part of the solution
 */
 void Solution::setupS() {
@@ -107,4 +138,34 @@ std::string Solution::getS() {
     result += std::to_string(S_[i]);
   }
   return result;
+}
+
+/**
+ * @desc 
+ * @param {std::vector} S
+ * @returns {std::vector<int>}
+*/
+std::vector<int> Solution::localSearch(std::vector<int> S) {
+  std::vector<int> maxSol = S;
+  float maxFound = 0.0, prevMax{maxFound};
+  do {
+    prevMax = maxFound;
+    S = maxSol;
+    for (int i{0}; i < size_; ++i) {  // First point to swap
+      for (int j{0}; j < size_; ++j) {  // Second point to swap
+        if (i == j || S[i] == S[j]) continue;
+        std::vector<int> tempSol = S;
+        int tempVal = tempSol[i];
+        tempSol[i] = tempSol[j];
+        tempSol[j] = tempVal;
+        float result = getTotalDistance(tempSol);
+        if (result > maxFound) {
+          maxFound = result;
+          maxSol = tempSol;
+        }
+      }
+    }
+  } while (maxFound < prevMax);
+
+  return maxSol;
 }

@@ -17,8 +17,6 @@ class VorazSolution : public Solution {
  public:
   VorazSolution(std::string nombre_fichero) : Solution(nombre_fichero) {};
   float evaluate(int m);
-  float distanceTo(std::vector<float> start, std::vector<float> end);
-  float getTotalDistance();
   std::vector<float> getCenter();
   std::vector<float> getCenterOfSolution();
 };

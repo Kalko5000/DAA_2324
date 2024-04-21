@@ -29,11 +29,14 @@ class Solution {
   Solution(std::string nombre_fichero);
   virtual float evaluate(int m) = 0;
   float stringToFloat(std::string word);
+  float distanceTo(std::vector<float> start, std::vector<float> end);
+  float getTotalDistance(std::vector<int> S);
   void setupS();
   void printS();
   int getSize();
   int getDimension();
   std::string getS();
+  std::vector<int> localSearch(std::vector<int> S);
  protected:
   int size_;
   int dimension_;

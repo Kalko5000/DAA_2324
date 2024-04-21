@@ -24,7 +24,7 @@ float VorazSolution::evaluate(int m) {
   std::vector<float> center = getCenter();
 
   do {
-    float farthestPointDistance = FLT_MAX;
+    float farthestPointDistance = 0.0;
     int farthestPointIndex = -1;
     for (int i{0}; i < size_; ++i) {
       if (S_[i] == 1) continue;
@@ -43,42 +43,12 @@ float VorazSolution::evaluate(int m) {
     center = getCenterOfSolution(); // Update center based off points in solution
     count++;
   } while (count < m);
+  // S_ = localSearch(S_);
 
   // DEBUG
   // printS()
 
-  return getTotalDistance();
-}
-
-/**
- * @desc Calculates the distance between two points
- * @param {std::vector<float>} start Initial point
- * @param {std::vector<float>} end Destination point
- * @returns {float} Resulting distance between the two
-*/
-float VorazSolution::distanceTo(std::vector<float> start, std::vector<float> end) {
-  float totalSum = 0.0;
-  for (int i{0}; i < dimension_; ++i) {
-    totalSum += std::pow(end[i] - start[i], 2);
-  }
-  return std::sqrt(totalSum);
-}
-
-/**
- * @desc Returns the distance between all points in the solution
- * @returns {float} Resulting distance
-*/
-float VorazSolution::getTotalDistance() {
-  std::vector<int> indexList;
-  for (int i{0}; i < size_; ++i) {
-    if (S_[i] == 1) indexList.push_back(i);
-  }
-  float totalSum = 0.0;
-  for (int i{0}; i < int(indexList.size() - 1); ++i) {
-    totalSum += distanceTo(puntos_[indexList[i]], puntos_[indexList[i + 1]]);
-  }
-  totalSum += distanceTo(puntos_[indexList[int(indexList.size() - 1)]], puntos_[indexList[0]]);
-  return totalSum;
+  return getTotalDistance(S_);
 }
 
 /**
