@@ -4,10 +4,10 @@
  * Grado en Ingeniería Informática
  * Diseño y Análisis de Algoritmos
  *
- * PRACTICA 07: Parallel Machine Scheduling Problem with Dependent Setup Times
+ * PRACTICA 08: B&B - Maximum Diversity Problem
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
- * @date:    02.apr.2024
+ * @date:    21.apr.2024
  * @brief:   Program that solves titular problem. Here we define the Solution class
  */
 
@@ -32,11 +32,8 @@ Solution::Solution(std::string nombre_fichero) {
         puntos_[i].push_back(stringToFloat(value));
       }
     }
-    S_.resize(size_);
-    for (int i{0}; i < int(S_.size()); ++i) {
-      S_[i] = 0;
-    }
-    printS();
+    setupS();
+    // printS();
   } else { // Fichero no se pudo abrir
     std::cerr << "Error al abrir fichero" << std::endl;
     exit(1);
@@ -57,6 +54,16 @@ float Solution::stringToFloat(std::string word) {
     }
   }
   return std::stof(word);
+}
+
+/**
+ * @desc Prints all points and whether or not they are part of the solution
+*/
+void Solution::setupS() {
+  S_.resize(size_);
+  for (int i{0}; i < int(S_.size()); ++i) {
+    S_[i] = 0;
+  }
 }
 
 /**
@@ -88,4 +95,16 @@ int Solution::getSize() {
 */
 int Solution::getDimension() {
   return dimension_;
+}
+
+/**
+ * @desc Getter for the state of the current solution
+ * @returns {std::string} String showcasing which points for part of the solution (those set to 1)
+*/
+std::string Solution::getS() {
+  std::string result{""};
+  for (int i{0}; i < int(S_.size()); ++i) {
+    result += std::to_string(S_[i]);
+  }
+  return result;
 }

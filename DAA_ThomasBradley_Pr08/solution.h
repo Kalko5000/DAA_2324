@@ -4,10 +4,10 @@
  * Grado en Ingeniería Informática
  * Diseño y Análisis de Algoritmos
  *
- * PRACTICA 07: Parallel Machine Scheduling Problem with Dependent Setup Times
+ * PRACTICA 08: B&B - Maximum Diversity Problem
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
- * @date:    02.apr.2024
+ * @date:    21.apr.2024
  * @brief:   Program that solves titular problem. Here we declare the Solution class
  */
 
@@ -27,11 +27,13 @@ using namespace std::chrono;
 class Solution {
  public:
   Solution(std::string nombre_fichero);
+  virtual float evaluate(int m) = 0;
   float stringToFloat(std::string word);
-  int evaluate(); // virtual ... = 0
+  void setupS();
   void printS();
   int getSize();
   int getDimension();
+  std::string getS();
  protected:
   int size_;
   int dimension_;
