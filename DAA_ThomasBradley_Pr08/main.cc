@@ -9,10 +9,10 @@
  * @email:   alu0101408248@ull.edu.es
  * @date:    21.apr.2024
  * @brief:   Main program to solve the problem at hand
- * @example: ./machine node_files
+ * @example: ./diversity node_files
  */
 
-// g++ --std=c++14 -o diversity main.cc
+// g++ --std=c++14 -o diversity solution.cc vorazsolution.cc graspsolution.cc main.cc
 
 #include <iostream>
 #include <fstream>
@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <dirent.h>
 #include <cstring>
-#include "vorazsolution.h"
+#include "graspsolution.h"
 
 using namespace std::chrono;
 
@@ -89,6 +89,34 @@ void printVoraz(std::vector<std::pair<std::string, std::string>> files, int m) {
 }
 
 /**
+ * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
+ * @param {int} m Number of points to include in solution
+*/
+void printGrasp(std::vector<std::pair<std::string, std::string>> files, int candidates, int m) {
+  int counter{1};
+  std::cout << "-- GRASP --" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) 
+  << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(11) << "z" 
+  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
+
+  for (int i{0}; i < int(files.size()); ++i) {
+    GraspSolution grasp(files[i].first, candidates);
+    auto start = std::chrono::high_resolution_clock::now();
+    float distance = grasp.evaluate(m);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
+    << grasp.getSize() << std::setw(5) << grasp.getDimension() << std::setw(5) 
+    << m << std::setw(7) << grasp.getCandidateSize() << std::setw(11) << distance << std::setw(32) 
+    << grasp.getS() << std::setw(15)
+    << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+    counter++;
+  }
+  std::cout << std::endl;
+}
+
+/**
  * @desc Compares the second string of two pairs and returns true if the first is smaller
  * @param {std::pair<std::string, std::string> } string01 First pair of strings to check second value of
  * @param {std::pair<std::string, std::string> } string02 Second pair of strings to check second value of
@@ -125,6 +153,10 @@ int main(int argc, char* argv []) {
   printVoraz(files, 2);
   printVoraz(files, 3);
   printVoraz(files, 4);
+
+  printGrasp(files, 3, 2);
+  printGrasp(files, 3, 3);
+  printGrasp(files, 3, 4);
 
   return 0;
 }

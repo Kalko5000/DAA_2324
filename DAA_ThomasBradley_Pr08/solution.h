@@ -37,6 +37,7 @@ class Solution {
   int getDimension();
   std::string getS();
   std::vector<int> localSearch(std::vector<int> S);
+  std::vector<int> tabuSearch(std::vector<int> S);
  protected:
   int size_;
   int dimension_;

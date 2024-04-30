@@ -15,7 +15,7 @@ LDFLAGS =
 
 all: diversity
 
-diversity: solution.cc vorazsolution.cc main.cc
+diversity: solution.cc vorazsolution.cc graspsolution.cc main.cc
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 .PHONY: all clean

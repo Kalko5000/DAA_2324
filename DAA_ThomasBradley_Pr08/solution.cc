@@ -169,3 +169,33 @@ std::vector<int> Solution::localSearch(std::vector<int> S) {
 
   return maxSol;
 }
+
+/**
+ * @desc 
+ * @param {std::vector} S
+ * @returns {std::vector<int>}
+*/
+std::vector<int> Solution::tabuSearch(std::vector<int> S) {
+  std::vector<int> maxSol = S;
+  float maxFound = 0.0, prevMax{maxFound};
+  do {
+    prevMax = maxFound;
+    S = maxSol;
+    for (int i{0}; i < size_; ++i) {  // First point to swap
+      for (int j{0}; j < size_; ++j) {  // Second point to swap
+        if (i == j || S[i] == S[j]) continue;
+        std::vector<int> tempSol = S;
+        int tempVal = tempSol[i];
+        tempSol[i] = tempSol[j];
+        tempSol[j] = tempVal;
+        float result = getTotalDistance(tempSol);
+        if (result > maxFound) {
+          maxFound = result;
+          maxSol = tempSol;
+        }
+      }
+    }
+  } while (maxFound < prevMax);
+
+  return maxSol;
+}
