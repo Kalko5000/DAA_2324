@@ -147,7 +147,8 @@ std::string Solution::getS() {
 */
 std::vector<int> Solution::localSearch(std::vector<int> S) {
   std::vector<int> maxSol = S;
-  float maxFound = 0.0, prevMax{maxFound};
+  float maxFound = getTotalDistance(S), prevMax{maxFound};
+
   do {
     prevMax = maxFound;
     S = maxSol;
@@ -165,37 +166,57 @@ std::vector<int> Solution::localSearch(std::vector<int> S) {
         }
       }
     }
-  } while (maxFound < prevMax);
+  } while (maxFound > prevMax);
 
   return maxSol;
 }
 
 /**
- * @desc 
- * @param {std::vector} S
- * @returns {std::vector<int>}
+ * @desc Tabu search that locks a movement for 3 turns after it has been done
+ * @param {std::vector} S Original solution to problem
+ * @returns {std::vector<int>} Imporved solutiong after passing through algorithm
 */
 std::vector<int> Solution::tabuSearch(std::vector<int> S) {
+  std::vector<std::pair<int, int>> swaps;
   std::vector<int> maxSol = S;
-  float maxFound = 0.0, prevMax{maxFound};
+  float maxFound = getTotalDistance(S), prevMax{maxFound};
+
   do {
+    int usedI, usedJ;
     prevMax = maxFound;
     S = maxSol;
     for (int i{0}; i < size_; ++i) {  // First point to swap
       for (int j{0}; j < size_; ++j) {  // Second point to swap
         if (i == j || S[i] == S[j]) continue;
-        std::vector<int> tempSol = S;
-        int tempVal = tempSol[i];
-        tempSol[i] = tempSol[j];
-        tempSol[j] = tempVal;
-        float result = getTotalDistance(tempSol);
-        if (result > maxFound) {
-          maxFound = result;
-          maxSol = tempSol;
+        bool valid{true};
+        if (int(swaps.size()) > 0) {  // There are locked movements
+          for (int i{0}; i < int(swaps.size()); ++i) {
+            if ((swaps[i].first == i && swaps[i].second == j) || (swaps[i].first == j && swaps[i].second == i)) {
+              valid = false;
+              break;
+            }
+          }
+        }
+        if (valid) {  // Movement has not been locked
+          std::vector<int> tempSol = S;
+          int tempVal = tempSol[i];
+          tempSol[i] = tempSol[j];
+          tempSol[j] = tempVal;
+          float result = getTotalDistance(tempSol);
+          if (result > maxFound) {
+            maxFound = result;
+            maxSol = tempSol;
+            usedI = i;
+            usedJ = j;
+          }
         }
       }
     }
-  } while (maxFound < prevMax);
+    if (int(swaps.size()) > 3) {  // Remove movement that has been locked for 3 turns
+      swaps.erase(swaps.begin());
+    }
+    swaps.push_back(std::make_pair(usedI, usedJ));  // Add latest locked movement
+  } while (maxFound > prevMax); // Stop condition is x amount of iterations, continues forward even if solution is worse
 
   return maxSol;
 }
