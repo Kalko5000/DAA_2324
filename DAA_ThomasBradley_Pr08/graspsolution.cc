@@ -21,22 +21,22 @@
 float GraspSolution::evaluate(int m) {
   std::vector<int> bestS{S_};
   int counter{0};
-  float newVal{0}, min{0};
+  float newVal{0}, max{0};
   srand(time(0)); // Seed for random number
 
   do {  // Local Optimal Search method implementations can be found in the base class -> Solution
     construct(m);
     std::vector<int> S = tabuSearch(S_);  // Can swap out to localSearch
     newVal = getTotalDistance(S);
-    if (newVal > min) {
-      min = newVal;
+    if (newVal > max) {
+      max = newVal;
       bestS = S;
     }
     counter++;
   } while (counter < 10);
 
   S_ = bestS;
-  return min;
+  return max;
 }
 
 /**

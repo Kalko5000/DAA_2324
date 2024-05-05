@@ -139,7 +139,7 @@ void printPoda(std::vector<std::pair<std::string, std::string>> files, int m, bo
     << m << std::setw(11) << distance << std::setw(32) 
     << poda.getS() << std::setw(15)
     << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() 
-    << std::setw(17) << 0 << std::endl;
+    << std::setw(17) << poda.getGeneratedNodes() << std::endl;
     counter++;
   }
   std::cout << std::endl;

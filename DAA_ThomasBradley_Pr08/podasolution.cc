@@ -20,29 +20,24 @@
 */
 float PodaSolution::evaluate(int m) {
   std::vector<int> bestS{S_};
-  int counter{0};
-  float newVal{0}, min{0};
   srand(time(0)); // Seed for random number
 
-  do {  // Local Optimal Search method implementations can be found in the base class -> Solution
-    if (useGrasp_) {
-      graspBuild(m);
-    } else {
-      greedyBuild(m);
-    }
-    std::vector<int> S = tabuSearch(S_);  // Can swap out to localSearch
-    newVal = getTotalDistance(S);
-    if (newVal > min) {
-      min = newVal;
-      bestS = S;
-    }
-    counter++;
-  } while (counter < 10);
+  if (useGrasp_) {
+    graspBuild(m);
+  } else {
+    greedyBuild(m);
+  }
+  cota_ = getTotalDistance(S_);
+  // std::cout << cota_ << " ";
+  widthSearch({}, m, 0);
+  // std::cout << cota_ << std::endl;
 
-  S_ = bestS;
-  return min;
+  return cota_;
 }
 
+/**
+ * @desc
+*/
 void PodaSolution::graspBuild(int m) {
   int count{0};
   setupS();
@@ -67,13 +62,16 @@ void PodaSolution::graspBuild(int m) {
     }
     int index = randomInt(int(candidatesIndex.size()) - 1);
     S_[candidatesIndex[index]] = 1;
-    center = getCenterOfSolution(); // Update center based off points in solution
+    center = getCenterOfSolution(S_); // Update center based off points in solution
     count++;
   } while (count < m);
 
   return;
 }
 
+/**
+ * @desc
+*/
 void PodaSolution::greedyBuild(int m) {
   int count{0};
   setupS();
@@ -96,10 +94,43 @@ void PodaSolution::greedyBuild(int m) {
       }
     }
     S_[farthestPointIndex] = 1;
-    center = getCenterOfSolution(); // Update center based off points in solution
+    center = getCenterOfSolution(S_); // Update center based off points in solution
     count++;
   } while (count < m);
 
+  return;
+}
+
+/**
+ * @desc
+*/
+void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
+  nodos_generados_++;
+
+  if (int(S.size()) == size_ || pointCount == m) { // A valid solution has been reached
+    while (int(S.size()) < size_) { // If all points added, fill in extra slots
+      S.push_back(0);
+    }
+    float newVal = getTotalDistance(S);
+    if (newVal > getTotalDistance(S_)) {
+      cota_ = newVal;
+      S_ = S;
+    }
+    return;
+  }
+
+  std::vector<int> push0{S}, push1{S};
+  push0.push_back(0);
+  push1.push_back(1);
+  float val0{getUpperQuota(push0, m, pointCount)}, val1{getUpperQuota(push1, m, pointCount + 1)};
+  // std::cout << val0 << " and " << val1 << " bigger than " << cota_ << std::endl;
+
+  if (val0 >= val1 && val0 > cota_) {
+    widthSearch(push0, m, pointCount);
+  } else if (val1 > cota_) {
+    widthSearch(push1, m, pointCount + 1);
+  }
+  
   return;
 }
 
@@ -123,13 +154,13 @@ std::vector<float> PodaSolution::getCenter() {
  * @desc Gets the center position of our group of points
  * @returns {std::vector<float>} Coordinates to the center position of the grouping
 */
-std::vector<float> PodaSolution::getCenterOfSolution() {
+std::vector<float> PodaSolution::getCenterOfSolution(std::vector<int> S) {
   std::vector<float> result;
   for (int i{0}; i < dimension_; ++i) {
     float currentSum{0.0};
     int count = 0;
-    for (int j{0}; j < size_; ++j) {
-      if (S_[j] == 1) { // Only use points in solution
+    for (int j{0}; j < int(S.size()); ++j) {
+      if (S[j] == 1) { // Only use points in solution
         currentSum += puntos_[j][i];
         count++;
       }
@@ -137,6 +168,42 @@ std::vector<float> PodaSolution::getCenterOfSolution() {
     result.push_back(currentSum / count);
   }
   return result;
+}
+
+/**
+ * @desc
+*/
+float PodaSolution::getUpperQuota(std::vector<int> S, int m, int pointCount) {
+  int initialSize = S.size();
+  if ((size_ - initialSize) < (m - pointCount)) return 0.0; // Not enough space to place remaining points
+  
+  while (int(S.size()) < size_) {
+    S.push_back(0);
+  }
+
+  std::vector<float> center = getCenterOfSolution(S);
+  while (pointCount < m) {
+    float farthestPointDistance = 0.0;
+    int farthestPointIndex = -1;
+    for (int i{initialSize}; i < size_; ++i) {
+      if (S[i] == 1) continue;
+      if (farthestPointIndex == -1) { // Index not setup yet
+        farthestPointIndex = i;
+        farthestPointDistance = distanceTo(puntos_[i], center);
+        continue;
+      }
+      float newDistance = distanceTo(puntos_[i], center);
+      if (newDistance > farthestPointDistance) { // Update if distance from center is greater (maximize)
+        farthestPointIndex = i;
+        farthestPointDistance = newDistance;
+      }
+    }
+    S[farthestPointIndex] = 1;
+    center = getCenterOfSolution(S);
+    pointCount++;
+  }
+
+  return getTotalDistance(S);
 }
 
 /**
@@ -169,4 +236,11 @@ int PodaSolution::randomInt(int max) {
 */
 int PodaSolution::getCandidateSize() {
   return candidateSize_;
+}
+
+/**
+ * @desc
+*/
+int PodaSolution::getGeneratedNodes() {
+  return nodos_generados_;
 }
