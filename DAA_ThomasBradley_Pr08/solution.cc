@@ -81,7 +81,9 @@ float Solution::getTotalDistance(std::vector<int> S) {
   }
   float totalSum = 0.0;
   for (int i{0}; i < int(indexList.size() - 1); ++i) {
-    totalSum += distanceTo(puntos_[indexList[i]], puntos_[indexList[i + 1]]);
+    for (int j{i + 1}; j < int(indexList.size()); ++j) {
+      totalSum += distanceTo(puntos_[indexList[i]], puntos_[indexList[j]]);
+    }
   }
   totalSum += distanceTo(puntos_[indexList[int(indexList.size() - 1)]], puntos_[indexList[0]]);
   return totalSum;
@@ -178,13 +180,14 @@ std::vector<int> Solution::localSearch(std::vector<int> S) {
 */
 std::vector<int> Solution::tabuSearch(std::vector<int> S) {
   std::vector<std::pair<int, int>> swaps;
-  std::vector<int> maxSol = S;
-  float maxFound = getTotalDistance(S), prevMax{maxFound};
+  std::vector<int> maxSol = S, currentMax = S;
+  float maxFound = getTotalDistance(S), currentFound{maxFound};
+  int iterations{10}, cont{0};
 
   do {
     int usedI, usedJ;
-    prevMax = maxFound;
-    S = maxSol;
+    currentFound = 0;
+    S = currentMax;
     for (int i{0}; i < size_; ++i) {  // First point to swap
       for (int j{0}; j < size_; ++j) {  // Second point to swap
         if (i == j || S[i] == S[j]) continue;
@@ -203,11 +206,15 @@ std::vector<int> Solution::tabuSearch(std::vector<int> S) {
           tempSol[i] = tempSol[j];
           tempSol[j] = tempVal;
           float result = getTotalDistance(tempSol);
-          if (result > maxFound) {
-            maxFound = result;
-            maxSol = tempSol;
+          if (result > currentFound) { // Update highest for current search
+            currentFound = result;
+            currentMax = tempSol;
             usedI = i;
             usedJ = j;
+            if (result > maxFound) {  // Update highest overall values
+              maxFound = result;
+              maxSol = tempSol;
+            }
           }
         }
       }
@@ -216,7 +223,8 @@ std::vector<int> Solution::tabuSearch(std::vector<int> S) {
       swaps.erase(swaps.begin());
     }
     swaps.push_back(std::make_pair(usedI, usedJ));  // Add latest locked movement
-  } while (maxFound > prevMax); // Stop condition is x amount of iterations, continues forward even if solution is worse
-
+    cont++;
+  } while (cont <= iterations); // Stop condition is x amount of iterations, continues forward even if solution is worse
+  
   return maxSol;
 }
