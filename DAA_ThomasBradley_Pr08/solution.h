@@ -7,7 +7,7 @@
  * PRACTICA 08: B&B - Maximum Diversity Problem
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
- * @date:    21.apr.2024
+ * @date:    07.may.2024
  * @brief:   Program that solves titular problem. Here we declare the Solution class
  */
 

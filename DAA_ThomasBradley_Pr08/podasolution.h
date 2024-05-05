@@ -8,14 +8,14 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    07.may.2024
- * @brief:   Program that solves titular problem. Here we declare the GraspSolution class
+ * @brief:   Program that solves titular problem. Here we declare the PodaSolution class
  */
 
-#include "vorazsolution.h"
+#include "graspsolution.h"
 
-class GraspSolution : public Solution {
+class PodaSolution : public Solution {
  public:
-  GraspSolution(std::string nombre_fichero, int candidateSize) : Solution(nombre_fichero) {
+  PodaSolution(std::string nombre_fichero, int candidateSize) : Solution(nombre_fichero) {
     candidateSize_ = candidateSize;
   };
   float evaluate(int m);

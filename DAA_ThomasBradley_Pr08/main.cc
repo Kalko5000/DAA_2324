@@ -7,7 +7,7 @@
  * PRACTICA 08: B&B - Maximum Diversity Problem
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
- * @date:    21.apr.2024
+ * @date:    07.may.2024
  * @brief:   Main program to solve the problem at hand
  * @example: ./diversity node_files
  */
@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <dirent.h>
 #include <cstring>
-#include "graspsolution.h"
+#include "podasolution.h"
 
 using namespace std::chrono;
 
@@ -117,6 +117,34 @@ void printGrasp(std::vector<std::pair<std::string, std::string>> files, int cand
 }
 
 /**
+ * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
+ * @param {int} m Number of points to include in solution
+*/
+void printPoda(std::vector<std::pair<std::string, std::string>> files, int candidates, int m) {
+  int counter{1};
+  std::cout << "-- RAMIFICACIÓN Y PODA --" << std::endl;
+  std::cout << std::setw(20) << "Problema" << std::setw(5) 
+  << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(11) << "z" 
+  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
+
+  for (int i{0}; i < int(files.size()); ++i) {
+    PodaSolution poda(files[i].first, candidates);
+    auto start = std::chrono::high_resolution_clock::now();
+    float distance = poda.evaluate(m);
+    auto end = std::chrono::high_resolution_clock::now();
+    
+    std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
+    << poda.getSize() << std::setw(5) << poda.getDimension() << std::setw(5) 
+    << m << std::setw(7) << poda.getCandidateSize() << std::setw(11) << distance << std::setw(32) 
+    << poda.getS() << std::setw(15)
+    << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+    counter++;
+  }
+  std::cout << std::endl;
+}
+
+/**
  * @desc Compares the second string of two pairs and returns true if the first is smaller
  * @param {std::pair<std::string, std::string> } string01 First pair of strings to check second value of
  * @param {std::pair<std::string, std::string> } string02 Second pair of strings to check second value of
@@ -157,6 +185,10 @@ int main(int argc, char* argv []) {
   printGrasp(files, 3, 2);
   printGrasp(files, 3, 3);
   printGrasp(files, 3, 4);
+
+  printPoda(files, 3, 2);
+  printPoda(files, 3, 3);
+  printPoda(files, 3, 4);
 
   return 0;
 }

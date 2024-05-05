@@ -8,17 +8,17 @@
  * @author:  Thomas Edward Bradley
  * @email:   alu0101408248@ull.edu.es
  * @date:    07.may.2024
- * @brief:   Program that solves titular problem. Here we define the GraspSolution class
+ * @brief:   Program that solves titular problem. Here we define the PodaSolution class
  */
 
-#include "graspsolution.h"
+#include "podasolution.h"
 
 /**
  * @desc Evaluates the MDP problem using a Grasp algorithm 
  * @param {int} m Number of points to include in solution
  * @returns {float} Resulting distance from found solution
 */
-float GraspSolution::evaluate(int m) {
+float PodaSolution::evaluate(int m) {
   std::vector<int> bestS{S_};
   int counter{0};
   float newVal{0}, min{0};
@@ -43,7 +43,7 @@ float GraspSolution::evaluate(int m) {
  * @desc Constructive algorithm for Grasp
  * @param {int} m Number of points to include in our solution
 */
-void GraspSolution::construct(int m) {
+void PodaSolution::construct(int m) {
   int count{0};
   setupS();
   std::vector<float> center = getCenter();
@@ -78,7 +78,7 @@ void GraspSolution::construct(int m) {
  * @desc Gets the center position of our group of points
  * @returns {std::vector<float>} Coordinates to the center position of the grouping
 */
-std::vector<float> GraspSolution::getCenter() {
+std::vector<float> PodaSolution::getCenter() {
   std::vector<float> result;
   for (int i{0}; i < dimension_; ++i) {
     float currentSum{0.0};
@@ -94,7 +94,7 @@ std::vector<float> GraspSolution::getCenter() {
  * @desc Gets the center position of our group of points
  * @returns {std::vector<float>} Coordinates to the center position of the grouping
 */
-std::vector<float> GraspSolution::getCenterOfSolution() {
+std::vector<float> PodaSolution::getCenterOfSolution() {
   std::vector<float> result;
   for (int i{0}; i < dimension_; ++i) {
     float currentSum{0.0};
@@ -115,7 +115,7 @@ std::vector<float> GraspSolution::getCenterOfSolution() {
  * @param {std::vector<int>} arr Array to check for biggest element in
  * @return {int} Index of biggest element
 */
-int GraspSolution::indexOfBiggest(std::vector<float> arr) {
+int PodaSolution::indexOfBiggest(std::vector<float> arr) {
   int max{0}, maxIndex{0};
   for (int i{0}; i < int(arr.size()); ++i) {
     if (arr[i] > max) {
@@ -131,13 +131,13 @@ int GraspSolution::indexOfBiggest(std::vector<float> arr) {
  * @param {int} max Highets number that can be generated
  * @return {int} Randomly generated number
 */
-int GraspSolution::randomInt(int max) {
+int PodaSolution::randomInt(int max) {
   return rand() % (max + 1);
 }
 
 /**
  * @desc
 */
-int GraspSolution::getCandidateSize() {
+int PodaSolution::getCandidateSize() {
   return candidateSize_;
 }
