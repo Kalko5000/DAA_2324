@@ -15,11 +15,14 @@
 
 class PodaSolution : public Solution {
  public:
-  PodaSolution(std::string nombre_fichero, int candidateSize) : Solution(nombre_fichero) {
+  PodaSolution(std::string nombre_fichero, int candidateSize, bool useGrasp) : Solution(nombre_fichero) {
     candidateSize_ = candidateSize;
+    useGrasp_ = useGrasp; 
+    nodos_generados_ = 0;
   };
   float evaluate(int m);
-  void construct(int m);
+  void graspBuild(int m);
+  void greedyBuild(int m);
   std::vector<float> getCenter();
   std::vector<float> getCenterOfSolution();
   int indexOfBiggest(std::vector<float> arr);
@@ -27,4 +30,6 @@ class PodaSolution : public Solution {
   int getCandidateSize();
  private:
   int candidateSize_;
+  bool useGrasp_;
+  int nodos_generados_;
 };

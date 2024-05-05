@@ -97,10 +97,10 @@ void printGrasp(std::vector<std::pair<std::string, std::string>> files, int cand
   int counter{1};
   std::cout << "-- GRASP --" << std::endl;
   std::cout << std::setw(20) << "Problema" << std::setw(5) 
-  << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(11) << "z" 
+  << "n" << std::setw(5) << "K" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(11) << "z" 
   << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
 
-  for (int i{0}; i < int(files.size()); ++i) {
+  for (int i{0}; i < int(files.size()); ++i) { // Add way to get Iter
     GraspSolution grasp(files[i].first, candidates);
     auto start = std::chrono::high_resolution_clock::now();
     float distance = grasp.evaluate(m);
@@ -121,24 +121,25 @@ void printGrasp(std::vector<std::pair<std::string, std::string>> files, int cand
  * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
  * @param {int} m Number of points to include in solution
 */
-void printPoda(std::vector<std::pair<std::string, std::string>> files, int candidates, int m) {
+void printPoda(std::vector<std::pair<std::string, std::string>> files, int m, bool useGrasp, int candidates = 0) {
   int counter{1};
   std::cout << "-- RAMIFICACIÓN Y PODA --" << std::endl;
   std::cout << std::setw(20) << "Problema" << std::setw(5) 
-  << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(11) << "z" 
-  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
+  << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(11) << "z" 
+  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::setw(17) << "nodos generados" << std::endl;
 
   for (int i{0}; i < int(files.size()); ++i) {
-    PodaSolution poda(files[i].first, candidates);
+    PodaSolution poda(files[i].first, candidates, useGrasp);
     auto start = std::chrono::high_resolution_clock::now();
     float distance = poda.evaluate(m);
     auto end = std::chrono::high_resolution_clock::now();
     
     std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
     << poda.getSize() << std::setw(5) << poda.getDimension() << std::setw(5) 
-    << m << std::setw(7) << poda.getCandidateSize() << std::setw(11) << distance << std::setw(32) 
+    << m << std::setw(11) << distance << std::setw(32) 
     << poda.getS() << std::setw(15)
-    << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+    << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() 
+    << std::setw(17) << 0 << std::endl;
     counter++;
   }
   std::cout << std::endl;
@@ -181,14 +182,21 @@ int main(int argc, char* argv []) {
   printVoraz(files, 2);
   printVoraz(files, 3);
   printVoraz(files, 4);
+  printVoraz(files, 5);
 
   printGrasp(files, 3, 2);
   printGrasp(files, 3, 3);
   printGrasp(files, 3, 4);
+  printGrasp(files, 3, 5);
 
-  printPoda(files, 3, 2);
-  printPoda(files, 3, 3);
-  printPoda(files, 3, 4);
+  printPoda(files, 2, false);
+  printPoda(files, 3, false);
+  printPoda(files, 4, false);
+  printPoda(files, 5, false);
+  printPoda(files, 2, true, 3);
+  printPoda(files, 3, true, 3);
+  printPoda(files, 4, true, 3);
+  printPoda(files, 5, true, 3);
 
   return 0;
 }

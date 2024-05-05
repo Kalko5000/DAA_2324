@@ -85,7 +85,7 @@ float Solution::getTotalDistance(std::vector<int> S) {
       totalSum += distanceTo(puntos_[indexList[i]], puntos_[indexList[j]]);
     }
   }
-  totalSum += distanceTo(puntos_[indexList[int(indexList.size() - 1)]], puntos_[indexList[0]]);
+  // totalSum += distanceTo(puntos_[indexList[int(indexList.size() - 1)]], puntos_[indexList[0]]);
   return totalSum;
 }
 

@@ -25,7 +25,11 @@ float PodaSolution::evaluate(int m) {
   srand(time(0)); // Seed for random number
 
   do {  // Local Optimal Search method implementations can be found in the base class -> Solution
-    construct(m);
+    if (useGrasp_) {
+      graspBuild(m);
+    } else {
+      greedyBuild(m);
+    }
     std::vector<int> S = tabuSearch(S_);  // Can swap out to localSearch
     newVal = getTotalDistance(S);
     if (newVal > min) {
@@ -39,11 +43,7 @@ float PodaSolution::evaluate(int m) {
   return min;
 }
 
-/**
- * @desc Constructive algorithm for Grasp
- * @param {int} m Number of points to include in our solution
-*/
-void PodaSolution::construct(int m) {
+void PodaSolution::graspBuild(int m) {
   int count{0};
   setupS();
   std::vector<float> center = getCenter();
@@ -67,6 +67,35 @@ void PodaSolution::construct(int m) {
     }
     int index = randomInt(int(candidatesIndex.size()) - 1);
     S_[candidatesIndex[index]] = 1;
+    center = getCenterOfSolution(); // Update center based off points in solution
+    count++;
+  } while (count < m);
+
+  return;
+}
+
+void PodaSolution::greedyBuild(int m) {
+  int count{0};
+  setupS();
+  std::vector<float> center = getCenter();
+
+  do {
+    float farthestPointDistance = 0.0;
+    int farthestPointIndex = -1;
+    for (int i{0}; i < size_; ++i) {
+      if (S_[i] == 1) continue;
+      if (farthestPointIndex == -1) { // Index not setup yet
+        farthestPointIndex = i;
+        farthestPointDistance = distanceTo(puntos_[i], center);
+        continue;
+      }
+      float newDistance = distanceTo(puntos_[i], center);
+      if (newDistance > farthestPointDistance) { // Update if distance from center is greater (maximize)
+        farthestPointIndex = i;
+        farthestPointDistance = newDistance;
+      }
+    }
+    S_[farthestPointIndex] = 1;
     center = getCenterOfSolution(); // Update center based off points in solution
     count++;
   } while (count < m);
