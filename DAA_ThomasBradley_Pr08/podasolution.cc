@@ -30,7 +30,7 @@ float PodaSolution::evaluate(int m) {
   cota_ = getTotalDistance(S_);
   // std::cout << cota_ << " ";
   nodos_generados_ = 1;
-  depthSearch({}, m, 0);
+  widthSearch({}, m, 0);
   // std::cout << cota_ << std::endl;
 
   return cota_;
@@ -125,11 +125,21 @@ void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
   nodos_generados_ += 2;
   // std::cout << val0 << " and " << val1 << " bigger than " << cota_ << std::endl;
 
-  if (val0 >= val1 && val0 > cota_) {
+  if (val0 >= val1 && val0 > cota_) { // Evaluate adding a 0 first
     widthSearch(push0, m, pointCount);
-  } else if (val1 > cota_) {
+    if (val1 > cota_) {
+      widthSearch(push1, m, pointCount + 1);
+    }
+  } else if (val1 > cota_) {  // EValuate adding a 1 first
     widthSearch(push1, m, pointCount + 1);
+    if (val0 > cota_) {
+      widthSearch(push0, m, pointCount);
+    }
   }
+
+  // ENABLE ONLY THE FOLLOWING TO EXPLORE ALL NODES
+  // widthSearch(push0, m, pointCount);
+  // widthSearch(push1, m, pointCount + 1);
   
   return;
 }
