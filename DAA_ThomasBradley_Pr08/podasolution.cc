@@ -29,7 +29,8 @@ float PodaSolution::evaluate(int m) {
   }
   cota_ = getTotalDistance(S_);
   // std::cout << cota_ << " ";
-  widthSearch({}, m, 0);
+  nodos_generados_ = 1;
+  depthSearch({}, m, 0);
   // std::cout << cota_ << std::endl;
 
   return cota_;
@@ -105,8 +106,6 @@ void PodaSolution::greedyBuild(int m) {
  * @desc
 */
 void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
-  nodos_generados_++;
-
   if (int(S.size()) == size_ || pointCount == m) { // A valid solution has been reached
     while (int(S.size()) < size_) { // If all points added, fill in extra slots
       S.push_back(0);
@@ -123,6 +122,7 @@ void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
   push0.push_back(0);
   push1.push_back(1);
   float val0{getUpperQuota(push0, m, pointCount)}, val1{getUpperQuota(push1, m, pointCount + 1)};
+  nodos_generados_ += 2;
   // std::cout << val0 << " and " << val1 << " bigger than " << cota_ << std::endl;
 
   if (val0 >= val1 && val0 > cota_) {
@@ -131,6 +131,40 @@ void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
     widthSearch(push1, m, pointCount + 1);
   }
   
+  return;
+}
+
+void PodaSolution::depthSearch(std::vector<int> S, int m, int pointCount) {
+  if (int(S.size()) == size_ || pointCount == m) { // A valid solution has been reached
+    while (int(S.size()) < size_) { // If all points added, fill in extra slots
+      S.push_back(0);
+    }
+    float newVal = getTotalDistance(S);
+    if (newVal > getTotalDistance(S_)) {
+      cota_ = newVal;
+      S_ = S;
+    }
+    return;
+  }
+
+  // First case to evaluate
+  std::vector<int> push0{S};
+  push0.push_back(0);
+  float val0{getUpperQuota(push0, m, pointCount)};
+  if (val0 > cota_) {
+    nodos_generados_++;
+    widthSearch(push0, m, pointCount);
+  }
+  
+  // Second case to evaluate
+  std::vector<int> push1{S};
+  push1.push_back(1);
+  float val1{getUpperQuota(push1, m, pointCount + 1)};
+  if (val1 > cota_) {
+    nodos_generados_++;
+    widthSearch(push1, m, pointCount + 1);
+  }
+
   return;
 }
 
