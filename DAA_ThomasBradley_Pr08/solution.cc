@@ -137,8 +137,11 @@ int Solution::getDimension() {
 std::string Solution::getS() {
   std::string result{""};
   for (int i{0}; i < int(S_.size()); ++i) {
-    result += std::to_string(S_[i]);
+    if (S_[i] == 1) result += std::to_string(i + 1) + ",";
+    // result += std::to_string(S_[i]);
   }
+  result.pop_back();
+  // result.pop_back();
   return result;
 }
 

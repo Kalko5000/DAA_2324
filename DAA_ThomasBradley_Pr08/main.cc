@@ -71,7 +71,7 @@ void printVoraz(std::vector<std::pair<std::string, std::string>> files, int m) {
   std::cout << "-- VORAZ --" << std::endl;
   std::cout << std::setw(20) << "Problema" << std::setw(5) 
   << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(11) << "z" 
-  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
+  << std::setw(20) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
 
   for (int i{0}; i < int(files.size()); ++i) {
     VorazSolution voraz(files[i].first);
@@ -81,7 +81,7 @@ void printVoraz(std::vector<std::pair<std::string, std::string>> files, int m) {
     
     std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
     << voraz.getSize() << std::setw(5) << voraz.getDimension() << std::setw(5) 
-    << m << std::setw(11) << distance << std::setw(32) << voraz.getS() << std::setw(15)
+    << m << std::setw(11) << distance << std::setw(20) << voraz.getS() << std::setw(15)
     << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
     counter++;
   }
@@ -98,7 +98,7 @@ void printGrasp(std::vector<std::pair<std::string, std::string>> files, int cand
   std::cout << "-- GRASP --" << std::endl;
   std::cout << std::setw(20) << "Problema" << std::setw(5) 
   << "n" << std::setw(5) << "K" << std::setw(5) << "m" << std::setw(7) << "|LRC|" << std::setw(11) << "z" 
-  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
+  << std::setw(20) << "s" << std::setw(15) << "CPU(ms)" << std::endl;
 
   for (int i{0}; i < int(files.size()); ++i) { // Add way to get Iter
     GraspSolution grasp(files[i].first, candidates);
@@ -108,7 +108,7 @@ void printGrasp(std::vector<std::pair<std::string, std::string>> files, int cand
     
     std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
     << grasp.getSize() << std::setw(5) << grasp.getDimension() << std::setw(5) 
-    << m << std::setw(7) << grasp.getCandidateSize() << std::setw(11) << distance << std::setw(32) 
+    << m << std::setw(7) << grasp.getCandidateSize() << std::setw(11) << distance << std::setw(20) 
     << grasp.getS() << std::setw(15)
     << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
     counter++;
@@ -126,7 +126,7 @@ void printPoda(std::vector<std::pair<std::string, std::string>> files, int m, bo
   std::cout << "-- RAMIFICACIÓN Y PODA --" << std::endl;
   std::cout << std::setw(20) << "Problema" << std::setw(5) 
   << "n" << std::setw(5) << "k" << std::setw(5) << "m" << std::setw(11) << "z" 
-  << std::setw(32) << "s" << std::setw(15) << "CPU(ms)" << std::setw(17) << "nodos generados" << std::endl;
+  << std::setw(20) << "s" << std::setw(15) << "CPU(ms)" << std::setw(17) << "nodos generados" << std::endl;
 
   for (int i{0}; i < int(files.size()); ++i) {
     PodaSolution poda(files[i].first, candidates, useGrasp);
@@ -136,7 +136,7 @@ void printPoda(std::vector<std::pair<std::string, std::string>> files, int m, bo
     
     std::cout << std::setw(20) << std::string(files[i].second) << std::setw(5) 
     << poda.getSize() << std::setw(5) << poda.getDimension() << std::setw(5) 
-    << m << std::setw(11) << distance << std::setw(32) 
+    << m << std::setw(11) << distance << std::setw(20) 
     << poda.getS() << std::setw(15)
     << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() 
     << std::setw(17) << poda.getGeneratedNodes() << std::endl;
