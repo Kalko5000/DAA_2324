@@ -1,0 +1,121 @@
+    \section{Algoritmo constructivo voraz}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Un constructivo voraz}
+El centro de gravedad de un conjunto de elementos $X = \{s_i: i \in I\}$ con $I \subseteq \{1, 2, \ldots, n\}$ se define como
+%%%%%%%%%%%%%%%%%%
+\[
+    centro(X) = \frac{1}{|X|}\left(\sum_{i \in I} s_{i1}, \sum_{i \in I} s_{i2}, \ldots, \sum_{i \in I} s_{iK}\right)
+\]
+%%%%%%%%%%%%%%%%%%
+Un algoritmo constructivo voraz para el {\em Maximum diversity problem} parte del subconjunto $S$ formado por el elemento m\'as alejado del centro de gravedad de $\mathbb{S}$. A continuaci\'on, a\~nade iterativamente a este subconjunto el elemento m\'as alejado de su centro de gravedad hasta que $S$ tenga $m$ elementos. El pseudoc\'odigo de este algoritmo se muestra en la figura \ref{voraz}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h!]
+%{\small
+ \hrule \
+ {\bf\small Algoritmo constructivo voraz}
+ \hrule
+\begin{center}
+\begin{tabbing}
+\  1: $Elem = \mathbb{S}$;\\
+\  2: $S = \emptyset$;\\
+\  3: Obtener $s_c = centro(Elem);\\
+\  4: {\bf rep}\={\bf eat}\\
+\  5: \> Obtener el elemento $s_{*} \in Elem$ m\a'as alejado de $s_c$$;\\
+\  6: \> $S = S \cup \{s_*\}$;\\
+\  7: \> $Elem = Elem - \{s_*\}$;\\
+\  8: \> Obtener $s_c = centro(S);\\
+\  9: {\bf until} ($|S| = m$)\\
+\ 10: Devolver $S$;
+\end{tabbing}
+\end{center}
+\hrule
+%}
+\caption{Algoritmo constructivo voraz}
+\label{voraz}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Búsqueda Local}
+
+A diferencia de la práctica previa, solo se implemento una búsqueda local para esta ya que solo hacia falta una. El funcionamiento básico del cúal se explicara a continuación:
+\\
+\begin{itemize}
+  \item Guardamos la mejor solucion encontrada hasta el momento y el valor maximo encontrado en la última iteración (ambas se inicializan con la solución inicial generada por greedy o voraz)
+  \item Entramos en un bucle do-while del que no salimos hasta que el máximo de la iteración actual no es mayor que el de la iteración previa
+  \item Anidamos dos bucles for para ir recorriendo todos los puntos dentro de nuestra solución
+  \item Si los dos puntos elegidos son distintos (i != j \&\& ambos no son ni 0, ni 1), se intercambian y se comprueba si la nueva distancia es mayor o no que la almacenada como máximo (en el caso de que lo es, este se guarda como la nueva solución máxima)
+  \item Al acabar los bucles for, vemos si efectivamente se ha producido una mejor solución (en el caso de que no, hemos encontrado un optimo local y este se devuelve, en el caso de que si, actualziamos el máximo previo y reiniciamos los bucles)
+\end{itemize}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{GRASP}
+Funciona igual que el algoritmo voraz, pero ahora con la diferencia de que vamos a formar una lista con los n mejores candidatos a ser insertados en la solución, y de estas elegimos una al azar (hasta que la solución contenga m puntos).
+\\
+\\
+Para el algoritmo GRASP empleado, tras experimentar con varios tanmaños de instancias (veces que corremos la fase constructiva) opte por 10 ya que era un buen balance entre buenos resultados y una ejecución rápida. 
+
+\begin{figure}[h!]
+{\small
+ \hrule \
+ {\bf\small Algoritmo constructivo grasp}
+ \hrule
+\begin{center}
+\begin{tabbing}
+\textbf{Procedure} \= \textbf{GRASP} \\
+\textbf{Begin} \\
+\> Preprocesamiento \\
+\> \textbf{Repeat} \\
+\> \> Fase Constructiva(Solución); Usando para ello una lista de n candidatos \\
+\> \> PostProcesamiento(Solución); Busqueda local / tabú para mejorar solución \\
+\> \> Actualizar(Solución, MejorSolución); Si es mejor almacenamos la solución mejorada \\
+\> \textbf{Until} (Se halla llegado a las iteraciones deseadas); \\
+\textbf{End.} \\
+\end{tabbing}
+\end{center}
+\hrule
+}
+\caption{Algoritmo constructivo grasp}
+\label{constructivo}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Búsqueda Tabú}
+
+La busqueda tabú se parece bastante a la búsqueda local por lo que no volveré a comentar aquellos detalles que comparten. Dicho esto, si que haré mención de todo ello en lo que se diferencian: 
+\begin{itemize}
+  \item \textbf{Condición de parada} - La condición de parada de nuestro bucle do-while pasa a ser un contador que sale del bucle cuando alcanza un cierto número de iteraciones. De manera parecida a como se hace en el algoritmo general de GRASP.
+  \item \textbf{Soluciones peores} - Como nuestra solución puede empeorar, ahora tenemos que guardar la mejor solución actual (no solo la mejor de todos los casos) en cada iteración. De modo que tenemos la mejor solución de todas (la cual solo sirve para actualizarse con mejores valores y ser devuelto al final) y la mejor de la iteración actual (la que usaremos en los cálculos (usada en los calculos actuales y para pasar la solución de la iteración previa a la siguiente, despues de la cual se devolvera a su estado inicial)
+  \item \textbf{Bloqueo de intercambios} - Ahora también tenemos memoria a corto plazo por lo que no podemos volver a realizar un intercambio hasta que hayan pasado 3 turnos de la última vez que lo hicimos. Para esto simplemente hace falta comprobar despues de verificar que son puntos distintos que no son iguales a ninguno de los movimientos ilegales (guardamos los movimientos en un vector swap, que no se mira hatsa que tiene tamaño 1). Para que funcione correctamente tambien tenemos que almacenar los valores de la mejor i y j actual para meterlos en swaps al final de los for (se quita el primer elemento en caso de que swaps tenga un tamaño mayor que 3, garantizando que solo se bloquea durante 3 turnos)
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ramificación y Poda}
+
+Para el caso de la Ramificación y Poda tenemos que recorrer el grafo de soluciones parciales (ramificación) hasta que lleguemos a una solución parcial que cumple con el número m de puntos que debe tener o es una hoja, que quiere decir se ha llegado al final de una rama del arbol (podar).
+\\
+\\
+Debemos partir de una solución inicial, la cual se puede generar tanto con un algoritmo voraz como un GRASP. Tras esto cogemos el valor de las distancias sumadas y la establecemos como la cota inferior (es decir, que para explorar un nodo en el arbol este debe poseer una cota supeior mayor que la cota inferior que acabamos de establecer).
+\\
+\\
+Además se pueden emplear distintas estrategias de ramificación. En particular para este trabajo se usa la tradicional (donde miramos los nodos a explorar y entramos en aquel que tenga mayor cota superior) o una enfocada a una búsqueda en profundidad (donde simplemente vamos explorando el primer nodo que cumple la condición de la cota inferior).
+\\
+\\
+He de mencionar tambien que como guardo mi solución en un vecotr binario, en cada paso solo se pueden generar dos nuevos nodos (agregando un 0 a nuestra solución parcial, o agregando un 1) lo que simplifica bastante la implementación y me permite hacer un if donde escojo la primera opción o la segunda en lugar de tener que demorar el tiempo en orgnizarlos. Además es por esto que utilizo recursividad para explorar el arbol en lugar de exploración de nodos (aunque se puede explicar como tal para un comprensión más facil) ya que no lo vi necesario en el diseño.
+\\
+\\
+Lo último que me gustaria mencionar es que no supe como implementar correctamente el cálculo de la cota superior por lo que de momento simplemente hace un constructivo voraz con los elementos restantes que no han sido decididos por la exploración de los nodos. Por esta razón el algoritmo no me funciona muy bien cuando se ejecuta con un algoritmo greedy como solución inicial.
+\\
+\\
+A continuación esta un pseudocódigo que muestra el proceso básico de la búsqueda para el algoritmo:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.8]{images/RamYPod.png}
+    \caption{Pseudocódigo para el algorítmo de ramificación y poda usado en un articulo de Elsevier, el cual se incluye en la bibliografía por si resulta de interés}
+    \label{fig:RYP}
+\end{figure}

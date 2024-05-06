@@ -1,0 +1,314 @@
+\documentclass[spanish,a4paper,12pt,oneside]{extreport}
+
+\usepackage[dvips]{graphicx}
+\usepackage[dvips]{epsfig}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{alltt}
+
+\usepackage[ruled,vlined,commentsnumbered,linesnumbered,inoutnumbered,titlenotnumbered,noend]{algorithm2e}
+\SetKwRepeat{Do}{do}{while}
+
+\usepackage{multirow}
+\usepackage{array} 
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{bigstrut}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{chngpage}
+\usepackage{float}
+\usepackage{enumitem,lipsum}
+\usepackage{graphicx}
+\usepackage{lscape}
+\usepackage{microtype}
+\usepackage{natbib}
+\usepackage{pdflscape}
+\usepackage{rotating}
+\usepackage{subcaption}
+\usepackage{ctable}
+\usepackage[hidelinks]{hyperref}
+%\usepackage{enumerate}
+\usepackage{gensymb}
+\usepackage{eurosym}
+\usepackage{xcolor}
+\usepackage{tabu}
+
+\usepackage{lineno}
+%\\linenumbers
+%\setlength\linenumbersep{5pt}
+%\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
+
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+
+\newenvironment{sourcecode}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item\scriptsize\bfseries}
+{\end{list}}
+
+\newenvironment{littlesourcecode}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item\tiny\bfseries}
+{\end{list}}
+
+\newenvironment{summary}
+{\par\noindent\begin{center}\textbf{Abstract}\end{center}\begin{itshape}\par\noindent}
+{\end{itshape}}
+
+\newenvironment{keywords}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Keywords:]}
+{\end{list}}
+
+\newenvironment{palabrasClave}
+{\begin{list}{}{\setlength{\leftmargin}{1em}}\item[\hskip\labelsep \bfseries Palabras clave:]}
+{\end{list}}
+
+\usepackage{bera}% optional: just to have a nice mono-spaced font
+\usepackage{listings}
+\usepackage{xcolor}
+
+\colorlet{punct}{red!60!black}
+\definecolor{background}{HTML}{EEEEEE}
+\definecolor{delim}{RGB}{20,105,176}
+\colorlet{numb}{magenta!60!black}
+
+\lstdefinelanguage{json}{
+    basicstyle=\normalfont\ttfamily,
+    numbers=left,
+    numberstyle=\scriptsize,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    backgroundcolor=\color{background},
+    literate=
+     *{0}{{{\color{numb}0}}}{1}
+      {1}{{{\color{numb}1}}}{1}
+      {2}{{{\color{numb}2}}}{1}
+      {3}{{{\color{numb}3}}}{1}
+      {4}{{{\color{numb}4}}}{1}
+      {5}{{{\color{numb}5}}}{1}
+      {6}{{{\color{numb}6}}}{1}
+      {7}{{{\color{numb}7}}}{1}
+      {8}{{{\color{numb}8}}}{1}
+      {9}{{{\color{numb}9}}}{1}
+      {:}{{{\color{punct}{:}}}}{1}
+      {,}{{{\color{punct}{,}}}}{1}
+      {\{}{{{\color{delim}{\{}}}}{1}
+      {\}}{{{\color{delim}{\}}}}}{1}
+      {[}{{{\color{delim}{[}}}}{1}
+      {]}{{{\color{delim}{]}}}}{1},
+}
+
+\begin{document}
+
+\renewcommand\listtablename{Índice de Tablas}    
+\renewcommand\listfigurename{Índice de Figuras}    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% First Page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}
+\thispagestyle{empty}
+
+
+\newcommand{\HRule}{\rule{\linewidth}{1mm}}
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{0mm}
+
+\vspace*{\stretch{0.5}}
+
+\begin{center}
+\includegraphics[scale=0.8]{images/escuela-ingenieria-tecnologia-original}\\[10mm]
+{\Huge Informe de la Práctica 8 de DAA \\[3mm] Curso 2023-2024}
+\end{center}
+
+\HRule
+\begin{flushright}
+        {\Huge \itshape B\&B \\ Maximum Diversity Problem} \\[5mm]
+        {\Large Thomas Edward Bradley} \\[5mm]
+
+
+\end{flushright}
+\HRule
+\vspace*{\stretch{2}}
+\begin{center}
+  \Large La Laguna, \today
+\end{center}
+
+\setlength{\parindent}{5mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+
+{ \flushright
+
+\begin{LARGE}
+Agradecimientos
+\end{LARGE}
+
+\hspace{3mm}
+
+\begin{large}
+Maria Belen Melian Batista
+
+\bigskip
+
+\end{large}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+
+\bigskip
+\begin{LARGE}
+Licencia
+\end{LARGE}
+
+\begin{center}
+\includegraphics[scale=1.8]{images/by-nc_88x31}\\[5mm]
+\end{center}
+
+\begin{large}
+© Esta obra está bajo una licencia de Creative Commons Reconocimiento-NoComercial 4.0 Internacional.
+\end{large}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage 
+\thispagestyle{empty}
+
+\begin{abstract}
+{\em
+
+El siguiente informe viene a redactar los conceptos, pseudocoódigos y resultados obtenidos al evaluar distribuciones de puntos en espacios de varias dimensiones a traves de distintos algoritmos (Voraz, Grasp y Ramificación/Poda). Además se han implementado dos busquedas (una local y una tabu) para mejorar los resultados obtenidos en el caso de desearlo.
+}
+
+\bigskip
+
+\begin{palabrasClave}
+Maximum Diversity Problem, Optimization, Point, 2D-Space, 3D-Space, Greedy, GRASP, Local Search, Tabu Search, Branching / Pruning. 
+\end{palabrasClave}
+
+
+\end{summary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{myheadings} %my head defined by markboth or markright
+% No funciona bien \markboth sin "twoside" en \documentclass, pero al
+% ponerlo se dan un montÃ³n de errores de underfull \vbox, con lo que no se
+% ha puesto.
+
+
+%%Aqui debería poner el nombre del proyecto pero, como es muy grande no cabe y se ve feo en el PDF
+\markboth{xxxxx}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Numeracion en romanos
+\renewcommand{\thepage}{\roman{page}}
+\setcounter{page}{1}
+\pagestyle{plain} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+
+\listoffigures
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+
+\listoftables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+
+%Numeracion a partir del capitulo I
+\renewcommand{\thepage}{\arabic{page}}
+\setcounter{page}{1}
+\pagestyle{plain}
+
+\chapter{\LARGE Introducción}
+\label{chapter:intro}
+
+\input{cap1.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE B\&B - Maximum Diversity Problem}
+\label{chapter:Problema}
+
+\input{cap2.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Algoritmos}
+\label{chapter:algoritmos}
+
+\input{cap3.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Experimentos y resultados computacionales}
+\label{chapter:resultados}
+
+\input{cap4.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+\chapter{\LARGE Conclusiones y trabajo futuro}
+\label{chapter:conclusiones}
+
+\input{cap5.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage{\pagestyle{empty}}
+\thispagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newpage{\pagestyle{empty}\cleardoublepage}
+%\thispagestyle{empty}
+
+%\begin{appendix}
+
+%\chapter{\LARGE Título del Apéndice 1}
+%\label{appendix:1}
+%\input{apendice1.tex}
+
+%\chapter{\LARGE Título del Apéndice 2}
+%\label{appendix:2}
+%\input{apendice2.tex}
+
+%\end{appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+\href{https://github.com/Kalko5000/DAA_2324}{Repositorio de Código}  
+\\
+\href{https://campusingenieriaytecnologia2324.ull.es/pluginfile.php/34118/mod_folder/content/0/Paper_Mart%C3%AD_Gallego_Duarte_Maximum_Diversity_Problem_2010.pdf?forcedownload=1}{Ramificación y Poda: explicación del cálculo de cota superior} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

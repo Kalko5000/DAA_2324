@@ -31,13 +31,15 @@ float PodaSolution::evaluate(int m) {
   // std::cout << cota_ << " ";
   nodos_generados_ = 1;
   widthSearch({}, m, 0);
+  // depthSearch({}, m, 0);
   // std::cout << cota_ << std::endl;
 
   return cota_;
 }
 
 /**
- * @desc
+ * @desc Build an inciial solution using a GRASP algorithm
+ * @param {int} m Number of points allowed in solution
 */
 void PodaSolution::graspBuild(int m) {
   int count{0};
@@ -71,7 +73,8 @@ void PodaSolution::graspBuild(int m) {
 }
 
 /**
- * @desc
+ * @desc Build an inciial solution using a Greedy algorithm
+ * @param {int} m Number of points allowed in solution
 */
 void PodaSolution::greedyBuild(int m) {
   int count{0};
@@ -103,7 +106,10 @@ void PodaSolution::greedyBuild(int m) {
 }
 
 /**
- * @desc
+ * @desc Uses a branching strategy that involves visiting the node with the highest upper quote
+ * @param {std::vector<int>} S Partial solution to evaluate
+ * @param {int} m Number of points allowed in solution
+ * @param {int} pointCount Number of points in current partial solution
 */
 void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
   if (int(S.size()) == size_ || pointCount == m) { // A valid solution has been reached
@@ -144,6 +150,12 @@ void PodaSolution::widthSearch(std::vector<int> S, int m, int pointCount) {
   return;
 }
 
+/**
+ * @desc Uses a branching strategy that involves visiting the deepest node still over the lower quota
+ * @param {std::vector<int>} S Partial solution to evaluate
+ * @param {int} m Number of points allowed in solution
+ * @param {int} pointCount Number of points in current partial solution
+*/
 void PodaSolution::depthSearch(std::vector<int> S, int m, int pointCount) {
   if (int(S.size()) == size_ || pointCount == m) { // A valid solution has been reached
     while (int(S.size()) < size_) { // If all points added, fill in extra slots
@@ -215,7 +227,10 @@ std::vector<float> PodaSolution::getCenterOfSolution(std::vector<int> S) {
 }
 
 /**
- * @desc
+ * @desc Calculates the upper quota of a partial solution
+ * @param {std::vector<int>} S Partial solution to evaluate
+ * @param {int} m Number of points allowed in solution
+ * @param {int} pointCount Number of points in current partial solution
 */
 float PodaSolution::getUpperQuota(std::vector<int> S, int m, int pointCount) {
   int initialSize = S.size();
@@ -225,7 +240,13 @@ float PodaSolution::getUpperQuota(std::vector<int> S, int m, int pointCount) {
     S.push_back(0);
   }
 
-  std::vector<float> center = getCenterOfSolution(S);
+  std::vector<float> center = {};
+  if (pointCount == 0) {  // Nothing in solution, get center of all points
+    center = getCenter();
+  } else {  // Values in solution, get center point of solution
+    center = getCenterOfSolution(S);
+  }
+
   while (pointCount < m) {
     float farthestPointDistance = 0.0;
     int farthestPointIndex = -1;
@@ -276,14 +297,16 @@ int PodaSolution::randomInt(int max) {
 }
 
 /**
- * @desc
+ * @desc Getter for candidateSize_
+ * @returns {int} candidateSize_
 */
 int PodaSolution::getCandidateSize() {
   return candidateSize_;
 }
 
 /**
- * @desc
+ * @desc Getter for nodos_generados_
+ * @returns {int} nodos_generados_
 */
 int PodaSolution::getGeneratedNodes() {
   return nodos_generados_;

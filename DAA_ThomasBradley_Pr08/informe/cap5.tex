@@ -1,0 +1,8 @@
+Si modificamos el algoritmo de ramificación y poda para evaluar todos los posibles caminos y soluciones. Vemos que el GRASP acierta en los mismos (ya sea por búsqueda local o búsqeuda tabú). De las dos opciones disponibles para ello, la búsqueda local produce los mismos resultados en menos tiempo por lo que dado el analísis de los algoritmos desarrollados es el más eficiente, en segundo lugar siendo la búsqueda tabú que obtiene los mismos resultados pero tardando más tiempo. Es por esto que el GRASP con búsqueda local es el mejor algoritmo para la precisión del resultado.
+\\
+\\
+En cuanto a los algoritmos de ramificación y poda, las dos estrategias de ramificación producen resultados bastante similares. Sin embargo, la estrategia de ramificación que expande
+el nodo con cota superior más pequeña resulta ser el más eficaz en tiempo (analizando los casos con cota inferior inicial generada por GRASP ya que son más precisos) por lo que resultaria el más eficaz. Si analizamos los tiempos y los resultados resulta que el algoritmo de ramificación sirve como un buen punto medio entre el voraz y el GRASP (tanto en tiempo como resultados). Incluso tras realizar el informe implemente un pequeño cambio al código que pilla el centro del conjunto dentro del cálculo de la cota superior, el cual mejora la calidad del resultado final sin realmente emperorar el tiempo, lo cual solidifica su posición como el algoritmo más eficiente globalmente (teniendo en cuenta la exactitud del resultado y el tiempo a la vez)
+\\
+\\
+Gracias a la práctica también puedo concluir que en el caso de implementar un algoritmo que usa una búsqueda por las ramas de un árbol, conviene guardar el resultado dentro de un vector binaria dado que simplifica bastante el proceso de ramificación. 

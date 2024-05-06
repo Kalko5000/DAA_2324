@@ -1,0 +1,636 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Constructivo voraz}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{ccccccc}
+      \multicolumn{7}{c}{Voraz, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 11.8592 & 7,9 & 28 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 13.2732 & 9,12 & 19 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 8.51033 & 18,19 & 20 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 11.8003 & 13,14 & 23 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 11.6571 & 9,28 & 27 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 13.0737 & 7,17 & 31 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Voraz, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{ccccccc}
+      \multicolumn{7}{c}{Voraz, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 25.7262 & 4,7,9 & 22 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 30.3241 & 5,9,12 & 25 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 21.9961 & 9,18,19 & 28 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 30.8727 & 8,13,14 & 33 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 28.9443 & 2,9,28 & 40 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 33.8423 & 7,17,24 & 45 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Voraz, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{ccccccc}
+      \multicolumn{7}{c}{Voraz, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 48.4139 & 4,7,9,11 & 29 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 59.7638 & 5,9,11,12 & 33 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 39.5682 & 3,9,18,19 & 37 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 56.5347 & 3,8,13,14 & 42 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 52.7712 & 2,9,11,28 & 53 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 63.5184 & 7,14,17,24 & 60 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Voraz, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{ccccccc}
+      \multicolumn{7}{c}{Voraz, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 73.5619 & 2,4,7,9,11 & 35 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 94.7487 & 5,9,11,12,14 & 41 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 61.2393 & 3,9,13,18,19 & 46 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 92.8298 & 3,8,13,14,17 & 52 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 80.9102 & 2,9,11,13,28 & 65 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 99.5088 & 7,14,15,17,24 & 75 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Voraz, m = 5. Tabla de resultados}
+   \end{table}
+
+
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{GRASP}
+
+Para el siguiente caso primero miraremos los resultados obtenidos empleando como estrategia de mejora para el algoritmo GRASP una búsqueda local. Cabe mencionar que para todos los ejemplos a continuación el tamaño elegido para la lista de candidatos en la fase constructiva (tras experimentar con ello) es 3. Además el nuemero de iteraciones del GRASP que se llevan a cabo es 10.
+\\
+\\
+No obstante, los resultados mejoran con respecto al algoritmo voraz pero también aumenta el tiempo de ejecución.
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda local, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 3 & 11.8592 & 7,9 & 2005 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 3 & 13.2732 & 9,12 & 2001 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 3 & 8.51033 & 18,19 & 2100 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 3 & 11.8003 & 13,14 & 2539 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 3 & 11.6571 & 9,28 & 4099 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 3 & 13.0737 & 7,17 & 3548 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda local, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda local, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 3 & 27.3727 & 1,7,9 & 3691 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 3 & 31.8685 & 5,7,12 & 4384 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 3 & 21.9961 & 9,18,19 & 5523 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 3 & 30.8727 & 8,13,14 & 6828 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 3 & 28.9443 & 2,9,28 & 9899 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 3 & 34.2905 & 6,17,24 & 12759 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda local, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda local, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 3 & 49.8268 & 1,6,7,9 & 9818 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 3 & 59.7638 & 5,9,11,12 & 12871 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 3 & 40.0023 & 2,3,9,19 & 14734 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 3 & 56.6903 & 3,13,14,17 & 15395 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 3 & 52.7712 & 2,9,11,28 & 25033 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 3 & 63.702 & 6,14,17,24 & 28169 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda local, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda local, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 3 & 79.1295 & 1,4,6,7,9 & 14040 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 3 & 96.0858 & 4,5,9,12,14 & 21417 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 3 & 63.6517 & 2,9,14,18,19 & 27258 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 3 & 92.8298 & 3,8,13,14,17 & 28722 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 3 & 80.9102 & 2,9,11,13,28 & 51114 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 3 & 99.592 & 6,14,15,17,24 & 67378 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda local, m = 5. Tabla de resultados}
+   \end{table}
+
+\clearpage
+A continuación en lugar de emplear una búsqueda local usaremos la búsqueda tabú. A pesar de tardar más acabamos callendo en más o menos los mismos resultados. Lo último a mencionar, se esta ejecutando la búsqueda tabú con 10 iteraciones (tanto tabú como el grasp general se ejecutan 10 veces aunque estos son valores separados).
+   
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda tabú, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 3 & 11.8592 & 7,9 & 5560 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 3 & 13.2732 & 9,12 & 6262 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 3 & 8.51033 & 18,19 & 8597 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 3 & 11.8003 & 13,14 & 7920 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 3 & 11.6571 & 9,28 & 13903 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 3 & 13.0737 & 7,17 & 14001 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda tabú, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda tabú, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 3 & 27.3727 & 1,7,9 & 13693 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 3 & 31.8685 & 5,7,12 & 16844 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 3 & 21.9961 & 9,18,19 & 19555 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 3 & 30.8727 & 8,13,14 & 26877 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 3 & 28.9443 & 2,9,28 & 43768 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 3 & 34.2905 & 6,17,24 & 37411 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda tabú, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda tabú, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 3 & 49.8268 & 1,6,7,9 & 39330 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 3 & 59.7638 & 5,9,11,12 & 36838 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 3 & 40.0023 & 2,3,9,19 & 44544 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 3 & 56.6903 & 3,13,14,17 & 46905 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 3 & 52.7712 & 2,9,11,28 & 62982 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 3 & 63.702 & 6,14,17,24 & 73439 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda tabú, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{GRASP - búsqueda tabú, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $|LRC|$ & $z$ & $s$ & $CPU(ms)$ \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 3 & 79.1295 & 1,4,6,7,9 & 48245 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 3 & 96.0858 & 4,5,9,12,14 & 48777 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 3 & 63.6517 & 2,9,14,18,19 & 69084 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 3 & 92.8298 & 3,8,13,14,17 & 78729 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 3 & 80.9102 & 2,9,11,13,28 & 119902 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 3 & 99.592 & 6,14,15,17,24 & 127563 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{GRASP - búsqueda tabú, m = 5. Tabla de resultados}
+   \end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Ramificación y Poda}
+
+Los resultados obtenidos en este apartado son buenos (si evaluamos todos los nodos vemos que nos devuelve los mismos valores que las busquedas locales por lo que los resultados de este partado son relativamente buenos). Aunque no sean mejores que los del GRASP si que se nota una grande diferencia en cuanto al tiempo de ejecución (de nuevo, el vector binario simplifica el proceso). También he de mencionar que guardo todos los nodos generados (incluyendo la original) y no las exploradas, lo cual seria un número distinto.
+\\
+\\
+Primero revisaremos los resultados obtenidos con una cota inferior incial generada por un algoritmo voraz. Como mencione antes, el cálculo de la cota superior lo hice con una evaluación voraz por lo que no se exploran muchos nodos en este apartado (cosa que se arregla como iniciamos con GRASP).
+\\
+Los primeros dos conjuntos de tablas serán empleando como estrategia de ramificación la que expande
+el nodo con cota superior más pequeña.
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - Voraz, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 11.8592 & 7,9 & 37 & 3 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 13.2732 & 9,12 & 52 & 3 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 8.51033 & 18,19 & 45 & 3 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 11.8003 & 13,14 & 62 & 3 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 11.6571 & 9,28 & 71 & 3 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 13.0737 & 7,17 & 82 & 3 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - Voraz, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - Voraz, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 27.2312 & 1,2,7 & 135 & 15 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 30.3241 & 5,9,12 & 62 & 3 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 21.9961 & 9,18,19 & 68 & 3 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 30.8727 & 8,13,14 & 78 & 3 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 28.9443 & 2,9,28 & 96 & 3 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 34.2905 & 7,17,24 & 110 & 3 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - Voraz, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - Voraz, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 49.8268 & 1,6,7,9 & 277 & 19 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 59.7638 & 5,9,11,12 & 82 & 3 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 39.5682 & 3,9,18,19 & 90 & 3 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 56.5347 & 3,8,13,14 & 104 & 3 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 52.7712 & 2,9,11,28 & 128 & 3 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 63.5184 & 7,14,17,24 & 148 & 3 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - Voraz, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - Voraz, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 79.1295 & 1,4,6,7,9 & 343 & 19 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 94.7487 & 5,9,11,12,14 & 102 & 3 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 61.2393 & 3,9,13,18,19 & 114 & 3 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 92.8298 & 3,8,13,14,17 & 129 & 3 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 80.9102 & 2,9,11,13,28 & 159 & 3 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 99.5088 & 7,14,15,17,24 & 180 & 3 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - Voraz, m = 5. Tabla de resultados}
+   \end{table}
+
+\clearpage
+Ahora miraremos los mismos resultados inicializando la cota inferior con el cálculo total de las distancias de una sdolución obtenida usando un algoritmo GRASP (aqui se nota mejor la exploración de distintos nodos). Además seguimos con un tamaño de la lista de candidatos de 3 como en las ejecuciones anteriores. Empleamos la misma estrategia de ramificación que en las tablas previas.
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - GRASP, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 11.6972 & 2,7 & 121 & 15 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 10.8584 & 1,12 & 45 & 3 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 8.369 & 3,9 & 162 & 19 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 10.1731 & 1,12 & 184 & 25 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 10.11 & 2,11 & 240 & 23 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 13.0737 & 7,17 & 77 & 3 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - GRASP, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - GRASP, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 27.2312 & 1,2,7 & 138 & 15 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 28.1891 & 1,9,12 & 67 & 3 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 21.1817 & 3,9,19 & 378 & 39 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 28.4421 & 1,12,14 & 391 & 29 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 28.9443 & 2,9,28 & 628 & 57 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 32.1179 & 1,6,17 & 495 & 35 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - GRASP, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - GRASP, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 49.8268 & 1,6,7,9 & 273 & 19 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 55.8006 & 1,9,12,14 & 407 & 29 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 39.5682 & 3,9,18,19 & 572 & 39 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 53.7322 & 1,3,13,17 & 508 & 35 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 52.7712 & 2,9,11,28 & 875 & 57 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 59.9796 & 1,6,17,24 & 953 & 49 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - GRASP, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Expande - GRASP, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 79.1295 & 1,4,6,7,9 & 342 & 19 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 90.0101 & 1,4,5,12,14 & 486 & 29 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 61.2393 & 3,9,13,18,19 & 756 & 39 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 89.6383 & 1,3,13,14,17 & 724 & 35 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 80.9102 & 2,9,11,13,28 & 1380 & 57 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 97.2453 & 1,6,8,17,24 & 1230 & 49 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Expande - GRASP, m = 5. Tabla de resultados}
+   \end{table}
+
+\clearpage
+Ahora mostaré las tablas voraz pero con una estrategia de ramificación en profundidad, el resto de parámetros permanecen igual.
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - Voraz, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 11.8592 & 7,9 & 47 & 1 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 13.2732 & 9,12 & 40 & 1 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 8.51033 & 18,19 & 44 & 1 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 11.8003 & 13,14 & 48 & 1 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 11.6571 & 9,28 & 61 & 1 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 13.0737 & 7,17 & 67 & 1 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - Voraz, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - Voraz, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 27.2312 & 1,2,7 & 130 & 14 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 30.3241 & 5,9,12 & 59 & 1 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 21.9961 & 9,18,19 & 67 & 1 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 30.8727 & 8,13,14 & 75 & 1 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 28.9443 & 2,9,28 & 93 & 1 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 33.8423 & 7,17,24 & 105 & 1 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - Voraz, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - Voraz, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 49.8268 & 1,6,7,9 & 258 & 18 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 59.7638 & 5,9,11,12 & 78 & 1 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 39.5682 & 3,9,18,19 & 104 & 1 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 56.5347 & 3,8,13,14 & 100 & 1 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 52.7712 & 2,9,11,28 & 125 & 1 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 63.5184 & 7,14,17,24 & 143 & 1 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - Voraz, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - Voraz, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 79.1295 & 1,4,6,7,9 & 324 & 18 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 94.7487 & 5,9,11,12,14 & 117 & 1 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 61.2393 & 3,9,13,18,19 & 111 & 1 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 92.8298 & 3,8,13,14,17 & 124 & 1 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 80.9102 & 2,9,11,13,28 & 157 & 1 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 99.5088 & 7,14,15,17,24 & 179 & 1 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - Voraz, m = 5. Tabla de resultados}
+   \end{table}
+
+\clearpage
+Ahora mostaré las tablas GRASP pero con una estrategia de ramificación en profundidad, el resto de parámetros permanecen igual.
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - GRASP, m = 2} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 2 & 11.6972 & 2,7 & 122 & 14 \\
+      max\_div\_15\_3.txt & 15 & 3 & 2 & 11.3591 & 3,12 & 50 & 1 \\
+      max\_div\_20\_2.txt & 20 & 2 & 2 & 8.369 & 3,9 & 166 & 18 \\
+      max\_div\_20\_3.txt & 20 & 3 & 2 & 11.8003 & 13,14 & 57 & 1 \\
+      max\_div\_30\_2.txt & 30 & 2 & 2 & 10.11 & 2,11 & 238 & 22 \\
+      max\_div\_30\_3.txt & 30 & 3 & 2 & 11.3982 & 3,24 & 446 & 48 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - GRASP, m = 2. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - GRASP, m = 3} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 3 & 27.2312 & 1,2,7 & 248 & 27 \\
+      max\_div\_15\_3.txt & 15 & 3 & 3 & 30.5747 & 4,5,12 & 264 & 24 \\
+      max\_div\_20\_2.txt & 20 & 2 & 3 & 21.1817 & 3,9,19 & 393 & 38 \\
+      max\_div\_20\_3.txt & 20 & 3 & 3 & 29.7909 & 1,13,14 & 87 & 1 \\
+      max\_div\_30\_2.txt & 30 & 2 & 3 & 28.9443 & 2,9,28 & 629 & 56 \\
+      max\_div\_30\_3.txt & 30 & 3 & 3 & 32.1179 & 1,6,17 & 1194 & 81 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - GRASP, m = 3. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - GRASP, m = 4} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 4 & 49.8268 & 1,6,7,9 & 426 & 31 \\
+      max\_div\_15\_3.txt & 15 & 3 & 4 & 55.8006 & 1,9,12,14 & 664 & 51 \\
+      max\_div\_20\_2.txt & 20 & 2 & 4 & 39.5682 & 3,9,18,19 & 570 & 38 \\
+      max\_div\_20\_3.txt & 20 & 3 & 4 & 56.6903 & 3,13,14,17 & 630 & 34 \\
+      max\_div\_30\_2.txt & 30 & 2 & 4 & 52.7712 & 2,9,11,28 & 868 & 56 \\
+      max\_div\_30\_3.txt & 30 & 3 & 4 & 60.2957 & 3,7,17,24 & 1012 & 48 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - GRASP, m = 4. Tabla de resultados}
+   \end{table}
+
+   \begin{table}[h]
+   {\small
+   \begin{center}
+   \begin{tabular}{cccccccc}
+      \multicolumn{8}{c}{Ramificación y Poda - Profundidad - GRASP, m = 5} \\
+      \hline
+      Problema & $n$ & $k$ & $m$ & $z$ & $s$ & $CPU(ms)$ & nodos\_generados \\
+      \hline
+      max\_div\_15\_2.txt & 15 & 2 & 5 & 79.1295 & 1,4,6,7,9 & 749 & 31 \\
+      max\_div\_15\_3.txt & 15 & 3 & 5 & 89.068 & 2,5,9,11,12 & 496 & 24 \\
+      max\_div\_20\_2.txt & 20 & 2 & 5 & 61.2393 & 3,9,13,18,19 & 8568 & 38 \\
+      max\_div\_20\_3.txt & 20 & 3 & 5 & 92.8298 & 3,8,13,14,17 & 790 & 34 \\
+      max\_div\_30\_2.txt & 30 & 2 & 5 & 80.9102 & 2,9,11,13,28 & 1187 & 56 \\
+      max\_div\_30\_3.txt & 30 & 3 & 5 & 97.2453 & 1,6,8,17,24 & 2327 & 95 \\
+      \hline
+   \end{tabular}
+   \end{center}
+   }
+   \caption{Ramificación y Poda - Profundidad - GRASP, m = 5. Tabla de resultados}
+   \end{table}
+
+\end{enumerate}
+

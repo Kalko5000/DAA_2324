@@ -12,7 +12,7 @@
  * @example: ./diversity node_files
  */
 
-// g++ --std=c++14 -o diversity solution.cc vorazsolution.cc graspsolution.cc main.cc
+// g++ --std=c++14 -o diversity solution.cc vorazsolution.cc graspsolution.cc podasolution.cc main.cc
 
 #include <iostream>
 #include <fstream>
@@ -89,7 +89,7 @@ void printVoraz(std::vector<std::pair<std::string, std::string>> files, int m) {
 }
 
 /**
- * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @desc Prints a GRASP execution of the sorting algorithm with a list of files
  * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
  * @param {int} m Number of points to include in solution
 */
@@ -117,7 +117,7 @@ void printGrasp(std::vector<std::pair<std::string, std::string>> files, int cand
 }
 
 /**
- * @desc Prints a Greedy execution of the sorting algorithm with a list of files
+ * @desc Prints a Branching and Pruning execution of the sorting algorithm with a list of files
  * @param {std::vector<std::pair<std::string, std::string>>} files A list of files locations and names
  * @param {int} m Number of points to include in solution
 */
@@ -193,10 +193,11 @@ int main(int argc, char* argv []) {
   printPoda(files, 3, false);
   printPoda(files, 4, false);
   printPoda(files, 5, false);
+
   printPoda(files, 2, true, 3);
   printPoda(files, 3, true, 3);
   printPoda(files, 4, true, 3);
   printPoda(files, 5, true, 3);
-
+  
   return 0;
 }

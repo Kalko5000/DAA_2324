@@ -1,0 +1,40 @@
+\section{Description}
+En el {\em Maximum diversity problem} se desea encontrar el subconjunto de elementos de diversidad m\'axima de un conjunto dado de elementos.
+
+Sea dado un conjunto $\mathbb{S} = \{s_1, s_2, \ldots, s_n\}$ de $n$ elementos, en el que cada elemento $s_i$ es un vector $s_i = (s_{i1}, s_{i2}, \ldots, s_{iK})$. Sea, asimismo, $d_{ij}$ la distancia entre los elementos $i$ y $j$. Si $m < n$ es el tama\~no del subconjunto que se busca el problema puede formularse como:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\[
+\mbox{Maximizar}\; z = \sum_{i=1}^{n-1} \sum_{j=i+1}^n d_{ij} x_i x_j
+\]
+%%%%%%%%%%%%%%%%%
+sujeto a:
+%%%%%%%%%%%%%%%%%
+\begin{eqnarray*}
+   \sum_{i=1}^n x_i = m & & \\
+   x_i \in \{0, 1\}     & & i = 1, 2, \ldots, n
+\end{eqnarray*}
+%%%%%%%%%%%%%%%%%
+donde:
+\[
+   x_i = \left\{ \begin{tabular}{lcl}
+                    1 & & \mbox{si $s_i$ pertenece a la soluci\'on}\\
+                    0 & & \mbox{en caso contrario}\\
+                 \end{tabular}\right.
+\]
+%%%%%%%%%%%%%%%%%
+La distancia $d_{ij}$ depende de la aplicaci\'on real considerada. En muchas aplicaciones se usa la distancia eucl\'{\i}dea. As\'{\i}:
+%%%%%%%%%%%%%%%
+\[
+   d_{ij} = d(s_i, s_j) = \sqrt{\sum_{r=1}^K (s_{ir} - s_{jr})^2}
+\]
+%%%%%%%%%%%%%%%
+Por lo tanto, para la evaluación de una solución estamos sumando la distancia entre cada punto a cada punto ajeno a ello dentro del conjunto de la solución (teniendo cuidado en solo sumar estos valores una vez, evitando la duplicidad de distancias).
+
+
+\subsection{Representaci\'on de las soluciones}
+
+Para representar nuestra solución tenemos un array de bits (es decir, un array de valores que solo pueden tomar el valor de 0 si no esta incluido en el conjunto o 1 si efectivamente pertenece), el cual sera del mismo tamaño que la cantidad de puntos en nuestro problema a evaluar. 
+
+Dicho esto, dentro de nuestras tablas se muestra el número de los puntos (empezando a contar en 1) que se incluyen en la solucion para que dicho resultado sea más facil de percibir visualmente (pero que quede constante que no se guarda la información dentro de la clase de dicha forma).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
